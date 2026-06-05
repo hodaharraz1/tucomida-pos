@@ -774,7 +774,9 @@ async function listenDineOrders() {
   updateReadyBadge();
 
   // Step 2: incremental real-time — sound only for NEW events, scoped to today
-  db.ref('orders').orderByChild('dayId').equalTo(_today).on('child_added', snap => {
+  const _dineRef = db.ref('orders').orderByChild('dayId').equalTo(_today);
+  registerCleanup(() => _dineRef.off());
+  _dineRef.on('child_added', snap => {
     if (initialDineIds.has(snap.key)) return; // skip boot batch
     const o = snap.val();
     if (['pending','preparing','ready'].includes(o.status)) {
@@ -785,7 +787,7 @@ async function listenDineOrders() {
     }
   });
 
-  db.ref('orders').orderByChild('dayId').equalTo(_today).on('child_changed', snap => {
+  _dineRef.on('child_changed', snap => {
     const o = snap.val();
     const prev = allOrders[snap.key];
     if (['pending','preparing','ready'].includes(o.status)) {
@@ -805,7 +807,7 @@ async function listenDineOrders() {
     }
   });
 
-  db.ref('orders').orderByChild('dayId').equalTo(_today).on('child_removed', snap => {
+  _dineRef.on('child_removed', snap => {
     if (allOrders[snap.key]) {
       delete allOrders[snap.key];
       renderOrders(); updateReadyBadge();
@@ -830,7 +832,9 @@ async function listenOnlineOrders() {
   });
   renderOnlineOrders(); updateOnlineBadge();
 
-  db.ref('online_orders').orderByChild('dayId').equalTo(_today).on('child_added', snap => {
+  const _onlineRef = db.ref('online_orders').orderByChild('dayId').equalTo(_today);
+  registerCleanup(() => _onlineRef.off());
+  _onlineRef.on('child_added', snap => {
     if (initialOnlineIds.has(snap.key)) return;
     const o = snap.val();
     if (['pending','preparing','ready'].includes(o.status)) {
@@ -840,7 +844,7 @@ async function listenOnlineOrders() {
     }
   });
 
-  db.ref('online_orders').orderByChild('dayId').equalTo(_today).on('child_changed', snap => {
+  _onlineRef.on('child_changed', snap => {
     const o = snap.val();
     if (['pending','preparing','ready'].includes(o.status)) {
       const prev = onlineOrders[snap.key];
@@ -856,7 +860,7 @@ async function listenOnlineOrders() {
     }
   });
 
-  db.ref('online_orders').orderByChild('dayId').equalTo(_today).on('child_removed', snap => {
+  _onlineRef.on('child_removed', snap => {
     if (onlineOrders[snap.key]) {
       delete onlineOrders[snap.key];
       renderOnlineOrders(); updateOnlineBadge();

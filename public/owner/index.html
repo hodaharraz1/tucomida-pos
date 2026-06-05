@@ -2918,10 +2918,10 @@ function _printOwnerReceiptData(order, payMethod) {
   }).join('');
 
   document.getElementById('owner-receipt-print').innerHTML =
-    `<div style="text-align:center;font-weight:bold;font-size:15pt;margin-bottom:3px">TuComida</div>
-    <div style="text-align:center;font-size:9pt;margin-bottom:1px">fresh &amp; healthy</div>
-    <div style="text-align:center;font-size:9pt;margin-bottom:1px">دمياط الجديدة</div>
-    <div style="text-align:center;font-size:9pt;margin-bottom:5px">01102708550</div>
+    `<div style="text-align:center;font-weight:bold;font-size:15pt;margin-bottom:3px">${(typeof TC_CONFIG!=='undefined'&&TC_CONFIG.RESTAURANT_NAME)||'TuComida'}</div>
+    <div style="text-align:center;font-size:9pt;margin-bottom:1px">${(typeof TC_CONFIG!=='undefined'&&TC_CONFIG.SLOGAN)||'fresh & healthy'}</div>
+    <div style="text-align:center;font-size:9pt;margin-bottom:1px">${(typeof TC_CONFIG!=='undefined'&&TC_CONFIG.ADDRESS)||'دمياط الجديدة'}</div>
+    <div style="text-align:center;font-size:9pt;margin-bottom:5px">${(typeof TC_CONFIG!=='undefined'&&TC_CONFIG.PHONE)||'01102708550'}</div>
     ${sep}
     <div style="margin:2px 0">فاتورة: #${order.orderNumber||'—'}</div>
     <div style="margin:2px 0">${dateStr}</div>

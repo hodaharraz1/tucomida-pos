@@ -1109,7 +1109,9 @@ function closeRM() { document.getElementById('readyModal').classList.remove('sho
 
 // ── FIREBASE LISTENERS ─────────────────────────────
 async function listenOrders() {
-  db.ref('.info/connected').on('value', snap => {
+  const _connRef = db.ref('.info/connected');
+  registerCleanup(() => _connRef.off());
+  _connRef.on('value', snap => {
     const ok = snap.val() === true;
     document.getElementById('cdot').className = 'cdot' + (ok?' ok':'');
     document.getElementById('ctext').textContent = ok ? 'متصل' : 'جاري الاتصال...';
@@ -1139,7 +1141,9 @@ async function listenOrders() {
   renderAll();
 
   // Incremental listeners — scoped to today
-  db.ref('orders').orderByChild('dayId').equalTo(_today).on('child_added', snap => {
+  const _dineRef = db.ref('orders').orderByChild('dayId').equalTo(_today);
+  registerCleanup(() => _dineRef.off());
+  _dineRef.on('child_added', snap => {
     if (initialDineIds.has(snap.key)) return;
     const o = snap.val();
     if (['pending','preparing'].includes(o.status)) {
@@ -1151,7 +1155,7 @@ async function listenOrders() {
       renderAll(); flashTicket(snap.key);
     }
   });
-  db.ref('orders').orderByChild('dayId').equalTo(_today).on('child_changed', snap => {
+  _dineRef.on('child_changed', snap => {
     const o = snap.val();
     if (['pending','preparing'].includes(o.status)) {
       if (dineOrders[snap.key]) {
@@ -1172,7 +1176,7 @@ async function listenOrders() {
       }
     }
   });
-  db.ref('orders').orderByChild('dayId').equalTo(_today).on('child_removed', snap => {
+  _dineRef.on('child_removed', snap => {
     if (dineOrders[snap.key]) {
       pendingAlarmIds.delete(snap.key);
       updateAlarmBanner();
@@ -1180,7 +1184,9 @@ async function listenOrders() {
     }
   });
 
-  db.ref('online_orders').orderByChild('dayId').equalTo(_today).on('child_added', snap => {
+  const _onlineRef = db.ref('online_orders').orderByChild('dayId').equalTo(_today);
+  registerCleanup(() => _onlineRef.off());
+  _onlineRef.on('child_added', snap => {
     if (initialOnlineIds.has(snap.key)) return;
     const o = snap.val();
     if (['pending','preparing'].includes(o.status)) {
@@ -1192,7 +1198,7 @@ async function listenOrders() {
       renderAll(); flashTicket(snap.key);
     }
   });
-  db.ref('online_orders').orderByChild('dayId').equalTo(_today).on('child_changed', snap => {
+  _onlineRef.on('child_changed', snap => {
     const o = snap.val();
     if (['pending','preparing'].includes(o.status)) {
       if (onlineOrdersMap[snap.key]?.status === 'pending' && o.status === 'preparing') {
@@ -1210,7 +1216,7 @@ async function listenOrders() {
       }
     }
   });
-  db.ref('online_orders').orderByChild('dayId').equalTo(_today).on('child_removed', snap => {
+  _onlineRef.on('child_removed', snap => {
     if (onlineOrdersMap[snap.key]) {
       pendingAlarmIds.delete(snap.key);
       updateAlarmBanner();

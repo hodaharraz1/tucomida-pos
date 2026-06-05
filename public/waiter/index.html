@@ -706,7 +706,9 @@ function doLogout() {
 
 // ── TABLES ─────────────────────────────────────────
 function loadTables() {
-  db.ref('tables').on('value', snap => { tables = snap.val() || {}; renderTables(); });
+  const _tablesRef = db.ref('tables');
+  _tablesRef.on('value', snap => { tables = snap.val() || {}; renderTables(); });
+  registerCleanup(() => _tablesRef.off());
 }
 
 function renderTables() {
@@ -745,10 +747,12 @@ function startTakeaway() {
 
 // ── MENU ───────────────────────────────────────────
 function loadMenu() {
-  db.ref('menu').on('value', snap => {
+  const _menuRef = db.ref('menu');
+  _menuRef.on('value', snap => {
     menuData = snap.val() || {categories:{}, items:{}};
     renderCatFilter(); renderMenuItems(null);
   });
+  registerCleanup(() => _menuRef.off());
 }
 function renderCatFilter() {
   const cats = Object.entries(menuData.categories||{})
@@ -890,7 +894,9 @@ async function submitOrder() {
 function listenActiveOrders() {
   // Only listen to today's orders — not entire history
   const todayId = getDayId();
-  db.ref('orders').orderByChild('dayId').equalTo(todayId).on('value', snap => {
+  const _ordersRef = db.ref('orders').orderByChild('dayId').equalTo(todayId);
+  registerCleanup(() => _ordersRef.off());
+  _ordersRef.on('value', snap => {
     activeOrdersData = {};
     const all = snap.val() || {};
     const newReady = [];

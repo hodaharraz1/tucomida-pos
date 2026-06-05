@@ -5,7 +5,8 @@ functions/node_modules/
 # Firebase local cache
 .firebase/
 
-# Sensitive files
+# Sensitive files — NEVER commit these
+serviceAccountKey.json
 set-passwords.js
 *.local.json
 .env

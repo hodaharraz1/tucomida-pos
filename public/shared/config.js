@@ -12,7 +12,10 @@ const TC_CONFIG = Object.freeze({
   APP_VERSION:    '2.0.0',
   APP_NAME:       'TuComida POS',
   RESTAURANT_NAME:'TuComida',
+  SLOGAN:         'fresh & healthy',
+  ADDRESS:        'دمياط الجديدة',
   PHONE:          '01102708550',
+  WEBSITE:        'tucomida.web.app',
   WA_LINK:        'https://wa.me/201102708550',
   ENV:            'production',
 
