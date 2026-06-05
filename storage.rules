@@ -1,0 +1,17 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ── Backups — server (Cloud Functions) write only, owner read only
+    match /backups/{allPaths=**} {
+      allow read:  if request.auth != null
+                   && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'owner';
+      allow write: if false; // Only Cloud Functions (admin SDK) can write backups
+    }
+
+    // ── Everything else — deny by default
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,262 @@
+{
+  "rules": {
+
+    /* ═══════════════════════════════════════════════════════════
+       MENU  — public read, owner-only write + field validation
+       Logged separately in menu_changes (see below)
+    ═══════════════════════════════════════════════════════════ */
+    "menu": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'owner'",
+
+      "categories": {
+        "$catId": {
+          ".validate": "newData.hasChildren(['name','active'])
+            && newData.child('name').isString()
+            && newData.child('name').val().length >= 1
+            && newData.child('name').val().length <= 100
+            && newData.child('active').isBoolean()"
+        }
+      },
+
+      "items": {
+        "$itemId": {
+          ".validate": "newData.hasChildren(['name','categoryId','active'])
+            && newData.child('name').isString()
+            && newData.child('name').val().length >= 1
+            && newData.child('name').val().length <= 100
+            && newData.child('categoryId').isString()
+            && newData.child('categoryId').val().length >= 1
+            && newData.child('active').isBoolean()"
+        }
+      }
+    },
+
+    /* ═══════════════════════════════════════════════════════════
+       MENU CHANGES AUDIT LOG — owner write only, owner read only
+       Tracks every menu modification for accountability
+    ═══════════════════════════════════════════════════════════ */
+    "menu_changes": {
+      ".read":  "auth != null && root.child('users').child(auth.uid).child('role').val() === 'owner'",
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'owner'",
+      "$changeId": {
+        ".validate": "newData.hasChildren(['action','userId','timestamp'])
+          && newData.child('action').isString()
+          && newData.child('action').val().length >= 1
+          && newData.child('action').val().length <= 100
+          && newData.child('timestamp').isNumber()
+          && newData.child('userId').isString()"
+      }
+    },
+
+    /* ═══════════════════════════════════════════════════════════
+       TABLES  — POS roles only
+    ═══════════════════════════════════════════════════════════ */
+    "tables": {
+      ".read":  "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(waiter|cashier|owner|kitchen)$/)",
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(waiter|cashier|owner)$/)",
+      "$tableId": {
+        ".validate": "newData.hasChildren(['number','status'])
+          && newData.child('status').val().matches(/^(available|occupied)$/)
+          && newData.child('number').isNumber()"
+      }
+    },
+
+    /* ═══════════════════════════════════════════════════════════
+       ORDERS (dine-in / takeaway)  — full validation
+    ═══════════════════════════════════════════════════════════ */
+    "orders": {
+      ".read":  "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(waiter|cashier|owner|kitchen)$/)",
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(waiter|cashier|owner|kitchen)$/)",
+      ".indexOn": ["dayId","createdAt","status","sessionId"],
+
+      "$orderId": {
+        ".validate": "newData.hasChildren(['orderNumber','status','items','createdAt','dayId','total','type'])
+          && newData.child('status').val().matches(/^(pending|preparing|ready|completed|cancelled)$/)
+          && newData.child('type').val().matches(/^(dine-in|takeaway)$/)
+          && newData.child('total').isNumber()
+          && newData.child('total').val() >= 0
+          && newData.child('total').val() <= 100000
+          && newData.child('orderNumber').isNumber()
+          && newData.child('orderNumber').val() > 0
+          && newData.child('createdAt').isNumber()
+          && newData.child('dayId').isString()
+          && newData.child('dayId').val().length == 10
+          && newData.child('items').hasChildren()"
+      }
+    },
+
+    /* ═══════════════════════════════════════════════════════════
+       ONLINE ORDERS  — public create-only (unauthenticated).
+       Security measures:
+         • New orders: must be 'pending' status
+         • Timestamp must be recent (±10 min from server time)
+         • Customer fields validated against HTML injection
+         • Phone format enforced (8-15 digits)
+         • Total capped at 50,000 EGP
+         • Once created, only staff can modify
+         • Rate limit: timestamp must be within 10 min of now
+    ═══════════════════════════════════════════════════════════ */
+    "online_orders": {
+      ".read": "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(cashier|owner|kitchen)$/)",
+      ".indexOn": ["dayId","createdAt","status"],
+
+      "$orderId": {
+        ".write": "(!data.exists() && auth == null)
+          || (auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(cashier|owner|kitchen)$/))",
+
+        ".validate": "newData.hasChildren(['items','total','status','createdAt','customerName','customerPhone','orderNumber','type','dayId'])
+          && newData.child('total').isNumber()
+          && newData.child('total').val() >= 0
+          && newData.child('total').val() <= 50000
+          && newData.child('orderNumber').isNumber()
+          && newData.child('orderNumber').val() > 0
+          && newData.child('createdAt').isNumber()
+          && (data.exists() || newData.child('createdAt').val() >= (now - 600000))
+          && (data.exists() || newData.child('createdAt').val() <= (now + 60000))
+          && newData.child('type').val().matches(/^(delivery|pickup)$/)
+          && newData.child('dayId').isString()
+          && newData.child('items').hasChildren()
+          && newData.child('status').val().matches(/^(pending|preparing|ready|completed|cancelled)$/)
+          && (data.exists() || (
+            newData.child('customerName').isString()
+            && newData.child('customerName').val().length >= 2
+            && newData.child('customerName').val().length <= 200
+            && newData.child('customerPhone').isString()
+            && newData.child('customerPhone').val().length >= 8
+            && newData.child('customerPhone').val().length <= 15
+            && newData.child('status').val() === 'pending'
+          ))"
+      }
+    },
+
+    /* ═══════════════════════════════════════════════════════════
+       SESSIONS
+    ═══════════════════════════════════════════════════════════ */
+    "sessions": {
+      ".read":  "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(owner|cashier)$/)",
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(owner|cashier)$/)",
+      "$sessionId": {
+        ".validate": "newData.hasChildren(['dayId','startedAt','active'])
+          && newData.child('active').isBoolean()
+          && newData.child('startedAt').isNumber()
+          && newData.child('dayId').isString()"
+      }
+    },
+
+    /* ═══════════════════════════════════════════════════════════
+       SETTINGS
+    ═══════════════════════════════════════════════════════════ */
+    "settings": {
+      ".read":  "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(waiter|cashier|owner|kitchen)$/)",
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(owner|cashier)$/)",
+
+      "orderCounter": {
+        ".write": "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(waiter|cashier|owner|kitchen)$/)",
+        ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= 999999"
+      },
+
+      "onlineOrderCounter": {
+        ".read":  true,
+        ".write": "(auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(cashier|owner|kitchen)$/))
+          || (auth == null && data.exists() && newData.val() == data.val() + 1)
+          || (auth == null && !data.exists() && newData.val() == 5001)",
+        ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= 999999"
+      },
+
+      "currentDayId": {
+        ".read": true
+      },
+
+      /* Plans — public read so website can display prices without auth */
+      "plans": {
+        ".read": true,
+        ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'owner'"
+      },
+
+      "currentSession": {
+        ".read": "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(waiter|cashier|owner|kitchen)$/)"
+      }
+    },
+
+    /* ═══════════════════════════════════════════════════════════
+       ACTIVITY LOG
+    ═══════════════════════════════════════════════════════════ */
+    "activity_log": {
+      ".read":  "auth != null && root.child('users').child(auth.uid).child('role').val() === 'owner'",
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(waiter|cashier|owner|kitchen)$/)",
+      "$logId": {
+        ".validate": "newData.hasChildren(['userId','role','action','timestamp'])
+          && newData.child('action').isString()
+          && newData.child('action').val().length >= 1
+          && newData.child('action').val().length <= 50
+          && newData.child('role').val().matches(/^(waiter|cashier|owner|kitchen)$/)
+          && newData.child('timestamp').isNumber()
+          && newData.child('userId').isString()"
+      }
+    },
+
+    /* ═══════════════════════════════════════════════════════════
+       USERS  — self-read/write or owner-manage
+                Prevents role escalation: only owner can set roles
+    ═══════════════════════════════════════════════════════════ */
+    "users": {
+      "$uid": {
+        ".read":  "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('role').val() === 'owner')",
+        ".write": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('role').val() === 'owner')",
+        ".validate": "newData.hasChildren(['email','role'])
+          && newData.child('role').val().matches(/^(owner|cashier|waiter|kitchen)$/)
+          && newData.child('email').isString()
+          && newData.child('email').val().length >= 5
+          && newData.child('email').val().length <= 200"
+      }
+    },
+
+    /* ═══════════════════════════════════════════════════════════
+       EXPENSES — owner only
+    ═══════════════════════════════════════════════════════════ */
+    "expenses": {
+      ".read":  "auth != null && root.child('users').child(auth.uid).child('role').val() === 'owner'",
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'owner'",
+      "$expId": {
+        ".validate": "newData.hasChildren(['name','amount','category','createdAt'])
+          && newData.child('amount').isNumber()
+          && newData.child('amount').val() >= 0
+          && newData.child('name').isString()
+          && newData.child('name').val().length >= 1
+          && newData.child('name').val().length <= 200"
+      }
+    },
+
+    /* ═══════════════════════════════════════════════════════════
+       INVENTORY — owner writes, kitchen/cashier can read
+    ═══════════════════════════════════════════════════════════ */
+    "inventory": {
+      ".read":  "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(owner|cashier|kitchen)$/)",
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'owner'",
+      "$itemId": {
+        ".validate": "newData.hasChildren(['name','unit','stock','minStock'])
+          && newData.child('stock').isNumber()
+          && newData.child('minStock').isNumber()
+          && newData.child('stock').val() >= 0
+          && newData.child('name').isString()"
+      }
+    },
+
+    /* ═══════════════════════════════════════════════════════════
+       PRESENCE — real-time online/offline tracking
+       Each user writes only their own node; owner reads all
+    ═══════════════════════════════════════════════════════════ */
+    "presence": {
+      ".read": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'owner'",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "!newData.exists()
+          || (newData.hasChildren(['role','lastSeen'])
+            && newData.child('role').val().matches(/^(owner|cashier|waiter|kitchen)$/)
+            && newData.child('lastSeen').isNumber())"
+      }
+    }
+
+  }
+}

@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Unregister old service workers immediately -->
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(r=>r.forEach(sw=>sw.unregister()));}</script>
+<title>TuComida | مطعم أكل صحي في دمياط الجديدة — Fresh & Healthy</title>
+<meta name="description" content="TuComida مطعم أكل صحي في دمياط الجديدة — وجبات بروتين عالي، راب صحي، سلطات، سموثي طازج. سعرات محسوبة لكل طبق. اطلب أونلاين أو عبر واتساب 01102708550. Healthy restaurant New Damietta.">
+<meta name="keywords" content="مطعم أكل صحي دمياط الجديدة, TuComida, توكميدا, healthy food new damietta, وجبات دايت دمياط, high protein meals egypt, healthy wraps damietta, سعرات محسوبة, بروتين عالي, رجيم دمياط, meal prep egypt, مطعم دمياط الجديدة">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="author" content="TuComida">
+<meta name="geo.region" content="EG-DT">
+<meta name="geo.placename" content="دمياط الجديدة, Egypt">
+<meta name="geo.position" content="31.4165;31.8133">
+<meta name="ICBM" content="31.4165, 31.8133">
+<meta name="revisit-after" content="7 days">
+<link rel="canonical" href="https://tucomida-pos.web.app/">
+<!-- Hreflang for bilingual content -->
+<link rel="alternate" hreflang="ar" href="https://tucomida-pos.web.app/">
+<link rel="alternate" hreflang="en" href="https://tucomida-pos.web.app/">
+<link rel="alternate" hreflang="x-default" href="https://tucomida-pos.web.app/">
+
+<!-- Open Graph — valid type + real food image -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="TuComida | مطعم أكل صحي دمياط الجديدة — Fresh & Healthy">
+<meta property="og:description" content="وجبات بروتين عالي، سعرات محسوبة، مكونات طازجة يومياً. راب صحي، سلطات، سموثي في دمياط الجديدة. High protein healthy meals in New Damietta — order online!">
+<meta property="og:image" content="https://tucomida-pos.web.app/images/food/food-05.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="900">
+<meta property="og:image:alt" content="أكل صحي طازج من TuComida دمياط الجديدة">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:url" content="https://tucomida-pos.web.app/">
+<meta property="og:site_name" content="TuComida — Fresh & Healthy">
+<meta property="og:locale" content="ar_EG">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="business:contact_data:locality" content="دمياط الجديدة">
+<meta property="business:contact_data:country_name" content="Egypt">
+<meta property="business:contact_data:phone_number" content="+201102708550">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@tucomida">
+<meta name="twitter:title" content="TuComida | مطعم أكل صحي دمياط الجديدة">
+<meta name="twitter:description" content="Fresh & Healthy meals in New Damietta — High protein, calculated calories, daily fresh ingredients. Order online now!">
+<meta name="twitter:image" content="https://tucomida-pos.web.app/images/food/food-05.jpg">
+<meta name="twitter:image:alt" content="TuComida Fresh Healthy Food New Damietta">
+
+<!-- Fonts + Performance Hints -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://tucomida-pos-default-rtdb.firebaseio.com">
+<link rel="dns-prefetch" href="https://maps.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<meta name="theme-color" content="#1A3D26">
+
+<!-- Schema JSON-LD — Structured Data -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":["Restaurant","LocalBusiness","FoodEstablishment"],
+      "@id":"https://tucomida-pos.web.app/#restaurant",
+      "name":"TuComida",
+      "alternateName":["توكميدا","تيوكوميدا","Tucomida Fresh & Healthy"],
+      "description":"مطعم أكل صحي في دمياط الجديدة يقدم وجبات بروتين عالي، سعرات محسوبة، راب صحي، سلطات وسموثي طازج يومياً منذ 2021",
+      "url":"https://tucomida-pos.web.app",
+      "telephone":"+201102708550",
+      "email":"tucomida.eg@gmail.com",
+      "servesCuisine":["Healthy Food","High Protein","Wraps","Salads","Smoothies","Mediterranean","Diet Food"],
+      "priceRange":"$$",
+      "currenciesAccepted":"EGP",
+      "paymentAccepted":"Cash, Cash on Delivery",
+      "foundingDate":"2021",
+      "address":{
+        "@type":"PostalAddress",
+        "streetAddress":"المنطقة المركزية، خلف السنترال المركزي",
+        "addressLocality":"دمياط الجديدة",
+        "addressRegion":"دمياط",
+        "postalCode":"34517",
+        "addressCountry":"EG"
+      },
+      "geo":{
+        "@type":"GeoCoordinates",
+        "latitude":"31.4165",
+        "longitude":"31.8133"
+      },
+      "openingHoursSpecification":{
+        "@type":"OpeningHoursSpecification",
+        "dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens":"10:00",
+        "closes":"00:00"
+      },
+      "image":[
+        "https://tucomida-pos.web.app/images/food/food-05.jpg",
+        "https://tucomida-pos.web.app/images/food/food-01.jpg",
+        "https://tucomida-pos.web.app/images/logo-brand.jpeg"
+      ],
+      "logo":"https://tucomida-pos.web.app/images/logo-brand.jpeg",
+      "hasMap":"https://maps.google.com/?q=31.4165,31.8133",
+      "menu":"https://tucomida-pos.web.app/order.html",
+      "hasOfferCatalog":{
+        "@type":"OfferCatalog",
+        "name":"TuComida Menu",
+        "itemListElement":[
+          {"@type":"Offer","itemOffered":{"@type":"MenuItem","name":"راب صحي بروتين","description":"راب مع دجاج مشوي وخضار طازجة وصوص صحي"}},
+          {"@type":"Offer","itemOffered":{"@type":"MenuItem","name":"سلطة بروتين","description":"سلطة طازجة بالبروتين المحسوب"}},
+          {"@type":"Offer","itemOffered":{"@type":"MenuItem","name":"سموثي طازج","description":"سموثي فاكهة طازجة بدون سكر مضاف"}}
+        ]
+      },
+      "aggregateRating":{
+        "@type":"AggregateRating",
+        "ratingValue":"4.9",
+        "reviewCount":"120",
+        "bestRating":"5",
+        "worstRating":"1"
+      },
+      "review":[
+        {"@type":"Review","reviewRating":{"@type":"Rating","ratingValue":"5"},"author":{"@type":"Person","name":"أحمد م."},"reviewBody":"أفضل أكل صحي في دمياط، البروتين محسوب وبحس بفرق حقيقي"},
+        {"@type":"Review","reviewRating":{"@type":"Rating","ratingValue":"5"},"author":{"@type":"Person","name":"سارة ك."},"reviewBody":"الراب صحي ولذيذ، السعرات واضحة والمكونات طازجة"}
+      ],
+      "sameAs":[
+        "https://www.instagram.com/tucomida.eg",
+        "https://www.facebook.com/share/1cbR8eMWki/"
+      ],
+      "contactPoint":{
+        "@type":"ContactPoint",
+        "telephone":"+201102708550",
+        "contactType":"customer service",
+        "availableLanguage":["Arabic","English"],
+        "contactOption":"TollFree"
+      }
+    },
+    {
+      "@type":"WebSite",
+      "@id":"https://tucomida-pos.web.app/#website",
+      "url":"https://tucomida-pos.web.app",
+      "name":"TuComida",
+      "description":"مطعم أكل صحي في دمياط الجديدة",
+      "publisher":{"@id":"https://tucomida-pos.web.app/#restaurant"},
+      "inLanguage":["ar","en"],
+      "potentialAction":{
+        "@type":"OrderAction",
+        "target":"https://tucomida-pos.web.app/order.html",
+        "name":"اطلب الآن"
+      }
+    },
+    {
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"الرئيسية","item":"https://tucomida-pos.web.app/"},
+        {"@type":"ListItem","position":2,"name":"المنيو","item":"https://tucomida-pos.web.app/order.html"}
+      ]
+    },
+    {
+      "@type":"FAQPage",
+      "@id":"https://tucomida-pos.web.app/#faq",
+      "mainEntity":[
+        {
+          "@type":"Question",
+          "name":"هل الأكل في TuComida صحي فعلاً؟",
+          "acceptedAnswer":{"@type":"Answer","text":"نعم، كل أطباقنا محسوبة السعرات والبروتين ومكوناتها طازجة يومياً بدون مواد حافظة أو دهون مضرة. بنعمل تحليل غذائي لكل طبق."}
+        },
+        {
+          "@type":"Question",
+          "name":"Is TuComida food really healthy?",
+          "acceptedAnswer":{"@type":"Answer","text":"Yes! All our dishes have calculated calories and protein made from fresh daily ingredients without preservatives."}
+        },
+        {
+          "@type":"Question",
+          "name":"هل يوجد توصيل للمنزل في دمياط الجديدة؟",
+          "acceptedAnswer":{"@type":"Answer","text":"نعم، نوفر التوصيل داخل دمياط الجديدة عبر واتساب 01102708550 أو الطلب الأونلاين من الموقع."}
+        },
+        {
+          "@type":"Question",
+          "name":"ما هي ساعات العمل؟",
+          "acceptedAnswer":{"@type":"Answer","text":"يومياً من الساعة 10 صباحاً حتى 12 منتصف الليل، 7 أيام في الأسبوع بدون إجازات."}
+        },
+        {
+          "@type":"Question",
+          "name":"ما الفرق بين وجبات البروتين والعادية؟",
+          "acceptedAnswer":{"@type":"Answer","text":"وجبات البروتين مصممة للرياضيين وعشاق الحياة الصحية بكميات بروتين مرتفعة تبدأ من 40 جرام ودهون محدودة ومحسوبة."}
+        },
+        {
+          "@type":"Question",
+          "name":"فين موقع مطعم TuComida في دمياط؟",
+          "acceptedAnswer":{"@type":"Answer","text":"المطعم في دمياط الجديدة، المنطقة المركزية، خلف السنترال المركزي. يمكنك الاتصال على 01102708550 للاستفسار."}
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --g1:#0A1F10;--g2:#1A3D26;--g3:#2A6041;--g4:#3D8B57;--g5:#5AAF73;
+  --o:#E67B20;--ol:#F09030;--oy:#FFF3E0;
+  --bg:#F6F8F4;--w:#fff;--s1:#EEF3EA;--s2:#E2EBD9;--s3:#C8D9BC;
+  --ink:#0A160A;--dim:#1E3520;--sub:#4A6650;--muted:#7A9880;
+  --e1:0 1px 3px rgba(10,31,16,.04),0 4px 16px rgba(10,31,16,.07);
+  --e2:0 2px 8px rgba(10,31,16,.06),0 16px 48px rgba(10,31,16,.10);
+  --e3:0 4px 16px rgba(10,31,16,.08),0 32px 80px rgba(10,31,16,.14);
+  --fa:'Cairo',sans-serif;--fe:'Inter',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--fa);color:var(--ink);background:var(--bg);overflow-x:hidden;line-height:1.7}
+body.lang-en{font-family:var(--fe);direction:ltr}
+img{max-width:100%;height:auto;display:block}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:inherit;border:none;background:none}
+.en{display:none}
+body.lang-en .ar{display:none}
+body.lang-en .en{display:block}
+body.lang-en span.en{display:inline}
+/* Hide Arabic category labels in English mode */
+body.lang-en .cat-ar{display:none}
+/* In English mode, cat-en becomes the primary label */
+body.lang-en .cat-en{font-size:20px;font-weight:900;opacity:1;letter-spacing:-.3px;line-height:1.2;margin-bottom:0}
+
+/* ── LAYOUT ── */
+.W{max-width:1280px;margin:0 auto;padding:0 48px}
+@media(max-width:768px){.W{padding:0 20px}}
+.sec{padding:112px 0}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--o);display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.eyebrow::before{content:'';width:24px;height:2px;background:var(--o);border-radius:2px;flex-shrink:0}
+.H2{font-size:clamp(32px,4vw,52px);font-weight:900;color:var(--ink);line-height:1.08;letter-spacing:-1px;margin-bottom:14px}
+.body-t{font-size:16px;color:var(--sub);line-height:1.9;max-width:520px}
+.acc{color:var(--o)}
+.fi{opacity:0;transform:translateY(20px);transition:opacity .65s cubic-bezier(.22,1,.36,1),transform .65s cubic-bezier(.22,1,.36,1)}
+.fi.on{opacity:1;transform:none}
+.fi-d1{transition-delay:.08s}.fi-d2{transition-delay:.16s}.fi-d3{transition-delay:.24s}.fi-d4{transition-delay:.32s}
+
+/* ── BTN ── */
+.btn{display:inline-flex;align-items:center;gap:9px;border-radius:60px;font-weight:700;font-family:inherit;transition:all .2s;cursor:pointer;letter-spacing:.1px}
+.btn-fill{background:var(--g2);color:#fff;padding:15px 32px;font-size:15px;box-shadow:0 4px 20px rgba(26,61,38,.22)}
+.btn-fill:hover{background:var(--g3);transform:translateY(-2px);box-shadow:0 8px 28px rgba(26,61,38,.3)}
+.btn-amb{background:var(--o);color:#fff;padding:15px 32px;font-size:15px;box-shadow:0 4px 20px rgba(230,123,32,.28)}
+.btn-amb:hover{background:var(--ol);transform:translateY(-2px);box-shadow:0 8px 28px rgba(230,123,32,.38)}
+.btn-soft{background:var(--s1);color:var(--g2);padding:14px 28px;font-size:14px;border:1.5px solid var(--s3)}
+.btn-soft:hover{background:var(--s2);border-color:var(--g3)}
+.btn-ghost-w{background:transparent;color:#fff;padding:13px 26px;font-size:14px;border:1.5px solid rgba(255,255,255,.38)}
+.btn-ghost-w:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.7)}
+
+/* ══════════════ NAV ══════════════ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:900;height:68px;
+  background:rgba(246,248,244,.94);backdrop-filter:blur(28px) saturate(1.6);
+  -webkit-backdrop-filter:blur(28px) saturate(1.6);
+  border-bottom:1px solid rgba(200,217,188,.5);
+  transition:all .3s}
+.nav.at-top{background:transparent;border-bottom-color:transparent}
+.nav-i{max-width:1280px;margin:0 auto;height:68px;padding:0 48px;display:flex;align-items:center;gap:10px}
+@media(max-width:768px){.nav-i{padding:0 20px}}
+.nav-logo{flex-shrink:0}
+.nav-sp{flex:1}
+.nav-links{display:flex;align-items:center;gap:2px}
+.nav-links a{padding:7px 14px;border-radius:10px;font-size:13px;font-weight:700;color:var(--ink);transition:all .18s}
+.nav-links a:hover{color:var(--g2);background:rgba(26,61,38,.08)}
+.nav.at-top .nav-links a{color:rgba(255,255,255,.75)}
+.nav.at-top .nav-links a:hover{color:#fff;background:rgba(255,255,255,.1)}
+.nav-acts{display:flex;align-items:center;gap:10px}
+.nav-lang{padding:7px 15px;border-radius:20px;font-size:12px;font-weight:700;border:1.5px solid var(--s3);color:var(--sub);background:none;cursor:pointer;font-family:inherit;transition:all .18s}
+.nav-lang:hover{border-color:var(--g3);color:var(--g2)}
+.nav.at-top .nav-lang{border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.8)}
+.nav-order{padding:9px 22px;border-radius:60px;font-size:13px;font-weight:700;background:var(--o);color:#fff;box-shadow:0 2px 12px rgba(230,123,32,.28);transition:all .18s}
+.nav-order:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(230,123,32,.4)}
+.nav-burger{display:none;flex-direction:column;gap:5px;padding:8px;cursor:pointer}
+.nav-burger span{display:block;width:22px;height:2px;background:var(--g2);border-radius:2px;transition:.3s}
+.nav.at-top .nav-burger span{background:#fff}
+.nav-mob{display:none;position:fixed;top:68px;left:0;right:0;bottom:0;background:rgba(246,248,244,.99);backdrop-filter:blur(28px);z-index:899;flex-direction:column;padding:28px 24px;gap:4px;overflow-y:auto}
+.nav-mob.open{display:flex}
+.nav-mob a{font-size:17px;font-weight:700;padding:14px 18px;border-radius:12px;color:var(--ink);border-bottom:1px solid var(--s1);transition:background .15s}
+.nav-mob a:hover{background:var(--s1)}
+.nav-mob a:last-child{background:var(--o);color:#fff;border:none;border-radius:60px;text-align:center;margin-top:10px;padding:14px}
+@media(max-width:768px){.nav-links,.nav-order{display:none}.nav-burger{display:flex}}
+
+/* ══════════════ HERO ══════════════ */
+.hero{min-height:100vh;display:grid;grid-template-columns:45% 55%;background:var(--bg);overflow:hidden;position:relative}
+@media(max-width:900px){.hero{grid-template-columns:1fr;min-height:auto}}
+
+/* Left panel */
+.hero-L{display:flex;flex-direction:column;justify-content:center;padding:120px 56px 80px 64px;position:relative;z-index:2}
+@media(max-width:1100px){.hero-L{padding:100px 40px 70px 48px}}
+@media(max-width:900px){.hero-L{padding:100px 24px 48px;text-align:center;align-items:center}}
+.hero-ey{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--o);display:flex;align-items:center;gap:10px;margin-bottom:28px}
+@media(max-width:900px){.hero-ey{justify-content:center}}
+.hero-ey::before{content:'';width:28px;height:2px;background:var(--o);border-radius:2px;flex-shrink:0}
+.hero-H{font-size:clamp(52px,6.5vw,96px);font-weight:900;color:var(--g1);line-height:.97;letter-spacing:-2.5px;margin-bottom:20px}
+.hero-H em{font-style:normal;color:var(--o);display:block}
+.hero-p{font-size:17px;color:var(--sub);line-height:1.9;max-width:400px;margin-bottom:32px}
+@media(max-width:900px){.hero-p{margin:0 auto 32px}}
+
+/* Ingredient badges */
+.hero-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:36px}
+@media(max-width:900px){.hero-badges{justify-content:center}}
+.hbadge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:50px;border:1.5px solid rgba(42,96,65,.15);background:rgba(42,96,65,.06);font-size:12px;font-weight:700;color:var(--g2);white-space:nowrap;transition:all .18s}
+.hbadge:hover{background:rgba(42,96,65,.12);border-color:rgba(42,96,65,.3)}
+.hbadge svg{flex-shrink:0}
+
+/* CTAs */
+.hero-acts{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:44px}
+@media(max-width:900px){.hero-acts{justify-content:center}}
+
+/* Thumbnail row */
+.hero-thumbs{display:flex;gap:10px;flex-wrap:wrap}
+@media(max-width:900px){.hero-thumbs{justify-content:center}}
+.hthumb{width:68px;height:68px;border-radius:16px;overflow:hidden;border:2.5px solid transparent;cursor:pointer;transition:all .22s;flex-shrink:0;outline:none;background:none;padding:0}
+.hthumb img{width:100%;height:100%;object-fit:cover;border-radius:13px;pointer-events:none}
+.hthumb.active{border-color:var(--o);box-shadow:0 0 0 3px rgba(230,123,32,.22),var(--e2)}
+.hthumb:hover:not(.active){border-color:var(--s3);transform:translateY(-2px)}
+
+/* Right panel */
+.hero-R{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+@media(max-width:900px){.hero-R{height:72vw;min-height:320px;max-height:540px}}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 70% 70% at 60% 50%,rgba(42,96,65,.14) 0%,rgba(42,96,65,.06) 50%,transparent 100%);pointer-events:none;z-index:0}
+.hero-glow::after{content:'';position:absolute;inset:0;background:radial-gradient(circle 500px at 70% 30%,rgba(230,123,32,.06) 0%,transparent 60%)}
+.hero-img-wrap{position:relative;z-index:1;width:88%;height:82%;border-radius:32px;overflow:hidden;box-shadow:var(--e3)}
+@media(max-width:900px){.hero-img-wrap{width:88%;height:88%;border-radius:24px}}
+.hero-img-wrap img{width:100%;height:100%;object-fit:cover;transition:opacity .45s ease,transform 8s ease}
+.hero-img-wrap img.changing{opacity:0}
+
+/* Floating badges */
+.hero-fb{position:absolute;z-index:2;background:rgba(246,248,244,.96);backdrop-filter:blur(16px);border-radius:18px;box-shadow:var(--e2);display:flex;align-items:center;gap:12px}
+.hfb-top{top:44px;left:40px;padding:13px 18px;animation:fbIn .8s cubic-bezier(.34,1.56,.64,1) .4s both}
+body.lang-en .hfb-top{left:auto;right:40px}
+.hfb-bot{bottom:44px;right:40px;padding:12px 18px;animation:fbIn .8s cubic-bezier(.34,1.56,.64,1) .6s both}
+body.lang-en .hfb-bot{right:auto;left:40px}
+@keyframes fbIn{from{opacity:0;transform:scale(.8) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.hfb-ico{font-size:26px}
+.hfb-t{font-size:14px;font-weight:800;color:var(--g2);line-height:1.2}
+.hfb-s{font-size:11px;color:var(--sub);margin-top:1px}
+.hfb-pr{font-size:22px;font-weight:900;color:var(--g1);font-family:var(--fe);line-height:1;letter-spacing:-1px}
+
+/* Meal info pill */
+.hero-meal-pill{position:absolute;bottom:44px;left:40px;z-index:2;background:rgba(10,31,16,.82);backdrop-filter:blur(14px);border-radius:60px;padding:10px 20px;display:flex;align-items:center;gap:12px;animation:fbIn .8s cubic-bezier(.34,1.56,.64,1) .8s both}
+body.lang-en .hero-meal-pill{left:auto;right:40px}
+.hmp-name{font-size:14px;font-weight:800;color:#fff}
+.hmp-price{font-size:14px;font-weight:900;color:var(--ol);font-family:var(--fe)}
+
+/* ══════════════ HERO UPGRADES ══════════════ */
+/* Animated word cycling */
+@keyframes wrdOut{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-22px) scale(.93)}}
+@keyframes wrdIn{0%{opacity:0;transform:translateY(22px) scale(.93)}100%{opacity:1;transform:translateY(0) scale(1)}}
+.hw{color:var(--o);font-style:normal;display:inline-block}
+.hw.w-out{animation:wrdOut .28s cubic-bezier(.4,0,.8,1) forwards}
+.hw.w-in{animation:wrdIn .36s cubic-bezier(.16,1,.3,1) forwards}
+/* Hero staggered entry */
+@keyframes hEnt{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.hero-L .hero-ey{opacity:0;animation:hEnt .68s cubic-bezier(.22,1,.36,1) .06s forwards}
+.hero-L .hero-H{opacity:0;animation:hEnt .68s cubic-bezier(.22,1,.36,1) .18s forwards}
+.hero-L .hero-p{opacity:0;animation:hEnt .68s cubic-bezier(.22,1,.36,1) .30s forwards}
+.hero-L .hero-badges{opacity:0;animation:hEnt .68s cubic-bezier(.22,1,.36,1) .42s forwards}
+.hero-L .hero-acts{opacity:0;animation:hEnt .68s cubic-bezier(.22,1,.36,1) .54s forwards}
+.hero-L .hero-thumbs{opacity:0;animation:hEnt .68s cubic-bezier(.22,1,.36,1) .66s forwards}
+/* Hero background glow on left panel */
+.hero-L::before{content:'';position:absolute;pointer-events:none;top:-140px;inset-inline-end:-40px;width:520px;height:520px;background:radial-gradient(circle,rgba(61,139,87,.07) 0%,transparent 64%);border-radius:50%;z-index:0;animation:hBlob 13s ease-in-out infinite}
+@keyframes hBlob{0%,100%{transform:scale(1)}50%{transform:scale(1.1) translate(12px,-10px)}}
+.hero-L>*{position:relative;z-index:1}
+/* Live dot in eyebrow */
+.hero-live-dot{width:7px;height:7px;border-radius:50%;background:var(--o);display:inline-block;flex-shrink:0;animation:ldPulse 2.4s ease-in-out infinite;margin-inline-end:2px;vertical-align:middle}
+@keyframes ldPulse{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.7);opacity:.3}}
+/* Progress bar at bottom of hero image */
+.hero-prog{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.1);z-index:3;overflow:hidden}
+.hero-prog-bar{height:100%;background:linear-gradient(90deg,var(--o) 0%,var(--ol) 100%);width:0%;transition:width 4.2s linear;will-change:width}
+/* ══════════════ TRUST ══════════════ */
+.trust-bar{background:var(--w);border-bottom:1px solid var(--s2);padding:16px 0}
+.trust-i{max-width:1280px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap}
+@media(max-width:768px){.trust-i{gap:16px;overflow-x:auto;flex-wrap:nowrap;justify-content:flex-start;padding:0 20px}}
+.ti{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;color:var(--sub);white-space:nowrap}
+.t-sep{width:1px;height:20px;background:var(--s2)}
+@media(max-width:768px){.t-sep{display:none}}
+
+/* ══════════════ SHOWCASE ══════════════ */
+.showcase{background:var(--bg);padding:112px 0}
+.sec-hd{text-align:center;max-width:640px;margin:0 auto 80px}
+.dish-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+@media(max-width:1100px){.dish-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.dish-grid{grid-template-columns:1fr}}
+.dish{background:var(--w);border-radius:24px;overflow:hidden;border:1px solid var(--s2);transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s,border-color .2s;display:flex;flex-direction:column}
+.dish:hover{transform:translateY(-10px);box-shadow:var(--e3);border-color:transparent}
+.dish-ph{position:relative;aspect-ratio:4/3;overflow:hidden}
+.dish-ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.dish:hover .dish-ph img{transform:scale(1.08)}
+.dish-bdg{position:absolute;top:14px;right:14px;border-radius:60px;padding:5px 13px;font-size:11px;font-weight:700;letter-spacing:0;backdrop-filter:blur(12px);font-family:var(--fa)}
+.dish-bdg.hot{background:rgba(230,123,32,.88);color:#fff}
+.dish-bdg.new{background:rgba(26,61,38,.88);color:#fff}
+.dish-bdg.pick{background:rgba(246,248,244,.92);color:var(--g2)}
+body.lang-en .dish-bdg{right:auto;left:14px}
+.dish-body{padding:22px 22px 26px;flex:1;display:flex;flex-direction:column}
+.dish-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.chip{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--s1);color:var(--dim)}
+.chip.p{background:rgba(230,123,32,.09);color:var(--o)}
+.dish-n{font-size:19px;font-weight:900;color:var(--ink);margin-bottom:7px;line-height:1.2;letter-spacing:-.3px}
+.dish-d{font-size:13px;color:var(--sub);line-height:1.75;flex:1;margin-bottom:20px}
+.dish-ft{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--s1);padding-top:16px}
+.dish-pr{font-size:27px;font-weight:900;color:var(--g2);font-family:var(--fe);line-height:1;letter-spacing:-1px}
+.dish-pr span{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:0}
+.dish-btn{padding:10px 20px;border-radius:60px;font-size:12px;font-weight:700;background:var(--g2);color:#fff;transition:all .2s}
+.dish-btn:hover{background:var(--g3);transform:translateY(-1px)}
+
+/* ══════════════ WHY ══════════════ */
+.why{background:var(--w);padding:112px 0}
+.why-gr{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--s2);border-radius:28px;overflow:hidden}
+.wc{padding:48px 44px;transition:background .2s;position:relative}
+.wc:hover{background:var(--bg)}
+.wc+.wc{border-right:1px solid var(--s2)}
+body.lang-en .wc+.wc{border-right:none;border-left:1px solid var(--s2)}
+.wc-ico{width:60px;height:60px;border-radius:18px;background:rgba(26,61,38,.07);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:22px;transition:background .2s}
+.wc:hover .wc-ico{background:rgba(26,61,38,.12)}
+.wc-t{font-size:19px;font-weight:800;color:var(--ink);margin-bottom:10px;letter-spacing:-.3px}
+.wc-d{font-size:14px;color:var(--sub);line-height:1.85}
+@media(max-width:768px){.why-gr{grid-template-columns:1fr}.wc+.wc{border-right:none;border-left:none;border-top:1px solid var(--s2)}}
+
+/* ══════════════ BENTO ══════════════ */
+.bento{background:var(--bg);padding:112px 0}
+.bg{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:128px;gap:14px}
+.bc{border-radius:24px;overflow:hidden;position:relative;cursor:pointer;transition:transform .3s cubic-bezier(.22,1,.36,1)}
+.bc:hover{transform:scale(1.012)}
+.bc img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.bc:hover img{transform:scale(1.07)}
+.bc-vl{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,31,16,.88) 0%,rgba(10,31,16,.1) 55%,transparent 80%)}
+.bc-body{position:absolute;bottom:0;inset-inline:0;padding:20px 24px;color:#fff}
+.bc-tag{display:inline-block;padding:4px 11px;border-radius:60px;font-size:10px;font-weight:700;letter-spacing:.4px;background:var(--o);color:#fff;margin-bottom:8px}
+.bc-t{font-size:21px;font-weight:900;line-height:1.2;margin-bottom:3px;letter-spacing:-.3px}
+.bc-s{font-size:12px;color:rgba(255,255,255,.65)}
+.bc-pr{position:absolute;top:18px;left:18px;background:rgba(246,248,244,.93);backdrop-filter:blur(10px);border-radius:14px;padding:7px 14px;font-size:14px;font-weight:900;color:var(--g2);font-family:var(--fe)}
+body.lang-en .bc-pr{left:auto;right:18px}
+.bc-st{position:absolute;top:18px;right:18px;background:rgba(10,31,16,.72);backdrop-filter:blur(10px);border-radius:14px;padding:7px 14px;font-size:11px;font-weight:700;color:#fff;text-align:center}
+body.lang-en .bc-st{right:auto;left:18px}
+.bc-st strong{display:block;font-size:19px;font-family:var(--fe);line-height:1.1}
+.bn-stat{border-radius:24px;background:var(--g1);padding:34px 30px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden}
+.bn-stat::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.03)}
+.bn-sl{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:12px}
+.bn-sn{font-size:60px;font-weight:900;color:#fff;font-family:var(--fe);line-height:1;margin-bottom:8px;letter-spacing:-2px}
+.bn-sd{font-size:15px;font-weight:600;color:rgba(255,255,255,.6);line-height:1.5}
+.bn-cta{border-radius:24px;background:linear-gradient(135deg,var(--o),#C85E0A);display:flex;align-items:center;justify-content:space-between;padding:0 30px;text-decoration:none;transition:opacity .2s}
+.bn-cta:hover{opacity:.9}
+.bn-ct{font-size:16px;font-weight:800;color:#fff}
+.bx{grid-column:span 8;grid-row:span 3}
+.bl{grid-column:span 4;grid-row:span 3}
+.bm{grid-column:span 4;grid-row:span 2}
+.bs{grid-column:span 4;grid-row:span 1}
+.bstat{grid-column:span 4;grid-row:span 2}
+.bcta{grid-column:span 8;grid-row:span 1}
+@media(max-width:1100px){.bg{grid-template-columns:repeat(8,1fr)}.bx{grid-column:span 5;grid-row:span 3}.bl{grid-column:span 3;grid-row:span 3}.bm,.bstat{grid-column:span 4;grid-row:span 2}.bs,.bcta{grid-column:span 8;grid-row:span 1}}
+@media(max-width:768px){.bg{grid-template-columns:repeat(4,1fr);grid-auto-rows:110px}.bx,.bl,.bm,.bstat{grid-column:span 4;grid-row:span 2}.bs,.bcta{grid-column:span 4;grid-row:span 1}.bn-sn{font-size:44px}.bn-stat{padding:22px 20px}}
+
+/* ══════════════ REVIEWS ══════════════ */
+.reviews{background:var(--w);padding:112px 0}
+.rev-hd{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:64px;flex-wrap:wrap}
+.rr-big{font-size:64px;font-weight:900;color:var(--ink);font-family:var(--fe);line-height:1;letter-spacing:-3px}
+.rr-d{display:flex;flex-direction:column;gap:4px}
+.rr-stars{font-size:22px;color:var(--o);letter-spacing:1px}
+.rr-cnt{font-size:12px;color:var(--muted);letter-spacing:.3px}
+.rev-gr{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:768px){.rev-gr{grid-template-columns:1fr}.rev-hd{flex-direction:column;align-items:flex-start}}
+.rc{background:var(--bg);border-radius:24px;padding:34px 30px;border:1px solid var(--s2);transition:all .28s;position:relative;overflow:hidden}
+.rc::before{content:'\201C';position:absolute;top:-20px;right:22px;font-size:110px;font-weight:900;color:rgba(26,61,38,.05);font-family:Georgia,serif;line-height:1;pointer-events:none}
+body.lang-en .rc::before{right:auto;left:22px}
+.rc:hover{transform:translateY(-6px);box-shadow:var(--e2);border-color:var(--s3)}
+.rc-stars{display:flex;gap:3px;margin-bottom:18px}
+.rc-stars span{font-size:15px;color:var(--o)}
+.rc-txt{font-size:15px;color:var(--dim);line-height:1.9;margin-bottom:26px;font-weight:400}
+.rc-auth{display:flex;align-items:center;gap:13px}
+.rc-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:800;flex-shrink:0;box-shadow:0 3px 10px rgba(26,61,38,.22)}
+.rc-nm{font-size:14px;font-weight:700;color:var(--ink);line-height:1.2}
+.rc-lc{font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:.3px}
+
+/* ══════════════ CATS ══════════════ */
+.cats{background:var(--bg);padding:112px 0}
+.cats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:56px}
+@media(max-width:900px){.cats-grid{grid-template-columns:repeat(2,1fr)}}
+.cat-card{border-radius:22px;overflow:hidden;position:relative;aspect-ratio:3/4;cursor:pointer;display:block}
+.cat-card img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.22,1,.36,1)}
+.cat-card:hover img{transform:scale(1.09)}
+.cat-vl{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,31,16,.92) 0%,rgba(10,31,16,.06) 55%,transparent 80%)}
+.cat-info{position:absolute;bottom:0;inset-inline:0;padding:22px 18px;color:#fff}
+.cat-en{font-size:10px;font-weight:700;opacity:.5;text-transform:uppercase;letter-spacing:2px;margin-bottom:4px}
+.cat-ar{font-size:20px;font-weight:900;line-height:1.2;letter-spacing:-.3px}
+.cat-go{font-size:11px;font-weight:700;color:var(--ol);margin-top:8px;display:inline-flex;align-items:center;gap:5px;opacity:0;transform:translateY(6px);transition:all .28s}
+.cat-card:hover .cat-go{opacity:1;transform:translateY(0)}
+.cat-bdg{position:absolute;top:13px;right:13px;background:var(--o);color:#fff;padding:4px 13px;border-radius:60px;font-size:10px;font-weight:700}
+
+/* ══════════════ GALLERY ══════════════ */
+.gallery{background:var(--s1);padding:112px 0}
+.gal-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:230px;gap:10px}
+.gi{border-radius:16px;overflow:hidden;position:relative;cursor:pointer}
+.gi.tall{grid-row:span 2}.gi.wide{grid-column:span 2}
+.gi img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.22,1,.36,1)}
+.gi:hover img{transform:scale(1.09)}
+.gi::after{content:'';position:absolute;inset:0;background:rgba(10,31,16,0);transition:.3s;border-radius:16px}
+.gi:hover::after{background:rgba(10,31,16,.1)}
+@media(max-width:900px){.gal-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:155px}.gi.tall{grid-row:span 1}.gi.wide{grid-column:span 1}}
+
+/* ══════════════ ABOUT ══════════════ */
+.about{background:var(--w);padding:112px 0}
+.about-g{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+@media(max-width:900px){.about-g{grid-template-columns:1fr;gap:40px}}
+.about-img{border-radius:28px;overflow:hidden;position:relative;aspect-ratio:4/5;box-shadow:var(--e3)}
+.about-img img{width:100%;height:100%;object-fit:cover}
+.about-bdg{position:absolute;top:28px;left:28px;background:#fff;border-radius:18px;padding:16px 20px;box-shadow:var(--e2);display:flex;align-items:center;gap:13px}
+body.lang-en .about-bdg{left:auto;right:28px}
+.ab-n{font-size:32px;font-weight:900;color:var(--g1);font-family:var(--fe);line-height:1;letter-spacing:-1px}
+.ab-l{font-size:11px;color:var(--sub);font-weight:600;margin-top:3px;letter-spacing:.3px}
+.about-body h2{font-size:clamp(30px,3.5vw,46px);font-weight:900;color:var(--ink);line-height:1.12;margin-bottom:22px;letter-spacing:-.8px}
+.about-body p{font-size:15px;color:var(--sub);line-height:2;margin-bottom:16px}
+.abt-list{list-style:none;margin:24px 0}
+.abt-list li{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--s1);font-size:14px;font-weight:600;color:var(--dim)}
+.abt-list li:last-child{border-bottom:none}
+.abt-list li::before{content:'✓';width:26px;height:26px;border-radius:50%;flex-shrink:0;background:rgba(61,139,87,.1);color:var(--g4);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900}
+
+/* ══════════════ STRIP ══════════════ */
+.strip{padding:56px 0;background:var(--bg);overflow:hidden}
+
+/* ══════════════ FAQ ══════════════ */
+.faq{background:var(--s1);padding:112px 0}
+.faq-g{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;margin-top:60px}
+@media(max-width:900px){.faq-g{grid-template-columns:1fr;gap:32px}}
+.faq-list{display:flex;flex-direction:column;gap:8px}
+.faq-item{background:var(--w);border-radius:16px;border:1px solid var(--s2);overflow:hidden;transition:border-color .2s}
+.faq-item.open{border-color:var(--g3)}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;padding:20px 24px;font-size:15px;font-weight:700;color:var(--ink);background:none;border:none;cursor:pointer;font-family:inherit;text-align:right;gap:14px;transition:color .18s}
+body.lang-en .faq-q{text-align:left}
+.faq-q:hover{color:var(--g2)}
+.faq-arr{width:32px;height:32px;border-radius:50%;background:var(--s1);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--o);transition:all .3s;flex-shrink:0}
+.faq-item.open .faq-arr{transform:rotate(180deg);background:var(--o);color:#fff}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s}
+.faq-item.open .faq-a{max-height:260px;padding-bottom:20px}
+.faq-a p{padding:0 24px;font-size:14px;color:var(--sub);line-height:1.9}
+.faq-aside{background:var(--g1);border-radius:26px;padding:44px 38px;position:sticky;top:84px;overflow:hidden}
+.faq-aside::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.03);pointer-events:none}
+.faq-aside h3{font-size:24px;font-weight:900;color:#fff;margin-bottom:14px;letter-spacing:-.4px}
+.faq-aside p{font-size:14px;color:rgba(255,255,255,.55);line-height:1.8;margin-bottom:22px}
+
+/* ══════════════ LOC ══════════════ */
+.loc{background:var(--w);padding:112px 0}
+.loc-g{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;margin-top:60px}
+@media(max-width:900px){.loc-g{grid-template-columns:1fr;gap:28px}}
+.map-wr{border-radius:24px;overflow:hidden;height:400px;box-shadow:var(--e2)}
+.map-wr iframe{width:100%;height:100%;border:none}
+.loc-cards{display:flex;flex-direction:column;gap:12px}
+.loc-card{display:flex;align-items:flex-start;gap:16px;padding:20px 22px;background:var(--bg);border-radius:16px;border:1px solid var(--s2);transition:border-color .2s}
+.loc-card:hover{border-color:var(--s3)}
+.loc-ico{font-size:22px;flex-shrink:0;margin-top:1px}
+.loc-t{font-size:13px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.loc-v{font-size:13px;color:var(--sub);line-height:1.65}
+
+/* ══════════════ CTA ══════════════ */
+.cta-sec{padding:112px 0;background:var(--bg)}
+.cta-box{background:linear-gradient(128deg,var(--g1) 0%,var(--g2) 55%,#0D2418 100%);border-radius:36px;padding:96px 80px;text-align:center;position:relative;overflow:hidden}
+@media(max-width:768px){.cta-box{padding:60px 28px;border-radius:24px}}
+.cta-box::before{content:'';position:absolute;top:-80px;right:-80px;width:400px;height:400px;border-radius:50%;background:rgba(255,255,255,.025);pointer-events:none}
+.cta-box::after{content:'';position:absolute;bottom:-100px;left:-100px;width:500px;height:500px;border-radius:50%;background:rgba(230,123,32,.04);pointer-events:none}
+.cta-box h2{font-size:clamp(32px,5vw,64px);font-weight:900;color:#fff;margin-bottom:16px;position:relative;z-index:1;letter-spacing:-1.5px;line-height:1.05}
+.cta-box p{font-size:17px;color:rgba(255,255,255,.5);margin-bottom:40px;position:relative;z-index:1}
+.cta-acts{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+
+/* ══════════════ FOOTER ══════════════ */
+footer{background:var(--g1);padding:64px 0 0}
+.ft-g{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:52px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.06)}
+@media(max-width:900px){.ft-g{grid-template-columns:1fr;gap:28px}}
+.ft-logo{margin-bottom:16px}
+.ft-tag{font-size:13px;color:rgba(255,255,255,.28);line-height:1.85;max-width:240px}
+.ft-ct{font-size:11px;font-weight:800;color:rgba(255,255,255,.45);margin-bottom:18px;letter-spacing:2px;text-transform:uppercase}
+.ft-row{display:flex;align-items:flex-start;gap:11px;margin-bottom:13px;font-size:13px;color:rgba(255,255,255,.35);line-height:1.65}
+.ft-ico{opacity:.4;flex-shrink:0;margin-top:1px}
+.ft-soc{display:flex;gap:8px;margin-top:14px}
+.ft-s{width:38px;height:38px;background:rgba(255,255,255,.07);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .2s;border:1px solid rgba(255,255,255,.05)}
+.ft-s:hover{background:rgba(255,255,255,.15);transform:translateY(-2px)}
+.ft-copy{padding:22px 0;text-align:center;font-size:12px;color:rgba(255,255,255,.14)}
+
+/* ══════════════ WA ══════════════ */
+.wa{position:fixed;bottom:24px;left:24px;z-index:999;background:#25D366;color:#fff;border-radius:32px;padding:13px 22px;display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;font-family:inherit;box-shadow:0 8px 32px rgba(37,211,102,.38);text-decoration:none;transition:transform .2s;animation:wap 2.8s ease infinite}
+body.lang-en .wa{left:auto;right:24px}
+.wa:hover{transform:translateY(-3px)}
+@keyframes wap{0%,100%{box-shadow:0 8px 32px rgba(37,211,102,.38)}50%{box-shadow:0 10px 44px rgba(37,211,102,.6)}}
+@media(max-width:480px){.wa{bottom:16px;left:12px;padding:11px 17px;font-size:12px}}
+</style>
+</head>
+<body>
+<!-- NAV -->
+<header class="nav at-top" id="siteNav">
+  <div class="nav-i">
+    <a href="/" class="nav-logo"><img src="/images/logo-brand.jpeg" alt="TuComida" style="height:44px;width:auto;object-fit:contain;border-radius:8px"></a>
+    <div class="nav-sp"></div>
+    <nav class="nav-links" id="navLinks">
+      <a href="#home" id="nl-home">الرئيسية</a>
+      <a href="#dishes" id="nl-menu">المنيو</a>
+      <a href="#about" id="nl-about">عن المطعم</a>
+      <a href="#faq" id="nl-faq">الأسئلة</a>
+      <a href="#location" id="nl-loc">تواصل</a>
+    </nav>
+    <div class="nav-acts">
+      <button class="nav-lang" id="langBtn" onclick="toggleLang()">EN</button>
+      <a href="/order.html" class="nav-order" id="nl-order">اطلب الآن</a>
+      <button class="nav-burger" id="navBurger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<div class="nav-mob" id="navMobile">
+  <a href="#home" onclick="closeMobileMenu()" id="mn-home">🏠 الرئيسية</a>
+  <a href="#dishes" onclick="closeMobileMenu()" id="mn-menu">🍽 المنيو</a>
+  <a href="#about" onclick="closeMobileMenu()" id="mn-about">🌿 عن المطعم</a>
+  <a href="#faq" onclick="closeMobileMenu()" id="mn-faq">❓ الأسئلة</a>
+  <a href="#location" onclick="closeMobileMenu()" id="mn-loc">📍 تواصل</a>
+  <a href="/order.html" id="mn-order">🛵 اطلب دلوقتي</a>
+</div>
+
+<!-- ══════ HERO ══════ -->
+<section class="hero" id="home">
+
+  <!-- LEFT -->
+  <div class="hero-L">
+    <div class="hero-ey">
+      <span class="hero-live-dot"></span>
+      <span class="ar">مطعم أكل صحي · دمياط الجديدة</span>
+      <span class="en">Fresh &amp; Healthy · New Damietta</span>
+    </div>
+
+    <h1 class="hero-H">
+      <span class="ar">أكل صحي...<br><em class="hw" id="heroWordAr">طازج</em></span>
+      <span class="en">Healthy food...<br><em class="hw" id="heroWordEn">Fresh</em></span>
+    </h1>
+
+    <p class="hero-p">
+      <span class="ar">وجبات مُعدّة يومياً بأفضل المكونات الطازجة — بروتين عالي، سعرات محسوبة، تجرّبه لا تنسى.</span>
+      <span class="en">Freshly prepared meals crafted daily with premium ingredients — high protein, calculated calories, unforgettable taste.</span>
+    </p>
+
+    <!-- Ingredient Badges -->
+    <div class="hero-badges">
+      <span class="hbadge">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="var(--g2)" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <span class="ar">بروتين عالي</span><span class="en">High Protein</span>
+      </span>
+      <span class="hbadge">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="var(--g2)" stroke-width="2.5"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M12 8v4l3 3"/></svg>
+        <span class="ar">طازج يومياً</span><span class="en">Fresh Daily</span>
+      </span>
+      <span class="hbadge">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="var(--g2)" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9S3 16.97 3 12 7.03 3 12 3s9 4.03 9 9z"/></svg>
+        <span class="ar">سعرات محسوبة</span><span class="en">Counted Calories</span>
+      </span>
+      <span class="hbadge">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="var(--g2)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="ar">بدون مواد حافظة</span><span class="en">No Preservatives</span>
+      </span>
+    </div>
+
+    <!-- CTAs -->
+    <div class="hero-acts">
+      <a href="/order.html" class="btn btn-amb">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <span class="ar">اطلب الآن</span><span class="en">Order Now</span>
+      </a>
+      <a href="#dishes" class="btn btn-soft"><span class="ar">شوف المنيو</span><span class="en">View Menu</span></a>
+    </div>
+
+    <!-- Thumbnail Gallery -->
+    <div class="hero-thumbs" id="heroThumbs">
+      <button class="hthumb active" onclick="switchMeal(0)" data-idx="0">
+        <img src="/images/food/food-07.jpg?v=2" alt="Toxic">
+      </button>
+      <button class="hthumb" onclick="switchMeal(1)" data-idx="1">
+        <img src="/images/food/food-08.jpg?v=2" alt="Rolit Pasta">
+      </button>
+      <button class="hthumb" onclick="switchMeal(2)" data-idx="2">
+        <img src="/images/food/food-66.jpg" alt="Caesar Salad">
+      </button>
+      <button class="hthumb" onclick="switchMeal(3)" data-idx="3">
+        <img src="/images/food/food-20.jpg" alt="Rizzo Shrimp">
+      </button>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="hero-R">
+    <div class="hero-glow"></div>
+
+    <div class="hero-img-wrap">
+      <img id="heroMainImg" src="/images/food/food-07.jpg?v=2" alt="توكسيك — TuComida" loading="eager" fetchpriority="high">
+    </div>
+
+    <!-- Floating price badge — redesigned -->
+    <div class="hero-fb hfb-top" style="flex-direction:column;align-items:flex-start;gap:4px;padding:14px 18px">
+      <div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px" class="ar">السعر يبدأ من</div>
+      <div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px" class="en">Starting from</div>
+      <div style="display:flex;align-items:baseline;gap:4px">
+        <span class="hfb-pr" id="heroPrice" style="font-size:26px">255</span>
+        <span style="font-size:13px;font-weight:700;color:var(--sub)" class="ar">ج</span>
+        <span style="font-size:13px;font-weight:700;color:var(--sub)" class="en">EGP</span>
+      </div>
+    </div>
+
+    <!-- Meal name pill -->
+    <div class="hero-meal-pill">
+      <div class="hmp-name" id="heroName"><span class="ar">توكسيك</span><span class="en">Toxic</span></div>
+      <div style="width:1px;height:16px;background:rgba(255,255,255,.2)"></div>
+      <div class="hmp-price" id="heroCalories" style="font-size:12px;color:rgba(255,255,255,.7)">506 kcal</div>
+    </div>
+
+    <!-- Auto-advance progress bar -->
+    <div class="hero-prog"><div class="hero-prog-bar" id="heroProgBar"></div></div>
+  </div>
+
+</section>
+
+<!-- TRUST -->
+<div class="trust-bar">
+  <div class="trust-i">
+    <div class="ti"><span class="ar">⭐ 4.9 تقييم جوجل</span><span class="en">⭐ 4.9 Google Rating</span></div>
+    <div class="t-sep"></div>
+    <div class="ti"><span class="ar">🥗 +120 صنف</span><span class="en">🥗 120+ Items</span></div>
+    <div class="t-sep"></div>
+    <div class="ti"><span class="ar">🌿 100% طازج يومياً</span><span class="en">🌿 100% Fresh Daily</span></div>
+    <div class="t-sep"></div>
+    <div class="ti"><span class="ar">🛵 توصيل سريع</span><span class="en">🛵 Fast Delivery</span></div>
+    <div class="t-sep"></div>
+    <div class="ti"><span class="ar">🏆 منذ 2021</span><span class="en">🏆 Since 2021</span></div>
+  </div>
+</div>
+
+<!-- SHOWCASE -->
+<section class="showcase" id="dishes">
+  <div class="W">
+    <div class="sec-hd">
+      <div class="eyebrow fi"><span class="ar">الأطباق المميزة</span><span class="en">SIGNATURE DISHES</span></div>
+      <h2 class="H2 fi" style="margin-bottom:14px"><span class="ar">الأكثر طلباً <span class="acc">كل يوم</span></span><span class="en">Most Ordered <span class="acc">Every Day</span></span></h2>
+      <p class="body-t fi" style="margin:0 auto"><span class="ar">أطباق بنفخر بيها — كل واحد محسوب السعرات والبروتين بدقة</span><span class="en">Dishes we're proud of — each with precisely calculated calories and protein</span></p>
+    </div>
+    <div class="dish-grid">
+      <article class="dish fi fi-d1">
+        <div class="dish-ph"><img src="/images/food/food-07.jpg?v=2" alt="توكسيك" loading="lazy"><div class="dish-bdg hot"><span class="ar">🔥 الأكثر طلباً</span><span class="en">🔥 Most Ordered</span></div></div>
+        <div class="dish-body">
+          <div class="dish-chips"><span class="chip p">💪 59g</span><span class="chip">🔥 506 kcal</span></div>
+          <h3 class="dish-n ar">توكسيك</h3><h3 class="dish-n en">Toxic</h3>
+          <p class="dish-d ar">تورتيلا صحي مع سماش برجر والدجاج المشوي والمشروم والجبن مع سلطة خضراء</p>
+          <p class="dish-d en">Healthy tortilla with smash burger, grilled chicken, mushroom, cheese and green salad</p>
+          <div class="dish-ft"><div class="dish-pr">255<span class="ar"> ج</span><span class="en"> EGP</span></div><a href="/order.html" class="dish-btn ar">اطلب</a><a href="/order.html" class="dish-btn en">Order</a></div>
+        </div>
+      </article>
+      <article class="dish fi fi-d2">
+        <div class="dish-ph"><img src="/images/food/food-08.jpg?v=2" alt="رولت باستا" loading="lazy"><div class="dish-bdg pick">🍝 Signature</div></div>
+        <div class="dish-body">
+          <div class="dish-chips"><span class="chip p">💪 47g</span><span class="chip">🔥 511 kcal</span></div>
+          <h3 class="dish-n ar">رولت باستا</h3><h3 class="dish-n en">Rolit Pasta</h3>
+          <p class="dish-d ar">صدور الدجاج المشوي وشرائح المشروم الفريش بصوص المشروم مع باستا وسلطة خضراء</p>
+          <p class="dish-d en">Grilled chicken breast with fresh mushroom in mushroom sauce, pasta and green salad</p>
+          <div class="dish-ft"><div class="dish-pr">210<span class="ar"> ج</span><span class="en"> EGP</span></div><a href="/order.html" class="dish-btn ar">اطلب</a><a href="/order.html" class="dish-btn en">Order</a></div>
+        </div>
+      </article>
+      <article class="dish fi fi-d3">
+        <div class="dish-ph"><img src="/images/food/food-66.jpg" alt="Caesar Salad" loading="lazy"><div class="dish-bdg hot"><span class="ar">⭐ الأكثر طلباً</span><span class="en">⭐ Best Seller</span></div></div>
+        <div class="dish-body">
+          <div class="dish-chips"><span class="chip p">💪 24g</span><span class="chip">🔥 307 kcal</span></div>
+          <h3 class="dish-n ar">سيزار سلاد</h3><h3 class="dish-n en">Caesar Salad</h3>
+          <p class="dish-d ar">دجاج مشوي مع خس وخيار وفلفل وذرة وفاصوليا حمراء مع دريسينج الزبادي والليمون</p>
+          <p class="dish-d en">Grilled chicken with lettuce, cucumber, peppers, corn and red beans with yogurt lemon dressing</p>
+          <div class="dish-ft"><div class="dish-pr">150<span class="ar"> ج</span><span class="en"> EGP</span></div><a href="/order.html" class="dish-btn ar">اطلب</a><a href="/order.html" class="dish-btn en">Order</a></div>
+        </div>
+      </article>
+      <article class="dish fi fi-d4">
+        <div class="dish-ph"><img src="/images/food/food-20.jpg" alt="Rizzo Shrimp" loading="lazy"><div class="dish-bdg new"><span class="ar">🦐 جديد</span><span class="en">🦐 New</span></div></div>
+        <div class="dish-body">
+          <div class="dish-chips"><span class="chip p">💪 29g</span><span class="chip">🔥 380 kcal</span></div>
+          <h3 class="dish-n ar">ريزو شريمب</h3><h3 class="dish-n en">Rizzo Shrimp</h3>
+          <p class="dish-d ar">جمبري كرانشي مع أرز بسمتي مبهر وصوص ريزو</p>
+          <p class="dish-d en">Crispy shrimp with seasoned basmati rice and Rizzo sauce</p>
+          <div class="dish-ft"><div class="dish-pr">95<span class="ar"> ج</span><span class="en"> EGP</span></div><a href="/order.html" class="dish-btn ar">اطلب</a><a href="/order.html" class="dish-btn en">Order</a></div>
+        </div>
+      </article>
+    </div>
+    <div style="text-align:center;margin-top:52px"><a href="/order.html" class="btn btn-fill fi" style="font-size:15px;padding:15px 36px"><span class="ar">عرض المنيو الكامل ←</span><span class="en">View Full Menu →</span></a></div>
+  </div>
+</section>
+
+<!-- WHY -->
+<!-- ══ SUBSCRIPTION PLANS — replaces "why" section ══ -->
+<style>
+/* Plans section — uses existing design tokens exclusively */
+.plans{background:var(--w);padding:112px 0}
+.plans-hd{text-align:center;max-width:580px;margin:0 auto 72px}
+.plans-sub{font-size:16px;color:var(--sub);line-height:1.9;margin-top:14px;max-width:480px;margin-inline:auto}
+
+.plans-gr{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+
+/* Base card */
+.pcard{background:var(--w);border-radius:24px;border:1.5px solid var(--s2);padding:36px 28px 32px;display:flex;flex-direction:column;box-shadow:var(--e1);transition:transform .32s cubic-bezier(.22,1,.36,1),box-shadow .32s,border-color .22s;position:relative;overflow:hidden}
+.pcard:hover{transform:translateY(-6px);box-shadow:var(--e3);border-color:var(--s3)}
+
+/* Featured card */
+.pcard.pf{background:var(--g2);border-color:var(--g2);box-shadow:var(--e2)}
+.pcard.pf:hover{transform:translateY(-6px);box-shadow:0 12px 52px rgba(26,61,38,.34);border-color:var(--g1)}
+
+/* Badge */
+.p-badge{position:absolute;top:18px;right:18px;background:var(--o);color:#fff;font-size:11px;font-weight:800;padding:5px 13px;border-radius:60px;letter-spacing:.3px;font-family:var(--fa);line-height:1}
+
+/* Icon */
+.p-ico{display:none}
+
+/* Name */
+.p-nm{font-size:21px;font-weight:900;color:var(--ink);line-height:1.2;margin-bottom:0;letter-spacing:-.3px}
+.pf .p-nm{color:#fff}
+
+/* Divider */
+.p-div{height:1px;background:var(--s2);margin:20px 0}
+.pf .p-div{background:rgba(255,255,255,.16)}
+
+/* Feature list */
+.p-ul{list-style:none;display:flex;flex-direction:column;gap:12px;margin:0 0 28px}
+.p-ul li{display:flex;align-items:center;gap:11px;font-size:14px;font-weight:600;color:var(--sub);line-height:1.5}
+.p-ul li::before{content:'✓';min-width:22px;height:22px;border-radius:50%;background:var(--s1);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:var(--g3);flex-shrink:0}
+.pf .p-ul li{color:rgba(255,255,255,.84)}
+.pf .p-ul li::before{background:rgba(255,255,255,.18);color:#fff}
+
+/* Price */
+.p-pr-row{display:flex;align-items:baseline;gap:4px;margin-bottom:26px;margin-top:auto}
+.p-pr{font-size:46px;font-weight:900;color:var(--g1);font-family:var(--fe);line-height:1;letter-spacing:-2px}
+.pf .p-pr{color:#fff}
+.p-cur{font-size:16px;font-weight:700;color:var(--sub);font-family:var(--fa);margin-inline-start:3px}
+.pf .p-cur{color:rgba(255,255,255,.72)}
+.p-per{font-size:13px;font-weight:600;color:var(--muted);margin-inline-start:6px}
+.pf .p-per{color:rgba(255,255,255,.55)}
+
+/* CTA button */
+.p-btn{display:block;width:100%;text-align:center;padding:14px 24px;border-radius:14px;font-size:15px;font-weight:800;font-family:var(--fa);cursor:pointer;text-decoration:none;transition:all .22s cubic-bezier(.22,1,.36,1);background:var(--s1);color:var(--g2);border:1.5px solid var(--s3)}
+.p-btn:hover{background:var(--s2);transform:translateY(-2px);box-shadow:0 4px 16px rgba(26,61,38,.12);border-color:var(--g3)}
+.pf .p-btn{background:#fff;color:var(--g2);border:1.5px solid transparent;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.pf .p-btn:hover{background:var(--o);color:#fff;transform:translateY(-2px);box-shadow:0 6px 22px rgba(230,123,32,.36);border-color:transparent}
+
+/* Responsive */
+@media(max-width:900px){.plans-gr{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.plans-gr{grid-template-columns:1fr}.pcard{padding:30px 22px 26px}}
+</style>
+
+<style>
+/* ── Tatbela plan cards (warm fire theme) ── */
+.plans-divider{
+  text-align:center;max-width:520px;margin:72px auto 48px;
+  border-top:1px solid var(--s2);padding-top:60px;
+}
+.plans-gr-2{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:24px;max-width:680px;margin:0 auto;
+}
+.pcard.pt{
+  border-color:rgba(230,123,32,.25);
+}
+.pcard.pt:hover{
+  border-color:rgba(230,123,32,.5);
+  box-shadow:0 12px 52px rgba(230,123,32,.12);
+}
+.pcard.pt .p-ul li::before{
+  background:rgba(230,123,32,.1);color:var(--o);
+}
+.pcard.ptf{
+  background:linear-gradient(145deg,#7B2800,#4A1A00);
+  border-color:#7B2800;box-shadow:var(--e2);
+}
+.pcard.ptf:hover{
+  box-shadow:0 12px 52px rgba(123,40,0,.34);border-color:#5C1E00;
+}
+.pcard.ptf .p-nm,.pcard.ptf .p-pr,.pcard.ptf .p-cur{ color:#fff; }
+.pcard.ptf .p-per{ color:rgba(255,255,255,.55); }
+.pcard.ptf .p-div{ background:rgba(255,255,255,.16); }
+.pcard.ptf .p-ul li{ color:rgba(255,255,255,.84); }
+.pcard.ptf .p-ul li::before{ background:rgba(255,255,255,.18);color:#fff; }
+.pcard.ptf .p-btn{ background:#fff;color:#7B2800;border:1.5px solid transparent; }
+.pcard.ptf .p-btn:hover{ background:var(--o);color:#fff;transform:translateY(-2px);box-shadow:0 6px 22px rgba(230,123,32,.4);border-color:transparent; }
+.p-badge-fire{ position:absolute;top:18px;right:18px;background:var(--o);color:#fff;font-size:11px;font-weight:800;padding:5px 13px;border-radius:60px;letter-spacing:.3px;font-family:var(--fa); }
+@media(max-width:600px){.plans-gr-2{grid-template-columns:1fr;max-width:100%}}
+</style>
+
+<section class="plans">
+  <div class="W">
+
+    <div class="plans-hd fi">
+      <div class="eyebrow"><span class="ar">الاشتراكات</span><span class="en">SUBSCRIPTIONS</span></div>
+      <h2 class="H2"><span class="ar">اختر الباقة <span class="acc">المناسبة لك</span></span><span class="en">Choose Your <span class="acc">Perfect Plan</span></span></h2>
+      <p class="plans-sub ar">وجبات صحية طازجة يتم إعدادها يومياً وتوصيلها مباشرة إلى باب منزلك</p>
+      <p class="plans-sub en">Fresh healthy meals prepared daily and delivered straight to your door</p>
+    </div>
+
+    <!-- ── Group 1: Healthy Meals ── -->
+    <div class="plans-gr">
+
+      <!-- Card 1 — Weekly -->
+      <div class="pcard fi fi-d1">
+        <div class="p-nm ar">الاشتراك الأسبوعي</div>
+        <div class="p-nm en">Weekly Plan</div>
+        <div class="p-div"></div>
+        <ul class="p-ul ar">
+          <li>7 أيام من الوجبات المتنوعة</li>
+          <li>سعرات محسوبة بدقة</li>
+          <li>2 طبق جانبي من اختيارك (أرز - سلطة - فرايز)</li>
+          <li>5 وجبات دجاج 150 جرام</li>
+          <li>2 وجبة لحم 150 جرام</li>
+        </ul>
+        <ul class="p-ul en">
+          <li>7 days of varied meals</li>
+          <li>Precisely calculated calories</li>
+          <li>2 side dishes of your choice (rice - salad - fries)</li>
+          <li>5 chicken meals (150g)</li>
+          <li>2 meat meals (150g)</li>
+        </ul>
+        <div class="p-pr-row">
+          <span class="p-pr" data-plan="weekly">1,520</span>
+          <span class="p-cur">EGP</span>
+          <span class="p-per ar">/ أسبوع</span>
+          <span class="p-per en">/ week</span>
+        </div>
+        <a href="https://wa.me/201102708550?text=Hi, I'd like to subscribe to the Weekly Plan 🥗" target="_blank" rel="noopener" class="p-btn en">Subscribe Now</a>
+        <a href="https://wa.me/201102708550?text=مرحباً، أريد الاشتراك الأسبوعي 🥗" target="_blank" rel="noopener" class="p-btn ar">اشترك الآن</a>
+      </div>
+
+      <!-- Card 2 — Half Monthly (Featured) -->
+      <div class="pcard pf fi fi-d2">
+        <div class="p-badge ar">الأكثر طلباً</div>
+        <div class="p-badge en">Most Popular</div>
+        <div class="p-nm ar">الاشتراك نصف الشهري</div>
+        <div class="p-nm en">Half Monthly Plan</div>
+        <div class="p-div"></div>
+        <ul class="p-ul ar">
+          <li>15 يوم من الوجبات المتنوعة</li>
+          <li>سعرات محسوبة بدقة</li>
+          <li>2 طبق جانبي من اختيارك (أرز - سلطة - فرايز)</li>
+          <li>11 وجبة دجاج 150 جرام</li>
+          <li>4 وجبات لحم 150 جرام</li>
+          <li>يمكن التبديل بأي راب أو كاسديا أو باستا</li>
+        </ul>
+        <ul class="p-ul en">
+          <li>15 days of varied meals</li>
+          <li>Precisely calculated calories</li>
+          <li>2 side dishes of your choice (rice - salad - fries)</li>
+          <li>11 chicken meals (150g)</li>
+          <li>4 meat meals (150g)</li>
+          <li>Can swap for any wrap, casdia or pasta</li>
+        </ul>
+        <div class="p-pr-row">
+          <span class="p-pr" data-plan="monthly">3,250</span>
+          <span class="p-cur">EGP</span>
+          <span class="p-per ar">/ 15 يوم</span>
+          <span class="p-per en">/ 15 days</span>
+        </div>
+        <a href="https://wa.me/201102708550?text=Hi, I'd like to subscribe to the Half Monthly Plan 🥑" target="_blank" rel="noopener" class="p-btn en">Start Subscribing</a>
+        <a href="https://wa.me/201102708550?text=مرحباً، أريد الاشتراك نصف الشهري 🥑" target="_blank" rel="noopener" class="p-btn ar">ابدأ اشتراكك</a>
+      </div>
+
+      <!-- Card 3 — Monthly -->
+      <div class="pcard fi fi-d3">
+        <div class="p-nm ar">الاشتراك الشهري</div>
+        <div class="p-nm en">Monthly Plan</div>
+        <div class="p-div"></div>
+        <ul class="p-ul ar">
+          <li>30 يوم من الوجبات المتنوعة</li>
+          <li>سعرات محسوبة بدقة</li>
+          <li>2 طبق جانبي من اختيارك (أرز - سلطة - فرايز)</li>
+          <li>22 وجبة دجاج 150 جرام</li>
+          <li>8 وجبات لحم 150 جرام</li>
+          <li>يمكن التبديل بأي راب أو كاسديا أو باستا</li>
+        </ul>
+        <ul class="p-ul en">
+          <li>30 days of varied meals</li>
+          <li>Precisely calculated calories</li>
+          <li>2 side dishes of your choice (rice - salad - fries)</li>
+          <li>22 chicken meals (150g)</li>
+          <li>8 meat meals (150g)</li>
+          <li>Can swap for any wrap, casdia or pasta</li>
+        </ul>
+        <div class="p-pr-row">
+          <span class="p-pr" data-plan="fitness">6,500</span>
+          <span class="p-cur">EGP</span>
+          <span class="p-per ar">/ شهر</span>
+          <span class="p-per en">/ month</span>
+        </div>
+        <a href="https://wa.me/201102708550?text=Hi, I'd like to subscribe to the Monthly Plan 💪" target="_blank" rel="noopener" class="p-btn en">Start Today</a>
+        <a href="https://wa.me/201102708550?text=مرحباً، أريد الاشتراك الشهري 💪" target="_blank" rel="noopener" class="p-btn ar">ابدأ اليوم</a>
+      </div>
+
+    </div>
+
+    <!-- ── Group 2: Tatbela Subscriptions ── -->
+    <div class="plans-divider fi">
+      <div class="eyebrow" style="justify-content:center"><span class="ar">🔥 باقات التتبيلة</span><span class="en">🔥 MARINADE PLANS</span></div>
+      <h3 class="H2" style="font-size:clamp(26px,3vw,40px)"><span class="ar">لحوم طازجة <span class="acc">جاهزة للشوي</span></span><span class="en">Fresh Meat <span class="acc">Ready to Grill</span></span></h3>
+      <p class="plans-sub ar" style="margin-top:10px">اختار اللحمة وبنتبلهالك بخلطتنا السرية — جاهزة تشوّيها في البيت بأي وقت</p>
+      <p class="plans-sub en" style="margin-top:10px">Choose your meat and we marinate it with our secret blend — ready to grill at home anytime</p>
+    </div>
+
+    <div class="plans-gr-2" style="grid-template-columns:repeat(3,1fr);max-width:100%">
+
+      <!-- Tatbela — Weekly -->
+      <div class="pcard pt fi fi-d1">
+        <div class="p-nm ar">الاشتراك الأسبوعي</div>
+        <div class="p-nm en">Weekly Marinade</div>
+        <div class="p-div"></div>
+        <ul class="p-ul ar">
+          <li>نصف كيلو شيش طاووق</li>
+          <li>نصف كيلو كفته حاتي</li>
+          <li>كيلو أوراك</li>
+        </ul>
+        <ul class="p-ul en">
+          <li>½ kg shish tawook</li>
+          <li>½ kg Hati kofta</li>
+          <li>1 kg chicken wings</li>
+        </ul>
+        <div class="p-pr-row">
+          <span class="p-pr" data-plan="tatbela-week">550</span>
+          <span class="p-cur">EGP</span>
+          <span class="p-per ar">/ أسبوع</span>
+          <span class="p-per en">/ week</span>
+        </div>
+        <a href="https://wa.me/201102708550?text=Hi, I'd like to subscribe to the Weekly Marinade Plan 🥩🔥" target="_blank" rel="noopener" class="p-btn en">Ask on WhatsApp</a>
+        <a href="https://wa.me/201102708550?text=مرحباً، أريد الاشتراك الأسبوعي للتتبيلة 🥩🔥" target="_blank" rel="noopener" class="p-btn ar">استفسر عبر واتساب</a>
+      </div>
+
+      <!-- Tatbela — Half Monthly (Featured) -->
+      <div class="pcard ptf fi fi-d2">
+        <div class="p-badge-fire ar">الأوفر</div>
+        <div class="p-badge-fire en">Best Value</div>
+        <div class="p-nm ar">الاشتراك نصف الشهري</div>
+        <div class="p-nm en">Half Monthly Marinade</div>
+        <div class="p-div"></div>
+        <ul class="p-ul ar">
+          <li>كيلو أوراك</li>
+          <li>نصف كيلو شيش طاووق</li>
+          <li>نصف كيلو كفته حاتي</li>
+          <li>نص كيلو برجر لحم</li>
+          <li>نص كيلو فاهيتا</li>
+        </ul>
+        <ul class="p-ul en">
+          <li>1 kg chicken wings</li>
+          <li>½ kg shish tawook</li>
+          <li>½ kg Hati kofta</li>
+          <li>½ kg meat burger</li>
+          <li>½ kg fahita</li>
+        </ul>
+        <div class="p-pr-row">
+          <span class="p-pr" data-plan="tatbela-2weeks">960</span>
+          <span class="p-cur">EGP</span>
+          <span class="p-per ar">/ نصف شهر</span>
+          <span class="p-per en">/ half month</span>
+        </div>
+        <a href="https://wa.me/201102708550?text=Hi, I'd like to subscribe to the Half Monthly Marinade Plan 🥩🔥" target="_blank" rel="noopener" class="p-btn en">Ask on WhatsApp</a>
+        <a href="https://wa.me/201102708550?text=مرحباً، أريد الاشتراك نصف الشهري للتتبيلة 🥩🔥" target="_blank" rel="noopener" class="p-btn ar">استفسر عبر واتساب</a>
+      </div>
+
+      <!-- Tatbela — Monthly -->
+      <div class="pcard pt fi fi-d3">
+        <div class="p-nm ar">الاشتراك الشهري</div>
+        <div class="p-nm en">Monthly Marinade</div>
+        <div class="p-div"></div>
+        <ul class="p-ul ar">
+          <li>كيلو فيليه اسبيشال</li>
+          <li>كفته تركي (دجاج)</li>
+          <li>كيلو أوراك</li>
+          <li>نصف كيلو شيش طاووق</li>
+          <li>نصف كيلو كفته حاتي</li>
+          <li>نص كيلو برجر لحم</li>
+          <li>نص كيلو فاهيتا</li>
+          <li>نص كيلو ميت بولز</li>
+        </ul>
+        <ul class="p-ul en">
+          <li>1 kg special fillet</li>
+          <li>Turkish kofta (chicken)</li>
+          <li>1 kg chicken wings</li>
+          <li>½ kg shish tawook</li>
+          <li>½ kg Hati kofta</li>
+          <li>½ kg meat burger</li>
+          <li>½ kg fahita</li>
+          <li>½ kg meatballs</li>
+        </ul>
+        <div class="p-pr-row">
+          <span class="p-pr" data-plan="tatbela-month">1,700</span>
+          <span class="p-cur">EGP</span>
+          <span class="p-per ar">/ شهر</span>
+          <span class="p-per en">/ month</span>
+        </div>
+        <a href="https://wa.me/201102708550?text=Hi, I'd like to subscribe to the Monthly Marinade Plan 🥩🔥" target="_blank" rel="noopener" class="p-btn en">Ask on WhatsApp</a>
+        <a href="https://wa.me/201102708550?text=مرحباً، أريد الاشتراك الشهري للتتبيلة 🥩🔥" target="_blank" rel="noopener" class="p-btn ar">استفسر عبر واتساب</a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- BENTO -->
+<!-- STATS STRIP -->
+<style>
+.stats-strip{background:var(--g1);padding:72px 0}
+.ss-grid{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:center}
+.ss-sep{width:1px;height:56px;background:rgba(255,255,255,.18)}
+.ss-item{text-align:center;padding:0 24px}
+.ss-n{font-size:clamp(40px,4.5vw,60px);font-weight:900;color:#fff;line-height:1;letter-spacing:-2px;margin-bottom:8px;font-family:var(--fe)}
+.ss-l{font-size:13px;font-weight:700;color:rgba(255,255,255,.8);margin-bottom:4px;letter-spacing:.3px}
+.ss-s{font-size:12px;color:rgba(255,255,255,.45)}
+@media(max-width:768px){
+  .ss-grid{grid-template-columns:1fr 1fr;gap:40px 0}
+  .ss-sep{display:none}
+  .ss-item{padding:0 16px}
+  .stats-strip{padding:56px 0}
+}
+</style>
+<section class="stats-strip">
+  <div class="W">
+    <div class="ss-grid fi">
+      <div class="ss-item">
+        <div class="ss-n">+120</div>
+        <div class="ss-l"><span class="ar">صنف في المنيو</span><span class="en">Menu Items</span></div>
+        <div class="ss-s"><span class="ar">من الراب للسموثي</span><span class="en">From wraps to smoothies</span></div>
+      </div>
+      <div class="ss-sep"></div>
+      <div class="ss-item">
+        <div class="ss-n">4.9</div>
+        <div class="ss-l"><span class="ar">تقييم جوجل</span><span class="en">Google Rating</span></div>
+        <div class="ss-s"><span class="ar">بناءً على مئات التقييمات</span><span class="en">Hundreds of reviews</span></div>
+      </div>
+      <div class="ss-sep"></div>
+      <div class="ss-item">
+        <div class="ss-n">100%</div>
+        <div class="ss-l"><span class="ar">طازج يومياً</span><span class="en">Fresh Daily</span></div>
+        <div class="ss-s"><span class="ar">بدون مواد حافظة</span><span class="en">No preservatives</span></div>
+      </div>
+      <div class="ss-sep"></div>
+      <div class="ss-item">
+        <div class="ss-n">2021</div>
+        <div class="ss-l"><span class="ar">سنة التأسيس</span><span class="en">Founded</span></div>
+        <div class="ss-s"><span class="ar">دمياط الجديدة</span><span class="en">New Damietta</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews">
+  <div class="W">
+    <div class="rev-hd fi">
+      <div>
+        <div class="eyebrow" style="margin-bottom:16px"><span class="ar">آراء عملاؤنا</span><span class="en">CUSTOMER REVIEWS</span></div>
+        <h2 class="H2" style="margin-bottom:0"><span class="ar">بيقولوا إيه <span class="acc">عننا</span></span><span class="en">What They Say <span class="acc">About Us</span></span></h2>
+      </div>
+      <div style="display:flex;align-items:center;gap:18px"><div class="rr-big">4.9</div><div class="rr-d"><div class="rr-stars">★★★★★</div><div class="rr-cnt ar">بناءً على مئات التقييمات</div><div class="rr-cnt en">Based on hundreds of reviews</div></div></div>
+    </div>
+    <!-- Google badge -->
+    <div class="fi" style="display:flex;align-items:center;gap:10px;margin-bottom:36px;padding:14px 20px;background:var(--w);border:1px solid var(--s2);border-radius:14px;width:fit-content">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      <span style="font-size:13px;font-weight:700;color:var(--dim)" class="ar">آراء من Google Maps</span>
+      <span style="font-size:13px;font-weight:700;color:var(--dim)" class="en">Reviews from Google Maps</span>
+    </div>
+    <div class="rev-gr">
+      <article class="rc fi fi-d1" itemscope itemtype="https://schema.org/Review">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><div class="rc-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><svg width="15" height="15" viewBox="0 0 24 24" style="opacity:.35"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></div>
+        <p class="rc-txt" itemprop="reviewBody"><span class="ar">أكل صحي حقيقي وبسعر كويس. جربت التوكسيك وكان تحفة — السعرات مكتوبة فعلاً. بيجوا تاني أكيد.</span><span class="en">Real healthy food at a great price. Tried the Toxic and it was amazing — calories are actually listed. Will definitely come back.</span></p>
+        <div class="rc-auth"><div class="rc-av" style="background:linear-gradient(135deg,#1a73e8,#0d47a1)">م</div><div><div class="rc-nm" itemprop="author">محمد عبدالرحمن</div><div class="rc-lc">منذ أسبوعين · Google</div></div></div>
+      </article>
+      <article class="rc fi fi-d2" itemscope itemtype="https://schema.org/Review">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><div class="rc-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><svg width="15" height="15" viewBox="0 0 24 24" style="opacity:.35"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></div>
+        <p class="rc-txt" itemprop="reviewBody"><span class="ar">من أكتر من سنة وأنا بطلب منهم. الراب والسموثي مش بيخذلوا أبداً. المكان نظيف والأكل طازج فعلاً.</span><span class="en">I've been ordering for over a year. The wraps and smoothies never disappoint. Clean place and genuinely fresh food.</span></p>
+        <div class="rc-auth"><div class="rc-av" style="background:linear-gradient(135deg,#e53935,#b71c1c)">ن</div><div><div class="rc-nm" itemprop="author">نورهان السيد</div><div class="rc-lc">منذ شهر · Google</div></div></div>
+      </article>
+      <article class="rc fi fi-d3" itemscope itemtype="https://schema.org/Review">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><div class="rc-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><svg width="15" height="15" viewBox="0 0 24 24" style="opacity:.35"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></div>
+        <p class="rc-txt" itemprop="reviewBody"><span class="ar">تجربة ممتازة. أكلت التتبيلة وعملت الشوي في البيت وطلعت تحفة. الخدمة ممتازة والرد على واتساب سريع.</span><span class="en">Excellent experience. Got the marinade, grilled it at home — it was perfect. Great service and fast WhatsApp replies.</span></p>
+        <div class="rc-auth"><div class="rc-av" style="background:linear-gradient(135deg,#f57c00,#e65100)">ع</div><div><div class="rc-nm" itemprop="author">عمر خالد</div><div class="rc-lc">منذ 3 أشهر · Google</div></div></div>
+      </article>
+    </div>
+    <div style="text-align:center;margin-top:40px" class="fi">
+      <a href="https://wa.me/201102708550?text=أريد أكتب تقييم عن TuComida" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;padding:12px 24px;border:1.5px solid var(--s2);border-radius:50px;font-size:13px;font-weight:700;color:var(--dim);transition:all .2s;text-decoration:none" onmouseover="this.style.borderColor='#25D366';this.style.color='#25D366'" onmouseout="this.style.borderColor='var(--s2)';this.style.color='var(--dim)'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <span class="ar">شاركنا تجربتك عبر واتساب ←</span><span class="en">Share your experience on WhatsApp →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- MENU CATEGORIES -->
+<section class="cats" id="menu">
+  <div class="W">
+    <div style="text-align:center;max-width:600px;margin:0 auto 72px">
+      <div class="eyebrow fi"><span class="ar">المنيو</span><span class="en">MENU</span></div>
+      <h2 class="H2 fi"><span class="ar">استكشف <span class="acc">أطباقنا</span></span><span class="en">Explore <span class="acc">Our Menu</span></span></h2>
+      <p class="body-t fi" style="margin:0 auto"><span class="ar">من الراب الصحي للسموثي الطازج — عندنا لكل ذوق الخيار المناسب</span><span class="en">From healthy wraps to fresh smoothies — we have the right option for every taste</span></p>
+    </div>
+    <div class="cats-grid">
+      <a href="/order.html" class="cat-card fi fi-d1"><img src="/images/food/food-37.jpg" alt="راب" loading="lazy"><div class="cat-vl"></div><div class="cat-bdg">⭐ <span class="ar">الأكثر طلباً</span><span class="en">Best Seller</span></div><div class="cat-info"><div class="cat-en">Wraps</div><div class="cat-ar">راب صحي</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+      <a href="/order.html" class="cat-card fi fi-d2"><img src="/images/food/food-15.jpg" alt="إفطار" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Breakfast</div><div class="cat-ar">إفطار صحي</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+      <a href="/order.html" class="cat-card fi fi-d3"><img src="/images/food/food-66.jpg" alt="سلطة" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Salads</div><div class="cat-ar">سلطات طازجة</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+      <a href="/order.html" class="cat-card fi fi-d4"><img src="/images/food/food-62.jpg" alt="سموثي" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Smoothies</div><div class="cat-ar">سموثي طازج</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+      <a href="/order.html" class="cat-card fi fi-d1"><img src="/images/food/food-16.jpg" alt="بروتين" loading="lazy"><div class="cat-vl"></div><div class="cat-bdg">💪 High Protein</div><div class="cat-info"><div class="cat-en">High Protein</div><div class="cat-ar">بروتين عالي</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+      <a href="/order.html" class="cat-card fi fi-d2"><img src="/images/food/food-61.jpg" alt="أطباق" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Main Course</div><div class="cat-ar">الأطباق الرئيسية</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+      <a href="/order.html" class="cat-card fi fi-d3"><img src="/images/food/food-79.jpg" alt="تتبيلة" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Marinade</div><div class="cat-ar">تتبيلة على الطلب</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+      <a href="/order.html" class="cat-card fi fi-d4"><img src="/images/food/food-72.jpg" alt="حلويات" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Desserts</div><div class="cat-ar">حلويات صحية</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+    </div>
+    <!-- CTA to full menu page -->
+    <div style="text-align:center;margin-top:16px" class="fi">
+      <a href="/order.html" class="btn btn-fill" style="font-size:16px;padding:16px 40px;display:inline-flex">
+        <span class="ar">🍽 شوف المنيو الكامل واطلب دلوقتي ←</span>
+        <span class="en">🍽 View Full Menu & Order Now →</span>
+      </a>
+    </div>
+    <!-- hidden elements needed by JS (don't remove) -->
+    <div id="menuTabsRow" style="display:none"></div>
+    <div id="menuSearch" style="display:none"></div>
+    <div id="menuItemsGrid" style="display:none"></div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<section class="strip" aria-hidden="true">
+  <div style="display:flex;gap:12px;animation:scrollStrip 32s linear infinite;width:max-content">
+    <img src="/images/food/food-22.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-23.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-24.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-25.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-26.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-27.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-28.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-29.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-22.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-23.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-24.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-25.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+  </div>
+  <style>@keyframes scrollStrip{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}</style>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery">
+  <div class="W">
+    <div style="text-align:center;max-width:600px;margin:0 auto 72px">
+      <div class="eyebrow fi"><span class="ar">من مطبخنا</span><span class="en">FROM OUR KITCHEN</span></div>
+      <h2 class="H2 fi"><span class="ar">صور <span class="acc">حقيقية</span></span><span class="en"><span class="acc">Real Photos</span> from Our Kitchen</span></h2>
+    </div>
+    <div class="gal-grid">
+      <div class="gi tall fi"><img src="/images/food/food-10.jpg" alt="" loading="lazy"></div>
+      <div class="gi fi fi-d1"><img src="/images/food/food-11.jpg" alt="" loading="lazy"></div>
+      <div class="gi fi fi-d2"><img src="/images/food/food-12.jpg" alt="" loading="lazy"></div>
+      <div class="gi tall fi fi-d1"><img src="/images/food/food-13.jpg" alt="" loading="lazy"></div>
+      <div class="gi fi fi-d2"><img src="/images/food/food-14.jpg" alt="" loading="lazy"></div>
+      <div class="gi fi fi-d3"><img src="/images/food/food-15.jpg" alt="" loading="lazy"></div>
+      <div class="gi wide fi"><img src="/images/food/food-16.jpg" alt="" loading="lazy"></div>
+      <div class="gi fi fi-d1"><img src="/images/food/food-17.jpg" alt="" loading="lazy"></div>
+      <div class="gi fi fi-d2"><img src="/images/food/food-18.jpg" alt="" loading="lazy"></div>
+      <div class="gi fi fi-d3"><img src="/images/food/food-19.jpg" alt="" loading="lazy"></div>
+      <div class="gi fi"><img src="/images/food/food-20.jpg" alt="" loading="lazy"></div>
+      <div class="gi fi fi-d1"><img src="/images/food/food-21.jpg" alt="" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="W">
+    <div class="about-g">
+      <div class="about-img fi"><img src="/images/food/food-03.jpg" alt="فريق TuComida" loading="lazy"><div class="about-bdg"><div><div class="ab-n">2021</div><div class="ab-l ar">سنة التأسيس</div><div class="ab-l en">Founded</div></div><div style="font-size:34px">🏆</div></div></div>
+      <div class="about-body fi fi-d2">
+        <div class="eyebrow"><span class="ar">قصتنا</span><span class="en">OUR STORY</span></div>
+        <h2><span class="ar">مطعم صحي حقيقي في <span class="acc">دمياط الجديدة</span></span><span class="en">A Real Healthy Restaurant in <span class="acc">New Damietta</span></span></h2>
+        <p><span class="ar">قصتنا بدأت في 2021 من حلم بسيط — أكل صحي حقيقي وبسعر معقول في دمياط. مش مجمد أو معلب، لكن وجبات طازجة بمكونات محسوبة وبحب حقيقي.</span><span class="en">Our story started in 2021 with a simple dream — genuinely healthy, affordable food in Damietta. Not frozen or canned, but fresh meals with calculated ingredients and real love.</span></p>
+        <ul class="abt-list">
+          <li><span class="ar">وجبات بروتين عالي للرياضيين</span><span class="en">High protein meals for athletes</span></li>
+          <li><span class="ar">سعرات حرارية محسوبة لكل طبق</span><span class="en">Calculated calories for every dish</span></li>
+          <li><span class="ar">مكونات طازجة يومياً بدون مواد حافظة</span><span class="en">Fresh daily ingredients, no preservatives</span></li>
+          <li><span class="ar">توصيل سريع ونظام طلب أونلاين</span><span class="en">Fast delivery and online ordering</span></li>
+        </ul>
+        <a href="/order.html" class="btn btn-fill" style="margin-top:30px"><span class="ar">🍽 اطلب وجبتك الآن</span><span class="en">🍽 Order Your Meal Now</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="W">
+    <div style="text-align:center;max-width:600px;margin:0 auto 0">
+      <div class="eyebrow fi"><span class="ar">أسئلة شائعة</span><span class="en">FAQ</span></div>
+      <h2 class="H2 fi"><span class="ar">أجوبة لكل <span class="acc">أسئلتك</span></span><span class="en">Answers to All <span class="acc">Your Questions</span></span></h2>
+    </div>
+    <div class="faq-g">
+      <div class="faq-list fi">
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question"><button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false"><span itemprop="name"><span class="ar">هل الأكل في TuComida صحي فعلاً؟</span><span class="en">Is TuComida food really healthy?</span></span><span class="faq-arr">▾</span></button><div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><p itemprop="text"><span class="ar">نعم، كل أطباقنا محسوبة السعرات والبروتين ومكوناتها طازجة يومياً بدون مواد حافظة.</span><span class="en">Yes! All dishes have calculated calories and protein, made with fresh daily ingredients without preservatives.</span></p></div></div>
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question"><button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false"><span itemprop="name"><span class="ar">هل يوجد خدمة توصيل؟</span><span class="en">Do you have delivery service?</span></span><span class="faq-arr">▾</span></button><div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><p itemprop="text"><span class="ar">نعم، بنوفر التوصيل عبر واتساب 01102708550 أو من خلال الطلب الأونلاين داخل دمياط الجديدة.</span><span class="en">Yes, we deliver via WhatsApp at 01102708550 or through online ordering within New Damietta.</span></p></div></div>
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question"><button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false"><span itemprop="name"><span class="ar">ما هي ساعات العمل؟</span><span class="en">Working hours?</span></span><span class="faq-arr">▾</span></button><div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><p itemprop="text"><span class="ar">يومياً من 10 صباحاً حتى 12 منتصف الليل بدون إجازات.</span><span class="en">Daily from 10 AM to midnight, no holidays.</span></p></div></div>
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question"><button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false"><span itemprop="name"><span class="ar">ممكن أطلب عبر واتساب مباشرة؟</span><span class="en">Can I order via WhatsApp?</span></span><span class="faq-arr">▾</span></button><div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><p itemprop="text"><span class="ar">أكيد! بعت رسالة على واتساب 01102708550 بطلبك وهنرد فوراً.</span><span class="en">Absolutely! Send a WhatsApp message to 01102708550 and we'll respond immediately.</span></p></div></div>
+      </div>
+      <div class="faq-aside fi fi-d2">
+        <h3><span class="ar">عندك سؤال تاني؟</span><span class="en">Have another question?</span></h3>
+        <p><span class="ar">فريقنا جاهز للرد عليك في أي وقت عبر واتساب.</span><span class="en">Our team is ready to answer anytime via WhatsApp.</span></p>
+        <a href="https://wa.me/201102708550" target="_blank" rel="noopener" class="btn btn-amb" style="justify-content:center;width:100%">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <span class="ar">ابعت رسالة دلوقتي</span><span class="en">Message Us Now</span>
+        </a>
+        <div style="background:rgba(255,255,255,.06);border-radius:16px;padding:20px;text-align:center;margin-top:6px"><div style="font-size:26px;font-weight:900;color:#fff;font-family:var(--fe);letter-spacing:-1px">01102708550</div><div style="font-size:11px;color:rgba(255,255,255,.38);margin-top:5px;letter-spacing:.5px;text-transform:uppercase">WhatsApp &amp; Phone</div></div>
+        <img src="/images/food/food-08.jpg?v=2" alt="" loading="lazy" style="border-radius:16px;width:100%;height:155px;object-fit:cover;margin-top:6px">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section class="loc" id="location">
+  <div class="W">
+    <div style="text-align:center;max-width:600px;margin:0 auto 0">
+      <div class="eyebrow fi"><span class="ar">موقعنا</span><span class="en">FIND US</span></div>
+      <h2 class="H2 fi"><span class="ar">تعال <span class="acc">زورنا</span></span><span class="en">Come <span class="acc">Visit Us</span></span></h2>
+    </div>
+    <div class="loc-g">
+      <div class="map-wr fi" style="position:relative">
+        <iframe
+          src="https://www.openstreetmap.org/export/embed.html?bbox=31.7933%2C31.4015%2C31.8333%2C31.4315&amp;layer=mapnik&amp;marker=31.4165%2C31.8133"
+          title="موقع TuComida — دمياط الجديدة"
+          loading="lazy"
+          style="border:0;width:100%;height:100%"
+          allowfullscreen></iframe>
+        <a href="https://maps.app.goo.gl/jfDnwRRKcxt6Mdac9" target="_blank" rel="noopener"
+           style="position:absolute;bottom:12px;right:12px;background:#fff;border:1px solid #ddd;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;color:#1a73e8;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.15);display:flex;align-items:center;gap:6px;z-index:10">
+          <svg width="14" height="14" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          افتح في خرائط جوجل
+        </a>
+      </div>
+      <div class="loc-cards fi fi-d2">
+        <div class="loc-card"><div class="loc-ico">📍</div><div><div class="loc-t"><span class="ar">العنوان</span><span class="en">Address</span></div><div class="loc-v"><span class="ar">المنطقة المركزية، خلف السنترال المركزي، دمياط الجديدة</span><span class="en">Central Area, behind the Central Exchange, New Damietta</span></div></div></div>
+        <div class="loc-card"><div class="loc-ico">⏰</div><div><div class="loc-t"><span class="ar">ساعات العمل</span><span class="en">Working Hours</span></div><div class="loc-v"><span class="ar">يومياً — 10 صباحاً حتى 12 منتصف الليل</span><span class="en">Daily — 10 AM to 12 Midnight</span></div></div></div>
+        <div class="loc-card"><div class="loc-ico">📞</div><div><div class="loc-t"><span class="ar">اتصل بنا</span><span class="en">Call Us</span></div><div class="loc-v"><a href="tel:01102708550" style="color:var(--g3);font-weight:700">01102708550</a></div></div></div>
+        <div class="loc-card"><div class="loc-ico">💬</div><div><div class="loc-t">WhatsApp</div><div class="loc-v"><a href="https://wa.me/201102708550" target="_blank" rel="noopener" style="color:#25D366;font-weight:700">+20 1102708550</a></div></div></div>
+        <a href="https://maps.app.goo.gl/jfDnwRRKcxt6Mdac9" target="_blank" rel="noopener" class="btn" style="width:100%;justify-content:center;margin-top:4px;background:#fff;color:#1a73e8;border:1.5px solid #ddd;padding:11px">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          <span class="ar">افتح في خرائط جوجل</span><span class="en">Open in Google Maps</span>
+        </a>
+        <a href="https://wa.me/201102708550?text=عايز اطلب من TuComida" target="_blank" rel="noopener" class="btn btn-fill" style="width:100%;justify-content:center;margin-top:8px"><span class="ar">اطلب الآن عبر واتساب</span><span class="en">Order Now via WhatsApp</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec">
+  <div class="W">
+    <div class="cta-box fi">
+      <h2><span class="ar">جاهزين لما تكون جاهز 🌿</span><span class="en">Ready When You Are 🌿</span></h2>
+      <p><span class="ar">اطلب وجبتك الصحية دلوقتي — توصيل سريع أو استلم بنفسك</span><span class="en">Order your healthy meal now — fast delivery or pick up yourself</span></p>
+      <div class="cta-acts">
+        <a href="/order.html" class="btn btn-amb" style="font-size:15px;padding:16px 40px"><span class="ar">🛵 اطلب اونلاين الآن</span><span class="en">🛵 Order Online Now</span></a>
+        <a href="https://wa.me/201102708550" target="_blank" rel="noopener" class="btn btn-ghost-w" style="font-size:15px;padding:15px 36px"><span class="ar">💬 واتساب</span><span class="en">💬 WhatsApp</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="W">
+    <div class="ft-g">
+      <div>
+        <div class="ft-logo"><img src="/images/logo-brand.jpeg" alt="TuComida" style="height:40px;width:auto;border-radius:8px;object-fit:contain"></div>
+        <p class="ft-tag"><span class="ar">مطعم أكل صحي في دمياط الجديدة — وجبات بروتين عالي، سعرات محسوبة، طازج يومياً منذ 2021.</span><span class="en">Healthy restaurant in New Damietta — high protein meals, calculated calories, fresh daily since 2021.</span></p>
+        <div class="ft-soc">
+          <a href="https://www.instagram.com/tucomida.eg" target="_blank" rel="noopener" class="ft-s"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="3.5"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg></a>
+          <a href="https://www.facebook.com/share/1cbR8eMWki/" target="_blank" rel="noopener" class="ft-s"><svg width="17" height="17" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+          <a href="https://wa.me/201102708550" target="_blank" rel="noopener" class="ft-s"><svg width="17" height="17" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <div class="ft-ct"><span class="ar">روابط سريعة</span><span class="en">Quick Links</span></div>
+        <div class="ft-row"><span class="ft-ico">→</span><a href="#home" style="color:rgba(255,255,255,.35)"><span class="ar">الرئيسية</span><span class="en">Home</span></a></div>
+        <div class="ft-row"><span class="ft-ico">→</span><a href="#dishes" style="color:rgba(255,255,255,.35)"><span class="ar">المنيو</span><span class="en">Menu</span></a></div>
+        <div class="ft-row"><span class="ft-ico">→</span><a href="#about" style="color:rgba(255,255,255,.35)"><span class="ar">عن المطعم</span><span class="en">About</span></a></div>
+        <div class="ft-row"><span class="ft-ico">→</span><a href="#faq" style="color:rgba(255,255,255,.35)"><span class="ar">الأسئلة</span><span class="en">FAQ</span></a></div>
+        <div class="ft-row"><span class="ft-ico">→</span><a href="/order.html" style="color:rgba(255,255,255,.35)"><span class="ar">اطلب الآن</span><span class="en">Order Now</span></a></div>
+      </div>
+      <div>
+        <div class="ft-ct"><span class="ar">تواصل معنا</span><span class="en">Contact Us</span></div>
+        <div class="ft-row"><span class="ft-ico">📍</span><span><span class="ar">دمياط الجديدة، المنطقة المركزية</span><span class="en">New Damietta, Central Area</span></span></div>
+        <div class="ft-row"><span class="ft-ico">📞</span><a href="tel:01102708550" style="color:rgba(255,255,255,.35)">01102708550</a></div>
+        <div class="ft-row"><span class="ft-ico">⏰</span><span><span class="ar">يومياً 10ص — 12م</span><span class="en">Daily 10AM — 12AM</span></span></div>
+        <div class="ft-row"><span class="ft-ico">📧</span><span style="color:rgba(255,255,255,.35)">tucomida.eg@gmail.com</span></div>
+      </div>
+    </div>
+    <div class="ft-copy"><span class="ar">© 2026 TuComida. جميع الحقوق محفوظة — مطعم أكل صحي في دمياط الجديدة</span><span class="en">© 2026 TuComida. All rights reserved — Healthy Restaurant in New Damietta</span></div>
+  </div>
+</footer>
+
+<!-- WA Float -->
+<a href="https://wa.me/201102708550" target="_blank" rel="noopener" class="wa">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span class="ar">اطلب الآن</span><span class="en">Order Now</span>
+</a>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js" defer></script>
+  <script src="/shared/firebase-config.js" defer></script>
+<script>
+// ── Language Toggle ──────────────────────────────
+const html = document.getElementById('html-root');
+// Nav link translations
+const NAV_TRANS = {
+  'nl-home':  {ar:'الرئيسية', en:'Home'},
+  'nl-menu':  {ar:'المنيو',   en:'Menu'},
+  'nl-about': {ar:'عن المطعم',en:'About'},
+  'nl-faq':   {ar:'الأسئلة', en:'FAQ'},
+  'nl-loc':   {ar:'تواصل',   en:'Contact'},
+  'nl-order': {ar:'اطلب الآن',en:'Order Now'},
+  'mn-home':  {ar:'🏠 الرئيسية', en:'🏠 Home'},
+  'mn-menu':  {ar:'🍽 المنيو',   en:'🍽 Menu'},
+  'mn-about': {ar:'🌿 عن المطعم',en:'🌿 About'},
+  'mn-faq':   {ar:'❓ الأسئلة',  en:'❓ FAQ'},
+  'mn-loc':   {ar:'📍 تواصل',   en:'📍 Contact'},
+  'mn-order': {ar:'🛵 اطلب دلوقتي',en:'🛵 Order Now'},
+};
+function setLang(lang) {
+  const isEn = lang === 'en';
+  document.body.classList.toggle('lang-en', isEn);
+  html.setAttribute('lang', isEn ? 'en' : 'ar');
+  html.setAttribute('dir', isEn ? 'ltr' : 'rtl');
+  const btn = document.getElementById('langBtn');
+  if (btn) btn.textContent = isEn ? 'AR' : 'EN';
+  localStorage.setItem('tc_lang', lang);
+  // update nav text via id map
+  Object.entries(NAV_TRANS).forEach(([id, t]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = t[lang] || t.ar;
+  });
+}
+function toggleLang() { setLang(document.body.classList.contains('lang-en') ? 'ar' : 'en'); }
+const _savedLang = localStorage.getItem('tc_lang');
+setLang(_savedLang || 'en'); // Default: English
+
+// ── Nav scroll ─────────────────────────────────
+const _siteNav = document.getElementById('siteNav');
+window.addEventListener('scroll', () => {
+  _siteNav.classList.toggle('scrolled', window.scrollY > 40); _siteNav.classList.toggle('at-top', window.scrollY < 60); _siteNav.classList.toggle('at-top', window.scrollY < 60);
+}, {passive:true});
+
+// ── Mobile Menu ────────────────────────────────
+const _navMobile = document.getElementById('navMobile');
+function toggleMobileMenu() { _navMobile.classList.toggle('open'); }
+function closeMobileMenu() { _navMobile.classList.remove('open'); }
+document.addEventListener('click', e => {
+  if (_navMobile.classList.contains('open') &&
+      !_navMobile.contains(e.target) &&
+      !document.getElementById('navBurger').contains(e.target)) {
+    closeMobileMenu();
+  }
+});
+
+// ── FAQ Accordion ───────────────────────────────
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => {
+    i.classList.remove('open');
+    i.querySelector('.faq-q').setAttribute('aria-expanded','false');
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    btn.setAttribute('aria-expanded','true');
+  }
+}
+
+// ── Fade-in on scroll ───────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); observer.unobserve(e.target); } });
+}, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.fi').forEach(el => observer.observe(el));
+
+// ── Menu tabs style ─────────────────────────────
+const TAB_STYLE = 'padding:8px 18px;border-radius:20px;border:1.5px solid #D8EDD8;background:#fff;color:#5A6A5A;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .2s';
+const TAB_ACTIVE = 'background:#2A6041;border-color:#2A6041;color:#fff';
+
+// ── Load Menu from Firebase ─────────────────────
+window.addEventListener('load', () => {
+  if (typeof db === 'undefined') return;
+  db.ref('menu').once('value').then(snap => {
+    const data = snap.val() || {categories:{},items:{}};
+    buildMenuTabs(data);
+    renderMenuItems(data, null);
+  }).catch(() => {
+    document.getElementById('menuItemsGrid').innerHTML =
+      '<div style="grid-column:1/-1;text-align:center;padding:24px;color:#5A6A5A;font-size:14px">تعذّر تحميل المنيو حالياً — <a href="/order.html" style="color:#2A6041;font-weight:700">اطلب من هنا</a></div>';
+  });
+});
+
+let _activeCat = null;
+let _menuData = {};
+
+function buildMenuTabs(data) {
+  _menuData = data;
+  const row = document.getElementById('menuTabsRow');
+  const cats = Object.entries(data.categories||{}).filter(([,c])=>c.active!==false).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
+  const allBtn = document.createElement('button');
+  allBtn.style.cssText = TAB_STYLE + ';' + TAB_ACTIVE;
+  allBtn.innerHTML = '<span>الكل</span>';
+  allBtn.onclick = function(){ _activeCat=null; setActiveTab(this); document.getElementById('menuSearch').value=''; renderMenuItems(data,null); };
+  row.appendChild(allBtn);
+  cats.slice(0,10).forEach(([id,c]) => {
+    const b = document.createElement('button');
+    b.style.cssText = TAB_STYLE;
+    b.textContent = c.nameAr || c.name;
+    b.onclick = function(){ _activeCat=id; setActiveTab(this); document.getElementById('menuSearch').value=''; renderMenuItems(data,id); };
+    row.appendChild(b);
+  });
+}
+
+function setActiveTab(btn) {
+  document.querySelectorAll('#menuTabsRow button').forEach(b => { b.style.cssText = TAB_STYLE; });
+  btn.style.cssText = TAB_STYLE + ';' + TAB_ACTIVE;
+}
+
+function filterMenuSearch(q) {
+  const query = q.trim().toLowerCase();
+  if (!query) { renderMenuItems(_menuData, _activeCat); return; }
+  const grid = document.getElementById('menuItemsGrid');
+  const all = Object.entries(_menuData.items||{}).filter(([,i]) => {
+    if (i.active===false) return false;
+    const name = (i.name||'').toLowerCase();
+    const nameAr = (i.nameAr||'').toLowerCase();
+    const desc = (i.description||'').toLowerCase();
+    return name.includes(query) || nameAr.includes(query) || desc.includes(query);
+  });
+  if (!all.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:32px;color:#5A6A5A;font-size:14px">🔍 مفيش نتائج لـ "${q}"</div>`; return;
+  }
+  grid.innerHTML = all.slice(0,16).map(([,i]) => buildItemCard(i)).join('');
+}
+
+// صورة الكاتيجوري بناءً على الاسم
+function _getCatImg(name) {
+  const n = (name||'').toLowerCase();
+  if (n.includes('فطار')||n.includes('breakfast'))   return '/images/menu-breakfast.jpeg';
+  if (n.includes('ديتوكس')||n.includes('detox'))     return '/images/menu-protein.jpeg';
+  if (n.includes('سالاد')||n.includes('salad'))       return '/images/menu-salad.jpeg';
+  if (n.includes('سموثي')||n.includes('smoothie'))    return '/images/menu-smoothie.jpeg';
+  if (n.includes('فروزن')||n.includes('frozen'))      return '/images/menu-smoothie.jpeg';
+  if (n.includes('جريل')||n.includes('grill'))        return '/images/menu-tatbela.jpeg';
+  if (n.includes('باستا')||n.includes('pasta'))       return '/images/menu-main-course.jpeg';
+  if (n.includes('صحي')||n.includes('وجبة')||n.includes('meal')) return '/images/menu-meals.jpeg';
+  if (n.includes('حلو')||n.includes('dessert'))       return '/images/menu-dessert.jpeg';
+  if (n.includes('راب')||n.includes('wrap'))          return '/images/menu-wrap.jpeg';
+  if (n.includes('قهوة')||n.includes('coffee'))       return '/images/menu-coffee.jpeg';
+  if (n.includes('مميز')||n.includes('special'))      return '/images/menu-special.jpeg';
+  return '/images/menu-meals.jpeg';
+}
+
+const _PROTEIN_HTML = `
+  <div style="background:#f0f8f3;border:2px solid #2A6041;border-radius:14px;padding:14px 16px;margin-top:12px">
+    <div style="font-size:13px;font-weight:900;color:#2A6041;margin-bottom:10px;display:flex;align-items:center;gap:6px">
+      💪 أضف بروتين لطلبك
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:12px">
+      <div style="background:#fff;border:1.5px solid #C8E6C8;border-radius:10px;padding:8px 10px;text-align:center;font-size:12px;font-weight:700">
+        🍗 صدر فراخ 100g<br><span style="color:#E67B20;font-size:14px;font-weight:900">70 ج</span>
+      </div>
+      <div style="background:#fff;border:1.5px solid #C8E6C8;border-radius:10px;padding:8px 10px;text-align:center;font-size:12px;font-weight:700">
+        🍗 صدر فراخ 50g<br><span style="color:#E67B20;font-size:14px;font-weight:900">35 ج</span>
+      </div>
+      <div style="background:#fff;border:1.5px solid #C8E6C8;border-radius:10px;padding:8px 10px;text-align:center;font-size:12px;font-weight:700">
+        🥩 لحمة 100g<br><span style="color:#E67B20;font-size:14px;font-weight:900">85 ج</span>
+      </div>
+      <div style="background:#fff;border:1.5px solid #C8E6C8;border-radius:10px;padding:8px 10px;text-align:center;font-size:12px;font-weight:700">
+        🥩 لحمة 50g<br><span style="color:#E67B20;font-size:14px;font-weight:900">45 ج</span>
+      </div>
+      <div style="background:#fff;border:1.5px solid #C8E6C8;border-radius:10px;padding:8px 10px;text-align:center;font-size:12px;font-weight:700">
+        🍚 أرز 100g<br><span style="color:#E67B20;font-size:14px;font-weight:900">20 ج</span>
+      </div>
+    </div>
+    <a href="/order.html" style="display:block;text-align:center;background:#2A6041;color:#fff;padding:11px;border-radius:10px;font-weight:800;font-size:14px;text-decoration:none;transition:background .2s"
+       onmouseenter="this.style.background='#357A52'" onmouseleave="this.style.background='#2A6041'">
+      اطلب دلوقتي وأضف البروتين ←
+    </a>
+  </div>`;
+
+function renderMenuItems(data, catId) {
+  const container = document.getElementById('menuItemsGrid');
+  container.innerHTML = '';
+
+  const cats = Object.entries(data.categories||{})
+    .filter(([,c])=>c.active!==false)
+    .sort((a,b)=>(a[1].order||0)-(b[1].order||0));
+
+  let rendered = 0;
+  cats.forEach(([cid, cat]) => {
+    if (catId && cid !== catId) return;
+    const items = Object.entries(data.items||{})
+      .filter(([,i])=>i.active!==false && i.categoryId===cid);
+    if (!items.length) return;
+
+    const catName = cat.nameAr || cat.name || '';
+    const catImg  = _getCatImg(catName);
+
+    const section = document.createElement('div');
+    section.style.cssText = 'margin-bottom:36px';
+    section.innerHTML = `
+      <!-- صورة الكاتيجوري -->
+      <div style="position:relative;border-radius:20px;overflow:hidden;height:175px;
+                  margin-bottom:16px;box-shadow:0 6px 20px rgba(26,61,38,.18)">
+        <img src="${catImg}" alt="${catName}"
+             style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy">
+        <div style="position:absolute;bottom:0;left:0;right:0;
+                    background:linear-gradient(transparent,rgba(0,0,0,.72));
+                    padding:28px 18px 14px">
+          <div style="font-size:21px;font-weight:900;color:#fff;
+                      display:flex;align-items:center;gap:8px;
+                      text-shadow:0 2px 8px rgba(0,0,0,.4)">
+            ${catName}
+            <span style="font-size:11px;background:rgba(255,255,255,.22);
+                         padding:2px 10px;border-radius:20px;font-weight:600">
+              ${items.length} صنف
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- أصناف الكاتيجوري -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
+        ${items.map(([,i]) => buildItemCard(i)).join('')}
+      </div>
+      <!-- زيادة البروتين -->
+      ${_PROTEIN_HTML}
+    `;
+    container.appendChild(section);
+    rendered++;
+  });
+
+  if (!rendered) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">لا توجد أصناف</div>';
+  }
+}
+
+function buildItemCard(i) {
+  const hasSizes = i.sizes && Object.keys(i.sizes).length > 0;
+  const minP = hasSizes ? Math.min(...Object.values(i.sizes).map(s=>s.price)) : (i.singlePrice||0);
+  const isEn = document.body.classList.contains('lang-en');
+  const cur = isEn ? 'EGP' : 'ج';
+  const fromTxt = isEn ? 'from' : 'من';
+  const priceStr = hasSizes ? `${fromTxt} ${minP} ${cur}` : `${minP} ${cur}`;
+  const cal = i.sizes?.M?.calories || i.calories;
+  const desc = i.nameAr || i.description || '';
+  return `
+    <div style="background:#fff;border-radius:12px;padding:14px 16px;
+                border:1.5px solid #D8EDD8;display:flex;align-items:center;
+                justify-content:space-between;gap:10px;transition:all .2s;cursor:pointer"
+         onclick="location.href='/order.html'"
+         onmouseenter="this.style.borderColor='#4CAF50';this.style.boxShadow='0 4px 16px rgba(26,61,38,.1)'"
+         onmouseleave="this.style.borderColor='#D8EDD8';this.style.boxShadow='none'">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:14px;font-weight:800;color:#1A1A1A;margin-bottom:3px">
+          ${i.name}
+          ${i.isStar?' ⭐':''}
+          ${i.isNew?'<span style="background:#FFF3E0;color:#E67B20;font-size:10px;padding:1px 6px;border-radius:10px;margin-right:4px;font-weight:700">جديد</span>':''}
+        </div>
+        ${desc ? `<div style="font-size:12px;color:#5A6A5A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px">${desc}</div>` : ''}
+      </div>
+      <div style="text-align:left;flex-shrink:0">
+        <div style="font-size:15px;font-weight:900;color:#2A6041">${priceStr}</div>
+        ${cal ? `<div style="font-size:11px;color:#E67B20;background:#FFF3E0;padding:2px 6px;border-radius:10px;font-weight:700;margin-top:2px">${cal}ك</div>` : ''}
+      </div>
+    </div>`;
+}
+
+// ── HERO WORD CYCLING ─────────────────────────────
+const _WA = ['طازج','صحي','طبيعي','شهي','يومي','مميز'];
+const _WE = ['Fresh','Healthy','Natural','Delicious','Daily','Premium'];
+let _wi = 0;
+function _cycleWord() {
+  _wi = (_wi + 1) % _WA.length;
+  [['heroWordAr',_WA],['heroWordEn',_WE]].forEach(([id,arr]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.add('w-out');
+    setTimeout(() => {
+      el.textContent = arr[_wi];
+      el.classList.remove('w-out');
+      el.classList.add('w-in');
+      setTimeout(() => el.classList.remove('w-in'), 400);
+    }, 270);
+  });
+}
+
+// ── THUMBNAIL GALLERY + AUTO-ADVANCE ──────────────
+const MEALS = [
+  {img:'/images/food/food-07.jpg?v=2', name_ar:'توكسيك', name_en:'Toxic', price:'255', protein:'59g', cal:'506 kcal'},
+  {img:'/images/food/food-08.jpg?v=2', name_ar:'شلبي سلفان', name_en:'Shalbi Solfan', price:'275', protein:'62g', cal:'567 kcal'},
+  {img:'/images/food/food-66.jpg', name_ar:'سيزار سلاد', name_en:'Caesar Salad', price:'150', protein:'24g', cal:'307 kcal'},
+  {img:'/images/food/food-20.jpg', name_ar:'ريزو شريمب', name_en:'Rizzo Shrimp', price:'95', protein:'29g', cal:'380 kcal'},
+];
+let _hmi = 0;
+let _hpt = null;
+function _heroProgStart() {
+  const bar = document.getElementById('heroProgBar');
+  if (!bar) return;
+  clearTimeout(_hpt);
+  bar.style.transition = 'none';
+  bar.style.width = '0%';
+  bar.offsetWidth; // force reflow
+  bar.style.transition = 'width 4.2s linear';
+  bar.style.width = '100%';
+  _hpt = setTimeout(() => {
+    _hmi = (_hmi + 1) % MEALS.length;
+    switchMeal(_hmi);
+  }, 4300);
+}
+function switchMeal(idx) {
+  _hmi = idx;
+  const m = MEALS[idx];
+  const img = document.getElementById('heroMainImg');
+  if (!img) return;
+  img.classList.add('changing');
+  setTimeout(() => {
+    img.src = m.img;
+    img.alt = m.name_ar;
+    img.classList.remove('changing');
+  }, 200);
+  const p = document.getElementById('heroPrice');
+  const pr = document.getElementById('heroProtein');
+  const nm = document.getElementById('heroName');
+  const ca = document.getElementById('heroCalories');
+  if (p) p.textContent = m.price;
+  if (pr) pr.textContent = m.protein + ' Protein';
+  if (ca) ca.textContent = m.cal;
+  if (nm) {
+    const arSpan = nm.querySelector('.ar');
+    const enSpan = nm.querySelector('.en');
+    if (arSpan) arSpan.textContent = m.name_ar;
+    if (enSpan) enSpan.textContent = m.name_en;
+  }
+  document.querySelectorAll('.hthumb').forEach((t,i) => {
+    t.classList.toggle('active', i === idx);
+  });
+  _heroProgStart();
+}
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+  const nav = document.getElementById('siteNav');
+  if (nav && window.scrollY < 60) nav.classList.add('at-top');
+  setInterval(_cycleWord, 2800);
+  setTimeout(_heroProgStart, 800);
+  _syncPricesFromFirebase();
+});
+
+/* ── SYNC PRICES FROM FIREBASE (owner prices → website) ── */
+function _syncPricesFromFirebase() {
+  // Wait for Firebase to be ready
+  if (typeof firebase === 'undefined') {
+    setTimeout(_syncPricesFromFirebase, 500);
+    return;
+  }
+  try {
+    const db2 = firebase.apps.length
+      ? firebase.app().database()
+      : firebase.initializeApp({
+          apiKey:"AIzaSyDXVIFKaiLP4ty0GHOhznN4O6FEbFFhzVo",
+          databaseURL:"https://tucomida-pos-default-rtdb.firebaseio.com",
+          projectId:"tucomida-pos", messagingSenderId:"698661717103",
+          appId:"1:698661717103:web:69e9100e49ac2669b9799a"
+        }).database();
+
+    db2.ref('menu/items').on('value', snap => {
+      const items = snap.val() || {};
+
+      /* Build all-names price map */
+      const PM = {}; // name_lowercase → price
+      Object.values(items).forEach(item => {
+        const p = (item.singlePrice != null) ? item.singlePrice
+                : (item.sizes?.M?.price ?? item.sizes?.L?.price ?? null);
+        if (p == null) return;
+        if (item.name)   PM[item.name.trim().toLowerCase()]   = p;
+        if (item.nameAr) PM[item.nameAr.trim().toLowerCase()] = p;
+      });
+
+      /* ── Showcase cards ── */
+      document.querySelectorAll('.dish').forEach(card => {
+        const en = card.querySelector('.dish-n.en')?.textContent?.trim().toLowerCase() || '';
+        const ar = card.querySelector('.dish-n.ar')?.textContent?.trim().toLowerCase() || '';
+        const price = PM[en] ?? PM[ar];
+        if (price == null) return;
+
+        const prEl = card.querySelector('.dish-pr');
+        if (!prEl) return;
+        // Update text node only — keep <span class="ar"> و <span class="en"> intact
+        for (const node of prEl.childNodes) {
+          if (node.nodeType === 3) { node.nodeValue = String(price); return; }
+        }
+        prEl.insertBefore(document.createTextNode(String(price)), prEl.firstChild);
+      });
+
+      /* ── Hero MEALS thumbnails ── */
+      if (typeof MEALS !== 'undefined') {
+        MEALS.forEach(m => {
+          const en = (m.name_en || '').toLowerCase();
+          const ar = (m.name_ar || '').toLowerCase();
+          const p  = PM[en] ?? PM[ar];
+          if (p != null) m.price = String(p);
+        });
+        if (typeof switchMeal === 'function') switchMeal(typeof _hmi !== 'undefined' ? _hmi : 0);
+      }
+    });
+
+    /* ── Plan prices — separate listener (public readable path) ── */
+    db2.ref('settings/plans').on('value', pSnap => {
+      const plans = pSnap.val() || {};
+      Object.entries(plans).forEach(([planId, plan]) => {
+        const el = document.querySelector(`[data-plan="${planId}"]`);
+        if (!el) return;
+        const price = plan.price ?? plan;
+        if (price == null || price === '') return;
+        const n = Number(price);
+        el.textContent = n >= 1000 ? n.toLocaleString() : String(n);
+      });
+    }, err => console.warn('[Plans]', err.message));
+
+  } catch(e) { console.warn('[PriceSync]', e.message); }
+}
+// Run immediately (Firebase scripts loaded with defer — call from window.load too)
+window.addEventListener('load', _syncPricesFromFirebase);
+
+</script>
+</body>
+</html>

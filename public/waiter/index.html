@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2A6041">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TuComida ويتر">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://tucomida-pos-default-rtdb.firebaseio.com" crossorigin>
+  <link rel="dns-prefetch" href="https://tucomida-pos-default-rtdb.firebaseio.com">
+  <link rel="dns-prefetch" href="https://identitytoolkit.googleapis.com">
+  <link rel="dns-prefetch" href="https://securetoken.googleapis.com">
+  <title>TuComida — الويتر</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    :root{
+      --primary:#1B5E20;--primary-mid:#2E7D32;--primary-light:#43A047;
+      --accent:#E67B20;--teal:#00796B;--red:#D32F2F;
+      --bg:#F4F7F4;--surface:#FFFFFF;--border:#E0EAE0;--border2:#C8DCC8;
+      --text:#0D1A0D;--text2:#374937;--muted:#6B7A6B;--muted2:#9AAA9A;
+      --font-ar:'Cairo',sans-serif;--font-en:'Inter',sans-serif;
+    }
+    body{background:var(--bg);color:var(--text);font-family:var(--font-ar);
+      min-height:100vh;overflow-x:hidden;padding-bottom:72px}
+
+    /* ── TOP BAR ─────────────────────────────── */
+    .topbar{
+      background:var(--primary);
+      padding:0 16px;height:56px;
+      display:flex;align-items:center;justify-content:space-between;
+      position:sticky;top:0;z-index:100;
+      box-shadow:0 1px 0 rgba(0,0,0,.15),0 4px 16px rgba(27,94,32,.2);
+    }
+    .tl-logo{font-size:19px;font-weight:900;color:#fff;letter-spacing:-.3px}
+    .tl-logo span{color:var(--accent)}
+    .tl-right{display:flex;align-items:center;gap:8px}
+    .tl-role{
+      font-size:11px;font-weight:600;
+      background:rgba(255,255,255,.12);
+      padding:4px 10px;border-radius:20px;
+      color:rgba(255,255,255,.8);letter-spacing:.3px;
+    }
+    .btn-logout{
+      background:none;border:1px solid rgba(255,255,255,.25);
+      color:rgba(255,255,255,.75);padding:5px 12px;
+      border-radius:8px;font-size:12px;cursor:pointer;
+      font-family:var(--font-ar);transition:all .15s;
+    }
+    .btn-logout:hover{background:rgba(255,255,255,.1);color:#fff}
+    .sound-btn{
+      background:none;border:1px solid rgba(255,255,255,.2);
+      color:rgba(255,255,255,.55);padding:5px 10px;
+      border-radius:8px;cursor:pointer;font-size:14px;transition:all .15s;
+    }
+    .sound-btn.on{border-color:var(--accent);color:var(--accent)}
+
+    /* ── READY BANNER ─────────────────────────── */
+    .ready-banner{
+      position:fixed;top:0;left:0;right:0;z-index:500;
+      background:linear-gradient(135deg,var(--primary-mid),var(--primary));
+      color:#fff;padding:14px 20px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 6px 24px rgba(27,94,32,.35);
+      transform:translateY(-100%);transition:transform .3s cubic-bezier(.22,1,.36,1);
+    }
+    .ready-banner.show{transform:translateY(0)}
+    .rb-text{font-size:16px;font-weight:800;display:flex;align-items:center;gap:10px}
+    .rb-close{
+      background:rgba(255,255,255,.15);border:none;color:#fff;
+      width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+    }
+
+    /* ── SCREENS ──────────────────────────────── */
+    .screen{display:none;padding:16px}
+    .screen.active{display:block}
+    .scr-title{font-size:18px;font-weight:800;margin-bottom:16px;color:var(--primary)}
+
+    /* ── TABLES GRID ──────────────────────────── */
+    .tables-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+    @media(min-width:600px){.tables-grid{grid-template-columns:repeat(4,1fr)}}
+
+    .table-card{
+      background:var(--surface);border-radius:16px;padding:20px 12px;
+      text-align:center;border:1.5px solid var(--border);cursor:pointer;
+      transition:transform .12s,box-shadow .15s,border-color .15s;
+      position:relative;overflow:hidden;
+    }
+    .table-card:active{transform:scale(.95)}
+
+    .table-card.available{border-color:#C8E6C9}
+    .table-card.available:hover{border-color:var(--primary-light);
+      box-shadow:0 4px 16px rgba(27,94,32,.1)}
+    .table-card.occupied{border-color:#FFCC80;background:#FFFBF5}
+    .table-card.occupied:hover{border-color:var(--accent);box-shadow:0 4px 16px rgba(230,123,32,.1)}
+    .table-card.ready{
+      border-color:var(--teal);background:rgba(0,121,107,.03);
+      animation:tblReady 2.2s ease-in-out infinite;
+    }
+    @keyframes tblReady{
+      0%,100%{box-shadow:none}
+      50%{box-shadow:0 0 16px rgba(0,121,107,.2)}
+    }
+
+    .tcard-icon{font-size:28px;margin-bottom:8px;display:block;line-height:1}
+    .tcard-num{font-size:21px;font-weight:900;margin-bottom:6px;color:var(--text)}
+    .tcard-status{
+      font-size:10px;font-weight:700;padding:3px 10px;
+      border-radius:20px;display:inline-block;letter-spacing:.3px;
+    }
+    .available .tcard-status{background:rgba(67,160,71,.12);color:var(--primary-light)}
+    .occupied .tcard-status{background:rgba(230,123,32,.12);color:#C15A00}
+    .ready .tcard-status{background:rgba(0,121,107,.12);color:var(--teal)}
+
+    .tcard-badge{
+      position:absolute;top:8px;right:8px;
+      min-width:20px;height:20px;background:var(--accent);color:#fff;
+      border-radius:10px;padding:0 5px;font-size:10px;font-weight:800;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .tcard-badge.ready-badge{background:var(--teal)}
+
+    .btn-takeaway{
+      width:100%;padding:15px;
+      background:var(--accent);color:#fff;
+      border:none;border-radius:14px;font-size:16px;font-weight:700;
+      cursor:pointer;font-family:var(--font-ar);
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      transition:opacity .15s,transform .1s;
+    }
+    .btn-takeaway:active{transform:scale(.98)}
+    .btn-takeaway:hover{opacity:.92}
+
+    /* ── ORDER SCREEN ─────────────────────────── */
+    .order-layout{
+      display:grid;grid-template-columns:1fr 320px;gap:12px;
+      height:calc(100vh - 56px - 72px - 32px);min-height:400px;
+    }
+    @media(max-width:720px){.order-layout{grid-template-columns:1fr;height:auto}}
+    .menu-panel{overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+
+    .cart-panel{
+      background:var(--surface);border-radius:16px;
+      display:flex;flex-direction:column;overflow:hidden;
+      border:1px solid var(--border);
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+    }
+
+    /* Category tabs */
+    .cat-filter{
+      display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;
+      margin-bottom:12px;scrollbar-width:none;
+    }
+    .cat-filter::-webkit-scrollbar{display:none}
+    .cat-btn{
+      white-space:nowrap;padding:8px 15px;border-radius:20px;
+      border:1.5px solid var(--border);background:var(--surface);
+      color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;
+      font-family:var(--font-ar);transition:all .15s;
+    }
+    .cat-btn:hover{border-color:var(--primary-light);color:var(--primary)}
+    .cat-btn.active{
+      background:var(--primary);border-color:var(--primary);color:#fff;
+    }
+
+    /* Menu items */
+    .sec-label{
+      font-size:12px;font-weight:800;color:var(--accent);
+      margin:14px 0 8px 2px;letter-spacing:.5px;text-transform:uppercase;
+    }
+    .items-grid{
+      display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));
+      gap:8px;margin-bottom:14px;
+    }
+    .item-card{
+      background:var(--surface);border-radius:12px;padding:13px 11px;
+      cursor:pointer;border:1.5px solid var(--border);transition:all .15s;
+    }
+    .item-card:hover{border-color:var(--primary-light);box-shadow:0 2px 10px rgba(27,94,32,.08)}
+    .item-card:active{transform:scale(.97)}
+    .ic-name{font-size:13px;font-weight:700;margin-bottom:2px;color:var(--text);line-height:1.3}
+    .ic-nameAr{font-size:11px;color:var(--muted);margin-bottom:6px}
+    .ic-price{font-size:13px;font-weight:700;color:var(--primary-light)}
+    .ic-sizes{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+    .size-chip{
+      padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;
+      background:rgba(67,160,71,.1);color:var(--primary-light);
+      font-family:var(--font-en);
+    }
+
+    /* Cart */
+    .cart-hdr{
+      padding:13px 16px;border-bottom:1px solid var(--border);
+      font-size:14px;font-weight:700;color:var(--text);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .cart-ctx{
+      padding:8px 16px;
+      background:rgba(230,123,32,.06);
+      border-bottom:1px solid var(--border);
+      font-size:12px;color:var(--accent);font-weight:600;
+    }
+    .cart-body{flex:1;overflow-y:auto;padding:8px}
+
+    .cart-item{
+      background:#F6FAF6;border-radius:10px;
+      padding:10px;margin-bottom:7px;
+      border:1px solid var(--border);
+    }
+    .ci-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+    .ci-name{font-size:13px;font-weight:700;flex:1;padding-left:6px;line-height:1.35}
+    .ci-price{font-size:13px;font-weight:700;color:var(--primary-light);white-space:nowrap}
+    .ci-ctrl{display:flex;align-items:center;gap:6px}
+    .qty-btn{
+      width:28px;height:28px;border-radius:8px;border:none;
+      font-size:16px;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;font-weight:700;
+      transition:opacity .15s;
+    }
+    .qty-btn.minus{background:rgba(211,47,47,.1);color:var(--red)}
+    .qty-btn.plus{background:rgba(67,160,71,.1);color:var(--primary-light)}
+    .qty-btn:hover{opacity:.8}
+    .qty-val{font-size:15px;font-weight:700;min-width:22px;text-align:center;font-family:var(--font-en)}
+
+    .note-inp{
+      width:100%;padding:5px 9px;
+      background:var(--bg);border:1px solid var(--border);
+      border-radius:8px;color:var(--text);font-size:11px;
+      resize:none;font-family:var(--font-ar);margin-top:6px;
+    }
+    .note-inp:focus{outline:none;border-color:var(--primary-light)}
+
+    .cart-ftr{padding:12px 16px;border-top:1px solid var(--border)}
+    .cart-total{
+      display:flex;justify-content:space-between;
+      font-size:16px;font-weight:800;margin-bottom:12px;color:var(--text);
+    }
+    .total-amt{color:var(--primary-light);font-family:var(--font-en)}
+
+    .btn-send{
+      width:100%;padding:14px;background:var(--primary);
+      color:#fff;border:none;border-radius:12px;
+      font-size:15px;font-weight:700;cursor:pointer;
+      font-family:var(--font-ar);margin-bottom:8px;
+      transition:background .15s,box-shadow .15s;
+    }
+    .btn-send:not(:disabled):hover{background:var(--primary-mid);box-shadow:0 4px 16px rgba(27,94,32,.25)}
+    .btn-send:disabled{opacity:.4;cursor:not-allowed}
+
+    .btn-cancel-ord{
+      width:100%;padding:10px;background:transparent;
+      color:var(--muted);border:1px solid var(--border);
+      border-radius:12px;font-size:13px;cursor:pointer;
+      font-family:var(--font-ar);transition:border-color .15s;
+    }
+    .btn-cancel-ord:hover{border-color:var(--border2);color:var(--text2)}
+
+    /* ── ACTIVE ORDERS ────────────────────────── */
+    .orders-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+      gap:12px;
+    }
+    .order-card{
+      background:var(--surface);border-radius:14px;
+      padding:16px;border:1.5px solid var(--border);
+      transition:box-shadow .15s;
+    }
+    .order-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
+    .order-card.pending{border-color:rgba(255,193,7,.4)}
+    .order-card.preparing{border-color:rgba(33,150,243,.35)}
+    .order-card.ready{
+      border-color:var(--teal);background:rgba(0,121,107,.03);
+      animation:ordReady 2s ease-in-out infinite;
+    }
+    @keyframes ordReady{
+      0%,100%{box-shadow:none}50%{box-shadow:0 0 16px rgba(0,121,107,.2)}
+    }
+    .oc-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .oc-num{font-size:17px;font-weight:800;color:var(--text)}
+    .oc-badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+    .badge-pending{background:rgba(255,193,7,.12);color:#C15A00}
+    .badge-preparing{background:rgba(33,150,243,.12);color:#1565C0}
+    .badge-ready{background:rgba(0,121,107,.12);color:var(--teal)}
+    .oc-items{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px}
+    .oc-total{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:12px}
+    .btn-cancel-req{
+      width:100%;padding:10px;background:rgba(211,47,47,.06);
+      color:var(--red);border:1px solid rgba(211,47,47,.2);
+      border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;
+      font-family:var(--font-ar);transition:background .15s;
+    }
+    .btn-cancel-req:hover{background:rgba(211,47,47,.1)}
+    .cancel-sent{color:#F57C00;font-size:12px;text-align:center;padding:8px;font-weight:600}
+
+    /* ── BOTTOM NAV ───────────────────────────── */
+    .bottom-nav{
+      position:fixed;bottom:0;left:0;right:0;
+      background:var(--surface);border-top:1px solid var(--border);
+      display:flex;z-index:100;
+      box-shadow:0 -4px 20px rgba(0,0,0,.06);
+    }
+    .nav-btn{
+      flex:1;padding:12px 0;background:none;border:none;
+      color:var(--muted2);font-size:10px;font-weight:600;
+      cursor:pointer;font-family:var(--font-ar);
+      display:flex;flex-direction:column;align-items:center;gap:4px;
+      transition:color .2s;position:relative;
+    }
+    .nav-btn.active{color:var(--primary)}
+    .nav-btn svg{width:22px;height:22px}
+    .nav-badge{
+      position:absolute;top:6px;background:var(--red);color:#fff;
+      border-radius:10px;font-size:9px;padding:2px 5px;
+      font-weight:800;font-family:var(--font-en);
+    }
+
+    /* ── MODALS ───────────────────────────────── */
+    .modal-bg{
+      position:fixed;inset:0;background:rgba(0,0,0,.5);
+      z-index:200;display:none;align-items:flex-end;justify-content:center;
+    }
+    .modal-bg.open{display:flex}
+    .modal-sheet{
+      background:var(--surface);border-radius:20px 20px 0 0;
+      padding:28px 22px;width:100%;max-width:500px;
+    }
+    .ms-title{font-size:19px;font-weight:800;margin-bottom:5px;color:var(--text)}
+    .ms-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+    .size-opts{display:flex;gap:10px;margin-bottom:18px}
+    .sopt{
+      flex:1;padding:18px 12px;border-radius:14px;
+      border:1.5px solid var(--border);background:#F8FAF8;
+      text-align:center;cursor:pointer;transition:all .15s;
+    }
+    .sopt:hover{border-color:var(--primary-light)}
+    .sopt.sel{border-color:var(--primary-light);background:rgba(67,160,71,.06)}
+    .sopt-lbl{font-size:22px;font-weight:900;margin-bottom:4px;color:var(--text);font-family:var(--font-en)}
+    .sopt-price{font-size:14px;color:var(--primary-light);font-weight:700;font-family:var(--font-en)}
+    .modal-btns{display:flex;gap:10px}
+    .btn-ms-cancel{
+      padding:14px 20px;background:#F5F7F5;color:var(--muted);
+      border:1px solid var(--border);border-radius:12px;font-size:14px;
+      cursor:pointer;font-family:var(--font-ar);transition:background .15s;
+    }
+    .btn-ms-cancel:hover{background:#EBF0EB}
+    .btn-ms-add{
+      flex:1;padding:14px;background:var(--primary);color:#fff;
+      border:none;border-radius:12px;font-size:15px;font-weight:700;
+      cursor:pointer;font-family:var(--font-ar);transition:background .15s;
+    }
+    .btn-ms-add:hover{background:var(--primary-mid)}
+
+    /* ── TOAST ────────────────────────────────── */
+    .toast{
+      position:fixed;bottom:84px;left:50%;transform:translateX(-50%);
+      background:var(--primary);color:#fff;padding:11px 22px;
+      border-radius:24px;font-size:13px;font-weight:600;
+      z-index:300;opacity:0;transition:opacity .25s;pointer-events:none;
+      white-space:nowrap;box-shadow:0 4px 16px rgba(27,94,32,.3);
+    }
+    .toast.show{opacity:1}
+
+    /* ── EMPTY ────────────────────────────────── */
+    .empty-s{text-align:center;padding:56px 20px;color:var(--muted)}
+    .empty-s p{font-size:14px;font-weight:500}
+
+    /* ── MOBILE / SAFE AREA FIXES ─────────────── */
+    /* Bottom nav: safe-area for iPhone home bar */
+    .bottom-nav{
+      padding-bottom:env(safe-area-inset-bottom,0);
+      height:calc(60px + env(safe-area-inset-bottom,0px));
+    }
+    body{padding-bottom:calc(60px + env(safe-area-inset-bottom,0px))}
+
+    /* Touch target sizes — min 44px */
+    .nav-btn{min-height:44px}
+    .table-card{min-height:88px}
+
+    /* Qty buttons bigger on mobile */
+    @media(max-width:480px){
+      .qty-btn{width:34px;height:34px;font-size:18px}
+      .items-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+      .table-card{padding:16px 10px}
+      .tcard-icon{font-size:24px}
+      .tcard-num{font-size:18px}
+      .orders-grid{grid-template-columns:1fr}
+      .modal-sheet{border-radius:20px 20px 0 0}
+    }
+    /* Topbar safe area on iPhone */
+    .topbar{
+      padding-top:env(safe-area-inset-top,0);
+      height:calc(56px + env(safe-area-inset-top,0px));
+      position:sticky;top:0;z-index:100;
+    }
+
+    /* ══ MOBILE UX OPTIMIZATION ══════════════════ */
+
+    /* Prevent iOS font auto-zoom */
+    input, select, textarea { font-size: 16px !important; }
+
+    /* Table cards — solid tap area */
+    .table-card { min-height: 88px; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+
+    /* Category filter buttons — comfortable tap targets */
+    .cat-btn { min-height: 36px; display: inline-flex; align-items: center; }
+
+    /* Item cards — bigger touch area */
+    .item-card { min-height: 64px; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+    .item-card:active { transform: scale(.96); }
+
+    /* Takeaway button — large, easy to hit */
+    .btn-takeaway { min-height: 54px; touch-action: manipulation; }
+
+    /* Cart quantity buttons */
+    .qty-btn { min-width: 36px; min-height: 36px; touch-action: manipulation; }
+
+    /* Submit order button */
+    .btn-submit { min-height: 52px; font-size: 15px; }
+
+    /* Navigation buttons */
+    .nav-btn { min-height: 48px; }
+
+    /* Bottom nav */
+    .bottom-nav .nav-btn { min-height: calc(60px + env(safe-area-inset-bottom, 0px)); }
+
+    /* Modal bottom sheet */
+    .modal-sheet { padding: 20px 18px max(24px, env(safe-area-inset-bottom, 24px)); }
+
+    /* Ready banner — always above content */
+    .ready-banner { padding: max(14px, env(safe-area-inset-top, 14px)) 16px 14px; }
+
+    @media (max-width: 480px) {
+      /* Table grid — 3 columns on phones */
+      .tables-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .tcard-icon { font-size: 26px; margin-bottom: 6px; }
+      .tcard-num  { font-size: 18px; }
+      .table-card { padding: 16px 8px; min-height: 80px; }
+
+      /* Item grid — 2 columns minimum */
+      .items-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+      .item-card  { padding: 11px 10px; }
+
+      /* Qty buttons larger for one-hand use */
+      .qty-btn { width: 36px; height: 36px; font-size: 18px; }
+
+      /* Cart total — more prominent */
+      .cart-total { font-size: 17px; font-weight: 800; }
+
+      /* Submit — full width, large */
+      .btn-submit { padding: 15px; font-size: 15px; }
+
+      /* Category tabs — snug but tappable */
+      .cat-btn { font-size: 12px; padding: 7px 12px; }
+
+      /* Section labels */
+      .sec-label { font-size: 11px; margin: 12px 0 6px; }
+    }
+
+    @media (max-width: 390px) {
+      .tables-grid { gap: 6px; }
+      .table-card { padding: 14px 6px; min-height: 76px; }
+      .tcard-num { font-size: 17px; }
+      .tcard-status { font-size: 9px; padding: 2px 8px; }
+      .takeaway-btn { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- READY BANNER -->
+<div class="ready-banner" id="readyBanner">
+  <div class="rb-text">🍽 <span id="readyBannerText">أوردر جاهز للتقديم!</span></div>
+  <button class="rb-close" onclick="dismissBanner()">✕</button>
+</div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="tl-logo">Tu<span>Comida</span></div>
+  <div class="tl-right">
+    <button class="sound-btn on" id="soundToggle" onclick="toggleWaiterSound()">🔔</button>
+    <span class="tl-role" id="roleLabel">ويتر</span>
+    <button class="btn-logout" onclick="doLogout()">خروج</button>
+  </div>
+</div>
+
+<!-- SCREEN: TABLES -->
+<div class="screen active" id="screen-tables">
+  <div class="scr-title">اختر الطاولة</div>
+  <div class="tables-grid" id="tablesGrid"></div>
+  <button class="btn-takeaway" onclick="startTakeaway()">
+    <svg fill="currentColor" viewBox="0 0 24 24" width="22"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+    طلب تيك أواي
+  </button>
+</div>
+
+<!-- SCREEN: ORDER -->
+<div class="screen" id="screen-order">
+  <div class="order-layout">
+    <div class="menu-panel" id="menuPanel">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <button onclick="goToTables()" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:9px 14px;border-radius:10px;font-size:13px;cursor:pointer">← رجوع</button>
+        <div style="font-size:17px;font-weight:800" id="orderCtxLabel">طاولة 1</div>
+      </div>
+      <div class="cat-filter" id="catFilter"></div>
+      <div id="menuItems"></div>
+    </div>
+    <div class="cart-panel">
+      <div class="cart-hdr">
+        🛒 الأوردر
+        <span id="cartCount" style="background:var(--green);color:#fff;border-radius:16px;padding:2px 10px;font-size:12px">0</span>
+      </div>
+      <div class="cart-ctx" id="cartCtx">جديد</div>
+      <div class="cart-body" id="cartBody">
+        <div class="empty-s"><p>ابدأ بإضافة الأيتمز</p></div>
+      </div>
+      <div class="cart-ftr">
+        <div class="cart-total"><span>الإجمالي</span><span class="total-amt" id="cartTotal">0 ج</span></div>
+        <button class="btn-send" id="sendBtn" onclick="submitOrder()" disabled>إرسال للمطبخ 🍳</button>
+        <button class="btn-cancel-ord" onclick="goToTables()">إلغاء</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN: ACTIVE ORDERS -->
+<div class="screen" id="screen-orders">
+  <div class="scr-title">الأوردرات النشطة</div>
+  <div class="orders-grid" id="activeOrdersGrid">
+    <div class="empty-s"><p>لا توجد أوردرات نشطة</p></div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-btn active" id="nav-tables" onclick="showScreen('tables')">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
+    الطاولات
+  </button>
+  <button class="nav-btn" id="nav-orders" onclick="showScreen('orders')">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4zm2.5 2.1h-15V5h15v14.1zm0-16.1h-15c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+    الأوردرات
+    <span class="nav-badge" id="ordersBadge" style="display:none">0</span>
+  </button>
+</div>
+
+<!-- SIZE MODAL -->
+<div class="modal-bg" id="sizeModal">
+  <div class="modal-sheet">
+    <div class="ms-title" id="sizeTitle">اختر الحجم</div>
+    <div class="ms-sub" id="sizeSub"></div>
+    <div class="size-opts" id="sizeOpts"></div>
+    <div class="modal-btns">
+      <button class="btn-ms-cancel" onclick="closeSizeModal()">إلغاء</button>
+      <button class="btn-ms-add" onclick="confirmSize()">إضافة ➕</button>
+    </div>
+  </div>
+</div>
+
+<!-- CANCEL MODAL -->
+<div class="modal-bg" id="cancelModal">
+  <div class="modal-sheet">
+    <div class="ms-title">طلب إلغاء أوردر</div>
+    <div class="ms-sub" id="cancelInfo" style="margin-bottom:14px"></div>
+    <textarea id="cancelReason" class="note-inp" rows="3" placeholder="سبب الإلغاء (اختياري)..." style="font-size:14px;padding:11px;margin-bottom:14px"></textarea>
+    <div class="modal-btns">
+      <button class="btn-ms-cancel" onclick="closeCancelModal()">إلغاء</button>
+      <button class="btn-ms-add" style="background:#D32F2F" onclick="confirmCancel()">إرسال طلب الإلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  <script src="/shared/firebase-config.js"></script>
+<script>
+// ── STATE ──────────────────────────────────────────
+let currentUser = null, currentRole = null;
+let menuData = {categories:{}, items:{}};
+let tables = {};
+let activeOrdersData = {};       // orderId → order (active dine orders)
+let tableOrderMap = {};          // tableId → {status, count, hasReady}
+let knownOrderStatuses = {};     // orderId → status (for detecting 'ready' transition)
+let isFirstOrdersLoad = true;
+let cart = [];
+let currentOrder = null;
+let selectedSizeItem = null, selectedSize = null;
+let cancelOrderId = null;
+let waiterAudioCtx = null, waiterSoundEnabled = true;
+let readyBannerTimer = null;
+
+// ── AUDIO ──────────────────────────────────────────
+function _ensureWaiterAudio() {
+  if (!waiterAudioCtx) {
+    try { waiterAudioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+  }
+  if (waiterAudioCtx && waiterAudioCtx.state === 'suspended') {
+    waiterAudioCtx.resume().catch(() => {});
+  }
+}
+['click','touchstart','touchend'].forEach(ev =>
+  document.addEventListener(ev, _ensureWaiterAudio, { passive: true })
+);
+function toggleWaiterSound() {
+  waiterSoundEnabled = !waiterSoundEnabled;
+  const b = document.getElementById('soundToggle');
+  b.textContent = waiterSoundEnabled ? '🔔' : '🔕';
+  b.className = waiterSoundEnabled ? 'sound-btn on' : 'sound-btn';
+}
+function _doPlayChime(ctx, vol) {
+  [[523,0],[659,.18],[784,.36]].forEach(([f,d]) => {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination); o.type = 'sine';
+    o.frequency.setValueAtTime(f, ctx.currentTime+d);
+    g.gain.setValueAtTime(0, ctx.currentTime+d);
+    g.gain.linearRampToValueAtTime(vol, ctx.currentTime+d+0.04);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+d+0.55);
+    o.start(ctx.currentTime+d); o.stop(ctx.currentTime+d+0.6);
+  });
+}
+function playReadyChime() {
+  if (!waiterSoundEnabled) return;
+  _ensureWaiterAudio();
+  if (!waiterAudioCtx) return;
+  if (waiterAudioCtx.state === 'suspended') {
+    waiterAudioCtx.resume().then(() => {
+      if (waiterAudioCtx.state === 'running') {
+        _doPlayChime(waiterAudioCtx, 0.55);
+        setTimeout(() => _doPlayChime(waiterAudioCtx, 0.45), 700);
+      }
+    }).catch(() => {});
+    return;
+  }
+  _doPlayChime(waiterAudioCtx, 0.55);
+  setTimeout(() => _doPlayChime(waiterAudioCtx, 0.45), 700);
+}
+function showReadyBanner(orderNum, tableInfo) {
+  document.getElementById('readyBannerText').textContent = `أوردر #${orderNum} — ${tableInfo} جاهز للتقديم!`;
+  document.getElementById('readyBanner').classList.add('show');
+  clearTimeout(readyBannerTimer);
+  readyBannerTimer = setTimeout(dismissBanner, 8000);
+  // عنوان التاب يتغير لما أوردر يبقى جاهز
+  const readyCount = Object.values(activeOrdersData).filter(o => o.status === 'ready').length;
+  document.title = readyCount > 0 ? `(${readyCount}) جاهز! — الويتر` : 'TuComida — الويتر';
+}
+function dismissBanner() {
+  document.getElementById('readyBanner').classList.remove('show');
+}
+function _updateWaiterTabTitle() {
+  const readyCount = Object.values(activeOrdersData).filter(o => o.status === 'ready').length;
+  document.title = readyCount > 0 ? `(${readyCount}) جاهز! — الويتر` : 'TuComida — الويتر';
+}
+
+// ── AUTH ───────────────────────────────────────────
+(function initAuth() {
+  const s = JSON.parse(sessionStorage.getItem('tc_pos_session') || 'null');
+  if (!s || !['waiter','cashier','owner'].includes(s.role)) {
+    window.location.href = '/login/'; return;
+  }
+  currentRole = s.role;
+  const labels = {owner:'أونر', cashier:'كاشير', waiter:'ويتر'};
+  document.getElementById('roleLabel').textContent = labels[s.role] || 'ويتر';
+  let _listenersUp = false;
+  auth.onAuthStateChanged(async user => {
+    if (!user) {
+      if (_listenersUp) { sessionStorage.removeItem('tc_pos_session'); window.location.href = '/login/'; }
+      return;
+    }
+    if (_listenersUp) return;
+    _listenersUp = true;
+    // Server-side role verification (MED-01) — 5s timeout safety
+    try {
+      const _timeout = new Promise(res => setTimeout(() => res(null), 5000));
+      const _roleSnap = await Promise.race([db.ref(`users/${user.uid}/role`).once('value'), _timeout]);
+      const _role = _roleSnap && typeof _roleSnap.val === 'function' ? _roleSnap.val() : currentRole;
+      if (!['waiter','cashier','owner'].includes(_role)) {
+        sessionStorage.removeItem('tc_pos_session');
+        await auth.signOut(); window.location.href = '/login/'; return;
+      }
+    } catch(e) { /* DB unreachable — fall through using session role */ }
+    currentUser = user;
+    setupPresence(user, currentRole);
+    // Auto-logout on inactivity (45 min)
+    if (typeof TC_CONFIG !== "undefined" && TC_CONFIG.FEATURES.AUTO_LOGOUT) {
+      setupInactivityTimer(TC_CONFIG.INACTIVITY_TIMEOUT_MS, doLogout);
+    }
+    loadTables(); loadMenu(); listenActiveOrders();
+  });
+})();
+function doLogout() {
+  if (currentUser) logActivity(currentUser.uid, currentRole, 'logout', {});
+  sessionStorage.removeItem('tc_pos_session');
+  auth.signOut().then(() => window.location.href = '/login/');
+}
+
+// ── TABLES ─────────────────────────────────────────
+function loadTables() {
+  db.ref('tables').on('value', snap => { tables = snap.val() || {}; renderTables(); });
+}
+
+function renderTables() {
+  const grid = document.getElementById('tablesGrid');
+  grid.innerHTML = '';
+  Object.entries(tables).sort((a,b) => a[1].number - b[1].number).forEach(([id, t]) => {
+    const om = tableOrderMap[id] || {};
+    let cardStatus = t.status; // 'available'|'occupied'
+    if (om.hasReady) cardStatus = 'ready';
+    const icons = {available:'🪑', occupied:'👥', ready:'🍽'};
+    const statusLabels = {available:'متاحة', occupied:'مشغولة', ready:'جاهز للتقديم'};
+    const div = document.createElement('div');
+    div.className = `table-card ${cardStatus}`;
+    div.innerHTML = `
+      ${om.count ? `<div class="tcard-badge ${om.hasReady?'ready-badge':''}">${om.count}</div>` : ''}
+      <span class="tcard-icon">${icons[cardStatus]}</span>
+      <div class="tcard-num">طاولة ${t.number}</div>
+      <div class="tcard-status">${statusLabels[cardStatus]}</div>`;
+    div.onclick = () => selectTable(id, t);
+    grid.appendChild(div);
+  });
+}
+
+function selectTable(tableId, table) {
+  currentOrder = {tableId, tableNumber:table.number, type:'dine-in', orderId:null};
+  document.getElementById('orderCtxLabel').textContent = `طاولة ${table.number}`;
+  document.getElementById('cartCtx').textContent = `طاولة ${table.number} — جديد`;
+  cart = []; renderCart(); showScreen('order');
+}
+function startTakeaway() {
+  currentOrder = {tableId:null, tableNumber:null, type:'takeaway', orderId:null};
+  document.getElementById('orderCtxLabel').textContent = 'تيك أواي';
+  document.getElementById('cartCtx').textContent = 'تيك أواي — جديد';
+  cart = []; renderCart(); showScreen('order');
+}
+
+// ── MENU ───────────────────────────────────────────
+function loadMenu() {
+  db.ref('menu').on('value', snap => {
+    menuData = snap.val() || {categories:{}, items:{}};
+    renderCatFilter(); renderMenuItems(null);
+  });
+}
+function renderCatFilter() {
+  const cats = Object.entries(menuData.categories||{})
+    .filter(([,c]) => c.active!==false).sort((a,b) => (a[1].order||0)-(b[1].order||0));
+  const f = document.getElementById('catFilter');
+  f.innerHTML = '<button class="cat-btn active" onclick="filterCat(null,this)">الكل</button>';
+  cats.forEach(([id,c]) => {
+    const b = document.createElement('button');
+    b.className = 'cat-btn'; b.textContent = c.name||c.nameAr;
+    b.onclick = function(){filterCat(id,this);}; f.appendChild(b);
+  });
+}
+function filterCat(catId, btn) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active'); renderMenuItems(catId);
+}
+function renderMenuItems(filterCat) {
+  const cats = Object.entries(menuData.categories||{})
+    .filter(([id,c]) => c.active!==false && (!filterCat||id===filterCat))
+    .sort((a,b) => (a[1].order||0)-(b[1].order||0));
+  const container = document.getElementById('menuItems'); container.innerHTML = '';
+  cats.forEach(([catId, cat]) => {
+    const catItems = Object.entries(menuData.items||{}).filter(([,i]) => i.categoryId===catId&&i.active!==false);
+    if (!catItems.length) return;
+    const lbl = document.createElement('div'); lbl.className = 'sec-label'; lbl.textContent = cat.name||cat.nameAr;
+    container.appendChild(lbl);
+    const grid = document.createElement('div'); grid.className = 'items-grid';
+    catItems.forEach(([iid, item]) => {
+      const hasSizes = item.sizes && Object.keys(item.sizes).length > 0;
+      const card = document.createElement('div'); card.className = 'item-card';
+      let priceHtml = hasSizes
+        ? `<div class="ic-sizes">${Object.entries(item.sizes).map(([s,d]) => `<span class="size-chip">${s}: ${d.price}ج</span>`).join('')}</div>`
+        : `<div class="ic-price">${item.singlePrice||0} ج</div>`;
+      card.innerHTML = `<div class="ic-name">${escapeHtml(item.name||item.nameAr||'')}</div>${priceHtml}`;
+      card.onclick = () => addToCart(iid, item);
+      grid.appendChild(card);
+    });
+    container.appendChild(grid);
+  });
+}
+
+// ── CART ───────────────────────────────────────────
+function addToCart(itemId, item) {
+  const hasSizes = item.sizes && Object.keys(item.sizes).length > 0;
+  if (hasSizes) { openSizeModal(itemId, item); return; }
+  const ex = cart.find(c => c.itemId===itemId && !c.size);
+  if (ex) ex.quantity++;
+  else cart.push({itemId, name:item.name, size:null, price:item.singlePrice||0, quantity:1, notes:''});
+  renderCart(); showToast(`تمت إضافة ${item.name} ✓`);
+}
+function openSizeModal(itemId, item) {
+  selectedSizeItem = {itemId, item}; selectedSize = null;
+  document.getElementById('sizeTitle').textContent = item.name;
+  document.getElementById('sizeSub').textContent = item.description||'';
+  const opts = document.getElementById('sizeOpts'); opts.innerHTML = '';
+  Object.entries(item.sizes).forEach(([size, data]) => {
+    const d = document.createElement('div'); d.className = 'sopt';
+    d.innerHTML = `<div class="sopt-lbl">${size}</div><div class="sopt-price">${data.price} ج</div>`;
+    d.onclick = () => { document.querySelectorAll('.sopt').forEach(o=>o.classList.remove('sel')); d.classList.add('sel'); selectedSize={size,...data}; };
+    opts.appendChild(d);
+  });
+  document.getElementById('sizeModal').classList.add('open');
+}
+function closeSizeModal() { document.getElementById('sizeModal').classList.remove('open'); selectedSizeItem=null; selectedSize=null; }
+function confirmSize() {
+  if (!selectedSize||!selectedSizeItem) return;
+  const {itemId, item} = selectedSizeItem, {size, price} = selectedSize;
+  const ex = cart.find(c => c.itemId===itemId&&c.size===size);
+  if (ex) ex.quantity++;
+  else cart.push({itemId, name:item.name, size, price, quantity:1, notes:''});
+  renderCart(); showToast(`تمت إضافة ${item.name} ${size} ✓`); closeSizeModal();
+}
+function renderCart() {
+  const body = document.getElementById('cartBody');
+  const btn = document.getElementById('sendBtn');
+  const cnt = document.getElementById('cartCount');
+  const tot = document.getElementById('cartTotal');
+  if (!cart.length) {
+    body.innerHTML = '<div class="empty-s"><p>ابدأ بإضافة الأيتمز</p></div>';
+    btn.disabled = true; tot.textContent = '0 ج'; cnt.textContent = '0'; return;
+  }
+  btn.disabled = false;
+  let total = 0, count = 0; body.innerHTML = '';
+  cart.forEach((ci, idx) => {
+    total += ci.price * ci.quantity; count += ci.quantity;
+    const div = document.createElement('div'); div.className = 'cart-item';
+    div.innerHTML = `
+      <div class="ci-top">
+        <div class="ci-name">${ci.name}${ci.size?` (${ci.size})`:''}</div>
+        <div class="ci-price">${(ci.price*ci.quantity).toLocaleString()} ج</div>
+      </div>
+      <div class="ci-ctrl">
+        <button class="qty-btn minus" onclick="chgQty(${idx},-1)">−</button>
+        <span class="qty-val">${ci.quantity}</span>
+        <button class="qty-btn plus" onclick="chgQty(${idx},1)">+</button>
+      </div>
+      <textarea class="note-inp" placeholder="ملاحظات..." rows="1"
+        onchange="setNote(${idx},this.value)">${ci.notes}</textarea>`;
+    body.appendChild(div);
+  });
+  tot.textContent = total.toLocaleString() + ' ج'; cnt.textContent = count;
+}
+function chgQty(idx, delta) { cart[idx].quantity += delta; if (cart[idx].quantity<=0) cart.splice(idx,1); renderCart(); }
+function setNote(idx, val) { cart[idx].notes = val; }
+
+// ── SUBMIT ORDER ───────────────────────────────────
+async function submitOrder() {
+  if (!cart.length) return;
+  const btn = document.getElementById('sendBtn');
+  btn.disabled = true; btn.textContent = 'جاري الإرسال...';
+  try {
+    const sessionId = await getCurrentSession();
+    const orderNumber = await getNextOrderNumber();
+    const subtotal = cart.reduce((s,i) => s+i.price*i.quantity, 0);
+    const orderId = currentOrder.orderId || generateId();
+    await db.ref(`orders/${orderId}`).set({
+      orderNumber, type:currentOrder.type,
+      tableId:currentOrder.tableId||null, tableNumber:currentOrder.tableNumber||null,
+      status:'pending',
+      items:cart.map(i=>({itemId:i.itemId,name:i.name,size:i.size||null,price:i.price,quantity:i.quantity,notes:i.notes||''})),
+      subtotal, discount:0, total:subtotal, paymentMethod:null,
+      createdAt:Date.now(), createdBy:currentUser.uid, createdByRole:currentRole,
+      updatedAt:Date.now(), cancelRequested:false, cancelRequestedBy:null,
+      cancelRequestedAt:null, cancelApproved:false, cancelApprovedBy:null,
+      dayId:getDayId(), sessionId
+    });
+    if (currentOrder.tableId) await db.ref(`tables/${currentOrder.tableId}/status`).set('occupied');
+    await logActivity(currentUser.uid, currentRole, 'new_order', {orderId, orderNumber, type:currentOrder.type});
+    showToast(`تم إرسال الأوردر #${orderNumber} للمطبخ ✓`);
+    cart = []; renderCart(); setTimeout(() => goToTables(), 1500);
+  } catch(e) {
+    console.error(e);
+    showToast('حدث خطأ في إرسال الأوردر');
+    btn.disabled = false; btn.textContent = 'إرسال للمطبخ 🍳';
+  }
+}
+
+// ── ACTIVE ORDERS LISTENER ─────────────────────────
+function listenActiveOrders() {
+  // Only listen to today's orders — not entire history
+  const todayId = getDayId();
+  db.ref('orders').orderByChild('dayId').equalTo(todayId).on('value', snap => {
+    activeOrdersData = {};
+    const all = snap.val() || {};
+    const newReady = [];
+
+    // Rebuild tableOrderMap
+    tableOrderMap = {};
+    Object.entries(all).forEach(([id, o]) => {
+      if (['pending','preparing','ready'].includes(o.status)) {
+        activeOrdersData[id] = o;
+        if (o.tableId) {
+          if (!tableOrderMap[o.tableId]) tableOrderMap[o.tableId] = {count:0, hasReady:false};
+          tableOrderMap[o.tableId].count++;
+          if (o.status === 'ready') tableOrderMap[o.tableId].hasReady = true;
+        }
+        // Detect newly ready
+        if (!isFirstOrdersLoad && o.status === 'ready' && knownOrderStatuses[id] !== 'ready') {
+          newReady.push(o);
+        }
+      }
+    });
+
+    // Update known statuses
+    Object.entries(all).forEach(([id,o]) => { knownOrderStatuses[id] = o.status; });
+    Object.keys(knownOrderStatuses).forEach(id => { if (!all[id]) delete knownOrderStatuses[id]; });
+
+    if (newReady.length > 0) {
+      playReadyChime();
+      const o = newReady[0];
+      const tinfo = o.type === 'takeaway' ? 'تيك أواي' : `طاولة ${o.tableNumber}`;
+      showReadyBanner(o.orderNumber, tinfo);
+    }
+
+    isFirstOrdersLoad = false;
+    renderTables(); renderActiveOrders(); updateOrdersBadge(); _updateWaiterTabTitle();
+  });
+}
+
+function renderActiveOrders() {
+  const grid = document.getElementById('activeOrdersGrid');
+  const entries = Object.entries(activeOrdersData).sort((a,b) => a[1].createdAt - b[1].createdAt);
+  if (!entries.length) {
+    grid.innerHTML = '<div class="empty-s"><p>لا توجد أوردرات نشطة حالياً</p></div>'; return;
+  }
+  grid.innerHTML = '';
+  entries.forEach(([id, o]) => {
+    const statusLabels = {pending:'في الانتظار', preparing:'قيد التحضير', ready:'جاهز ✅'};
+    const badgeCls = {pending:'badge-pending', preparing:'badge-preparing', ready:'badge-ready'};
+    const tinfo = o.type === 'takeaway' ? 'تيك أواي' : `طاولة ${o.tableNumber}`;
+    const items = (o.items||[]).map(i => `${i.quantity}× ${i.name}${i.size?` (${i.size})`:''}`).join(' · ');
+    const cancelHtml = o.cancelRequested
+      ? `<div class="cancel-sent">⏳ طلب الإلغاء قيد المراجعة</div>`
+      : `<button class="btn-cancel-req" onclick="openCancelModal('${id}',${o.orderNumber})">طلب إلغاء</button>`;
+    const card = document.createElement('div');
+    card.className = `order-card ${o.status}`;
+    card.innerHTML = `
+      <div class="oc-hdr">
+        <div class="oc-num">#${o.orderNumber} — ${tinfo}</div>
+        <div class="oc-badge ${badgeCls[o.status]}">${statusLabels[o.status]}</div>
+      </div>
+      <div class="oc-items">${items}</div>
+      <div class="oc-total"><span>الإجمالي</span><span style="color:var(--glight)">${o.total} ج</span></div>
+      ${cancelHtml}`;
+    grid.appendChild(card);
+  });
+}
+function updateOrdersBadge() {
+  const n = Object.keys(activeOrdersData).length;
+  const b = document.getElementById('ordersBadge');
+  b.textContent = n; b.style.display = n ? 'block' : 'none';
+}
+
+// ── CANCEL MODAL ────────────────────────────────────
+function openCancelModal(orderId, orderNum) {
+  cancelOrderId = orderId;
+  document.getElementById('cancelInfo').textContent = `أوردر رقم #${orderNum}`;
+  document.getElementById('cancelReason').value = '';
+  document.getElementById('cancelModal').classList.add('open');
+}
+function closeCancelModal() { document.getElementById('cancelModal').classList.remove('open'); cancelOrderId=null; }
+async function confirmCancel() {
+  if (!cancelOrderId) return;
+  const reason = document.getElementById('cancelReason').value.trim();
+  await db.ref(`orders/${cancelOrderId}`).update({
+    cancelRequested:true, cancelRequestedBy:currentUser.uid,
+    cancelRequestedAt:Date.now(), cancelReason:reason||''
+  });
+  await logActivity(currentUser.uid, currentRole, 'cancel_request', {orderId:cancelOrderId, reason});
+  showToast('تم إرسال طلب الإلغاء للأونر ✓'); closeCancelModal();
+}
+
+// ── NAVIGATION ─────────────────────────────────────
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`screen-${name}`).classList.add('active');
+  const nb = document.getElementById(`nav-${name}`);
+  if (nb) nb.classList.add('active');
+}
+function goToTables() { currentOrder=null; cart=[]; showScreen('tables'); }
+
+// ── TOAST ──────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast'); t.textContent = msg;
+  t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>

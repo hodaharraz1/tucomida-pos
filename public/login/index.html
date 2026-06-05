@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#1B5E20">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TuComida POS">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://tucomida-pos-default-rtdb.firebaseio.com">
+  <title>TuComida — تسجيل الدخول</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary:       #1B5E20;
+      --primary-mid:   #2E7D32;
+      --accent:        #E67B20;
+      --bg:            #F2F6F2;
+      --surface:       #FFFFFF;
+      --border:        #D4E4D4;
+      --text:          #0D1F0D;
+      --text-2:        #3A4F3A;
+      --muted:         #6B7A6B;
+      --error:         #C62828;
+      --error-bg:      #FFF5F5;
+      --focus-ring:    rgba(46,125,50,0.12);
+      --shadow-card:   0 2px 4px rgba(0,0,0,0.04), 0 12px 40px rgba(27,94,32,0.07);
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse 60% 50% at 15% 60%, rgba(27,94,32,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 85% 20%, rgba(230,123,32,0.04) 0%, transparent 60%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cairo', sans-serif;
+      padding: 24px 16px;
+    }
+
+    /* ── WRAPPER ─────────────────────────────────── */
+    .login-wrapper {
+      width: 100%;
+      max-width: 420px;
+      animation: fadeUp .45s cubic-bezier(.22,1,.36,1) both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── CARD ────────────────────────────────────── */
+    .login-card {
+      background: var(--surface);
+      border-radius: 24px;
+      padding: 52px 44px 44px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border);
+    }
+
+    /* ── LOGO ────────────────────────────────────── */
+    .logo { text-align: center; margin-bottom: 40px; }
+
+    .logo-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px; height: 60px;
+      background: linear-gradient(145deg, var(--primary-mid), var(--primary));
+      border-radius: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 6px 20px rgba(27,94,32,0.22);
+    }
+    .logo-icon svg { width: 30px; height: 30px; fill: white; }
+
+    .logo-name {
+      font-size: 30px;
+      font-weight: 900;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+    .logo-name .o { color: var(--accent); }
+
+    .logo-tag {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      margin-top: 7px;
+    }
+
+    /* ── HEADING ─────────────────────────────────── */
+    .login-heading {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    /* ── FORM ────────────────────────────────────── */
+    .form-group { margin-bottom: 20px; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-2);
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 16px;
+      background: #F7FAF7;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      outline: none;
+      transition: border-color .18s, box-shadow .18s, background .18s;
+      direction: ltr;
+      text-align: left;
+    }
+    input:focus {
+      background: var(--surface);
+      border-color: var(--primary-mid);
+      box-shadow: 0 0 0 3px var(--focus-ring);
+    }
+    input::placeholder { color: #B0BFB0; }
+
+    /* ── BUTTON ──────────────────────────────────── */
+    .btn-login {
+      width: 100%;
+      padding: 15px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Cairo', sans-serif;
+      cursor: pointer;
+      margin-top: 8px;
+      letter-spacing: .3px;
+      transition: background .2s, box-shadow .2s, transform .1s;
+    }
+    .btn-login:hover:not(:disabled) {
+      background: var(--primary-mid);
+      box-shadow: 0 6px 24px rgba(27,94,32,0.28);
+    }
+    .btn-login:active:not(:disabled) { transform: scale(.99); }
+    .btn-login:disabled { opacity: .55; cursor: not-allowed; }
+
+    /* ── ERROR ───────────────────────────────────── */
+    .error-msg {
+      background: var(--error-bg);
+      color: var(--error);
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 600;
+      margin-top: 16px;
+      display: none;
+      align-items: center;
+      gap: 9px;
+      border: 1px solid rgba(198,40,40,.12);
+    }
+
+    /* ── LOADING ─────────────────────────────────── */
+    .loading {
+      display: none;
+      text-align: center;
+      margin-top: 16px;
+      color: var(--primary-mid);
+      font-size: 13.5px;
+      font-weight: 600;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(46,125,50,.2);
+      border-top-color: var(--primary-mid);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── FOOTER ──────────────────────────────────── */
+    .footer-note {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: .5px;
+      opacity: .7;
+    }
+
+    @media (max-width: 480px) {
+      .login-card { padding: 40px 24px 36px; border-radius: 20px; }
+    }
+
+    /* ══ MOBILE UX OPTIMIZATION ══════════════════ */
+
+    /* Dynamic viewport height — fixes iOS Safari toolbar */
+    body {
+      min-height: 100dvh;
+      padding: max(env(safe-area-inset-top, 0px), 20px) 16px
+               max(env(safe-area-inset-bottom, 0px), 20px);
+    }
+
+    /* Larger touch targets for inputs (min 48px) */
+    input {
+      min-height: 48px;
+      padding: 14px 16px;
+      -webkit-appearance: none;
+      appearance: none;
+      font-size: 16px; /* prevents iOS auto-zoom */
+    }
+
+    /* Login button — comfortable tap area */
+    .btn-login {
+      min-height: 52px;
+      font-size: 16px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    /* Tap feedback on buttons */
+    .btn-login:active:not(:disabled) { transform: scale(.98); opacity:.9; }
+
+    /* Small phone optimizations (iPhone SE = 375px) */
+    @media (max-width: 390px) {
+      .login-card { padding: 36px 20px 28px; }
+      .logo { margin-bottom: 26px; }
+      .logo-name { font-size: 26px; }
+      .login-heading { font-size: 16px; margin-bottom: 22px; }
+      .form-group { margin-bottom: 16px; }
+      .footer-note { margin-top: 24px; }
+    }
+
+    /* Prevent horizontal overflow on very narrow screens */
+    .login-wrapper { box-sizing: border-box; }
+  </style>
+</head>
+<body>
+  <div class="login-wrapper">
+    <div class="login-card">
+
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24"><path d="M18.06 22.99h1.66c.84 0 1.53-.64 1.63-1.46L23 5.05h-5V1h-1.97v4.05h-4.97l.3 2.34c1.71.47 3.31 1.32 4.27 2.26 1.44 1.42 2.43 2.89 2.43 5.29v8.05zM1 21.99V21h15.03v.99c0 .55-.45 1-1.01 1H2.01c-.56 0-1.01-.45-1.01-1zm15.03-7c0-2-1.99-4.07-5.03-5.02-.29-.09-.6-.15-.97-.15C7.17 9.82 5 11.7 5 14.99v1h11.03v-1z"/></svg>
+        </div>
+        <div class="logo-name">Tu<span class="o">C</span>omida</div>
+        <div class="logo-tag">Fresh · Healthy · POS</div>
+      </div>
+
+      <div class="login-heading">مرحباً، سجّل دخولك</div>
+
+      <div class="form-group">
+        <label for="email">البريد الإلكتروني</label>
+        <input type="email" id="email" placeholder="example@tucomida.com" autocomplete="username">
+      </div>
+
+      <div class="form-group">
+        <label for="password">كلمة المرور</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+
+      <button class="btn-login" id="loginBtn" onclick="doLogin()">دخول</button>
+
+      <!-- ── MFA Step (hidden by default) ── -->
+      <div id="mfaStep" style="display:none;margin-top:16px">
+        <div style="text-align:center;padding:16px 0 8px">
+          <div style="font-size:28px;margin-bottom:8px">🔐</div>
+          <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">التحقق بخطوتين</div>
+          <div style="font-size:12px;color:var(--muted)">أدخل كود التطبيق من Google Authenticator</div>
+        </div>
+        <div class="form-group" style="margin-top:12px">
+          <label for="mfaCode">كود التحقق (6 أرقام)</label>
+          <input type="text" id="mfaCode" placeholder="000000"
+            maxlength="6" inputmode="numeric" pattern="[0-9]*"
+            style="text-align:center;font-size:24px;font-weight:700;letter-spacing:8px;font-family:'Inter',sans-serif"
+            autocomplete="one-time-code">
+        </div>
+        <button class="btn-login" id="mfaBtn" onclick="verifyMFA()">تأكيد الكود</button>
+        <button onclick="cancelMFA()" style="width:100%;margin-top:10px;padding:10px;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:'Cairo',sans-serif">
+          ← رجوع لتسجيل الدخول
+        </button>
+      </div>
+
+      <div class="error-msg" id="errorMsg"></div>
+      <div class="loading" id="loading">
+        <span class="spinner"></span> جاري التحقق...
+      </div>
+
+      <div class="footer-note">TuComida POS System · Secure · v2.0</div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  <script src="/shared/firebase-config.js"></script>
+  <script>
+    document.getElementById('password').addEventListener('keydown', e => {
+      if (e.key === 'Enter') doLogin();
+    });
+    document.getElementById('email').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('password').focus();
+    });
+
+    (function checkExistingSession() {
+      const s = JSON.parse(sessionStorage.getItem('tc_pos_session') || 'null');
+      if (s && s.role) {
+        const routes = {owner:'/owner/',cashier:'/cashier/',waiter:'/waiter/',kitchen:'/kitchen/'};
+        window.location.href = routes[s.role] || '/waiter/';
+      }
+    })();
+
+    // ── MFA state ──────────────────────────────────────
+    let _mfaResolver = null;
+
+    async function doLogin() {
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const btn      = document.getElementById('loginBtn');
+      const errEl    = document.getElementById('errorMsg');
+      const loading  = document.getElementById('loading');
+
+      if (!email || !password) {
+        showError('يرجى إدخال البريد الإلكتروني وكلمة المرور');
+        return;
+      }
+
+      btn.disabled = true;
+      loading.style.display = 'flex';
+      errEl.style.display = 'none';
+
+      try {
+        await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+        const cred = await auth.signInWithEmailAndPassword(email, password);
+        await redirectByRole(cred.user);
+
+      } catch (err) {
+        loading.style.display = 'none';
+
+        // ── MFA required ───────────────────────────────
+        if (err.code === 'auth/multi-factor-auth-required') {
+          _mfaResolver = err.resolver;
+          // Show MFA step, hide email/password step
+          document.getElementById('mfaStep').style.display = 'block';
+          document.querySelector('.form-group').style.display = 'none';
+          document.querySelectorAll('.form-group').forEach(el => el.style.display = 'none');
+          btn.style.display = 'none';
+          document.getElementById('mfaCode').focus();
+          return;
+        }
+
+        btn.disabled = false;
+        const msgs = {
+          'auth/user-not-found':    'البريد الإلكتروني غير مسجل',
+          'auth/wrong-password':    'كلمة المرور غير صحيحة',
+          'auth/too-many-requests': 'محاولات كثيرة، حاول لاحقاً',
+          'auth/invalid-email':     'البريد الإلكتروني غير صحيح',
+          'auth/invalid-credential':'بيانات الدخول غير صحيحة'
+        };
+        showError(msgs[err.code] || 'حدث خطأ في تسجيل الدخول');
+      }
+    }
+
+    // ── Verify TOTP Code ────────────────────────────────
+    async function verifyMFA() {
+      const code  = document.getElementById('mfaCode').value.trim();
+      const btn   = document.getElementById('mfaBtn');
+      const errEl = document.getElementById('errorMsg');
+      const loading = document.getElementById('loading');
+
+      if (!code || code.length !== 6) {
+        showError('أدخل كود التحقق المكون من 6 أرقام');
+        return;
+      }
+
+      btn.disabled = true;
+      loading.style.display = 'flex';
+      errEl.style.display = 'none';
+
+      try {
+        // Find TOTP hint
+        const totpHint = _mfaResolver.hints.find(h =>
+          h.factorId === firebase.auth.TotpMultiFactorGenerator.FACTOR_ID
+        );
+        if (!totpHint) throw new Error('No TOTP factor found');
+
+        const assertion = firebase.auth.TotpMultiFactorGenerator.assertionForSignIn(
+          totpHint.uid, code
+        );
+        const cred = await _mfaResolver.resolveSignIn(assertion);
+        await redirectByRole(cred.user);
+
+      } catch(err) {
+        btn.disabled = false;
+        loading.style.display = 'none';
+        const msgs = {
+          'auth/invalid-verification-code': 'كود خاطئ — تحقق من التطبيق وأعد المحاولة',
+          'auth/code-expired':              'انتهت صلاحية الكود — انتظر الكود الجديد'
+        };
+        showError(msgs[err.code] || 'كود خاطئ أو منتهي الصلاحية');
+      }
+    }
+
+    // ── Cancel MFA, back to login ───────────────────────
+    function cancelMFA() {
+      _mfaResolver = null;
+      document.getElementById('mfaStep').style.display = 'none';
+      document.getElementById('mfaCode').value = '';
+      document.querySelectorAll('.form-group').forEach(el => el.style.display = 'block');
+      document.getElementById('loginBtn').style.display = 'block';
+      document.getElementById('loginBtn').disabled = false;
+      document.getElementById('errorMsg').style.display = 'none';
+    }
+
+    // Enter key on MFA code
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('mfaCode').addEventListener('keydown', e => {
+        if (e.key === 'Enter') verifyMFA();
+      });
+    });
+
+    async function redirectByRole(user) {
+      try {
+        const snap = await db.ref(`users/${user.uid}`).once('value');
+        const userData = snap.val();
+
+        if (!userData || !userData.role) {
+          // User exists in Auth but has no DB record — block access, require admin setup
+          await auth.signOut();
+          showError('هذا الحساب غير مفعّل — تواصل مع المسؤول');
+          document.getElementById('loginBtn').disabled = false;
+          document.getElementById('loading').style.display = 'none';
+          return;
+        }
+
+        const allowedRoles = ['owner','cashier','waiter','kitchen'];
+        if (!allowedRoles.includes(userData.role)) {
+          await auth.signOut();
+          showError('صلاحية غير معروفة — تواصل مع المسؤول');
+          document.getElementById('loginBtn').disabled = false;
+          document.getElementById('loading').style.display = 'none';
+          return;
+        }
+
+        sessionStorage.setItem('tc_pos_session', JSON.stringify({
+          uid: user.uid,
+          role: userData.role
+        }));
+
+        await logActivity(user.uid, userData.role, 'login', { email: user.email, device: navigator.userAgent.substring(0, 100) });
+
+        const routes = {
+          'owner': '/owner/',
+          'cashier': '/cashier/',
+          'waiter': '/waiter/',
+          'kitchen': '/kitchen/'
+        };
+        window.location.href = routes[userData.role];
+      } catch (err) {
+        showError('خطأ في تحميل بيانات المستخدم');
+        document.getElementById('loginBtn').disabled = false;
+        document.getElementById('loading').style.display = 'none';
+      }
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('errorMsg');
+      el.textContent = msg;
+      el.style.display = 'flex';
+    }
+  </script>
+</body>
+</html>

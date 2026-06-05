@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Allow: /order.html
+Disallow: /login/
+Disallow: /kitchen/
+Disallow: /waiter/
+Disallow: /cashier/
+Disallow: /owner/
+Disallow: /shared/
+Disallow: /sw.js
+
+User-agent: Googlebot
+Allow: /
+Allow: /order.html
+Crawl-delay: 1
+
+Sitemap: https://tucomida-pos.web.app/sitemap.xml

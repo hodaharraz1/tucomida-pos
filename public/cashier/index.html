@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2A6041">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TuComida كاشير">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://tucomida-pos-default-rtdb.firebaseio.com" crossorigin>
+  <link rel="dns-prefetch" href="https://tucomida-pos-default-rtdb.firebaseio.com">
+  <link rel="dns-prefetch" href="https://identitytoolkit.googleapis.com">
+  <link rel="dns-prefetch" href="https://securetoken.googleapis.com">
+  <title>TuComida — الكاشير</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --primary:#1B5E20; --primary-mid:#2E7D32; --primary-light:#43A047;
+      --accent:#E67B20; --red:#C62828; --blue:#1565C0;
+      --bg:#F3F7F3; --surface:#FFFFFF; --surface2:#F8FAF8;
+      --border:#E0EAE0; --border2:#C8DCC8;
+      --text:#0D1A0D; --text2:#374937; --muted:#6B7A6B; --muted2:#9AAA9A;
+      --sidebar-bg:#0F2E15; --sidebar-border:rgba(255,255,255,.07);
+      --font-ar:'Cairo',sans-serif; --font-en:'Inter',sans-serif;
+    }
+    body { background:var(--bg); color:var(--text); font-family:var(--font-ar); display:flex; height:100vh; overflow:hidden; }
+
+    /* ── SIDEBAR ─────────────────────────────── */
+    .sidebar { width:210px; background:var(--sidebar-bg); display:flex; flex-direction:column; height:100vh; flex-shrink:0; border-left:1px solid rgba(255,255,255,.04); }
+    .sidebar-logo { padding:20px 16px 18px; border-bottom:1px solid var(--sidebar-border); }
+    .sidebar-logo-text { font-size:20px; font-weight:900; color:white; letter-spacing:-.3px; }
+    .sidebar-logo-text span { color:var(--accent); }
+    .sidebar-role { font-size:10px; color:rgba(255,255,255,.35); margin-top:5px; letter-spacing:1px; text-transform:uppercase; font-family:var(--font-en); }
+    .sidebar-nav { flex:1; padding:12px 0; overflow-y:auto; }
+    .nav-item { display:flex; align-items:center; gap:11px; padding:12px 16px; color:rgba(255,255,255,.5); font-size:13px; font-weight:600; cursor:pointer; transition:all .18s; border-right:3px solid transparent; font-family:var(--font-ar); }
+    .nav-item:hover { background:rgba(255,255,255,.05); color:rgba(255,255,255,.8); }
+    .nav-item.active { background:rgba(67,160,71,.1); color:var(--primary-light); border-right-color:var(--primary-light); }
+    .nav-item svg { width:18px; height:18px; flex-shrink:0; opacity:.7; }
+    .nav-item.active svg { opacity:1; }
+    .nav-badge { margin-right:auto; background:var(--red); color:white; border-radius:10px; padding:2px 7px; font-size:10px; font-weight:800; font-family:var(--font-en); }
+    .sidebar-bottom { padding:14px; border-top:1px solid var(--sidebar-border); }
+    .btn-logout-side { width:100%; padding:10px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); color:rgba(255,255,255,.4); border-radius:10px; font-size:12px; cursor:pointer; font-family:var(--font-ar); transition:all .15s; }
+    .btn-logout-side:hover { background:rgba(255,255,255,.08); color:rgba(255,255,255,.7); }
+
+    /* ── MAIN */
+    .main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+    .topbar { background:var(--surface); border-bottom:1px solid var(--border); padding:0 24px; height:56px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+    .topbar-title { font-size:17px; font-weight:700; color:var(--text); }
+    .topbar-time { font-size:15px; color:var(--muted); font-variant-numeric:tabular-nums; font-family:var(--font-en); }
+    .content { flex:1; overflow-y:auto; padding:20px 24px; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+
+    .screen { display:none; } .screen.active { display:block; }
+    .orders-filters { display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap; }
+    .filter-chip { padding:7px 16px; border-radius:20px; border:1.5px solid var(--border); background:var(--surface); font-size:12px; font-weight:600; cursor:pointer; color:var(--muted); font-family:var(--font-ar); transition:all .15s; }
+    .filter-chip.active { background:var(--primary); border-color:var(--primary); color:white; }
+    .filter-chip:hover:not(.active) { border-color:var(--border2); color:var(--text2); }
+    .status-section { margin-bottom:22px; }
+    .status-section-title { font-size:11px; font-weight:700; color:var(--muted2); letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:7px; }
+    .status-dot { width:8px; height:8px; border-radius:50%; }
+    .dot-pending { background:#F59E0B; } .dot-preparing { background:#3B82F6; } .dot-ready { background:var(--primary-light); }
+    .orders-grid-pos { display:grid; grid-template-columns:repeat(auto-fill,minmax(272px,1fr)); gap:12px; }
+    .order-card-pos { background:var(--surface); border-radius:14px; padding:16px; border:1.5px solid var(--border); transition:box-shadow .15s; }
+    .order-card-pos:hover { box-shadow:0 4px 20px rgba(0,0,0,.07); }
+    .order-card-pos.ready { border-color:var(--primary-light); background:#F2FAF2; }
+    .order-card-pos.online-card { border-right:3px solid var(--accent); }
+    .order-card-pos.new-flash { animation:cardFlash .6s ease-out; }
+    @keyframes cardFlash { 0%{background:#E8F5E9;transform:scale(1.01);} 100%{background:var(--surface);transform:scale(1);} }
+    .ocard-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+    .ocard-num { font-size:18px; font-weight:800; color:var(--primary); font-family:var(--font-en); }
+    .ocard-badge { padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; }
+    .badge-pending { background:rgba(245,158,11,.12); color:#B45309; }
+    .badge-preparing { background:rgba(59,130,246,.12); color:#1D4ED8; }
+    .badge-ready { background:rgba(67,160,71,.12); color:var(--primary-mid); }
+    .ocard-meta { font-size:12px; color:var(--muted); margin-bottom:8px; }
+    .ocard-items { font-size:12px; color:var(--text2); line-height:1.75; margin-bottom:12px; border-top:1px solid var(--border); padding-top:10px; }
+    .ocard-total { display:flex; justify-content:space-between; font-size:14px; font-weight:700; margin-bottom:12px; }
+    .btn-pay { width:100%; padding:11px; background:var(--primary); color:white; border:none; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; font-family:var(--font-ar); transition:background .15s; }
+    .btn-pay:hover { background:var(--primary-mid); }
+    .btn-pay.disabled-btn { background:var(--border); color:var(--muted2); cursor:default; }
+    .btn-pay.disabled-btn:hover { background:var(--border); }
+    .new-order-layout { display:grid; grid-template-columns:1fr 350px; gap:14px; height:calc(100vh - 160px); }
+    .menu-section { overflow-y:auto; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+    .cart-section { background:var(--surface); border-radius:14px; display:flex; flex-direction:column; overflow:hidden; border:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,.04); }
+    .cat-tabs { display:flex; gap:6px; overflow-x:auto; padding-bottom:10px; margin-bottom:12px; scrollbar-width:none; }
+    .cat-tabs::-webkit-scrollbar { display:none; }
+    .cat-tab { white-space:nowrap; padding:7px 14px; border-radius:20px; border:1.5px solid var(--border); background:var(--surface); color:var(--muted); font-size:12px; font-weight:600; cursor:pointer; font-family:var(--font-ar); transition:all .15s; }
+    .cat-tab.active { background:var(--primary); border-color:var(--primary); color:white; }
+    .cat-tab:hover:not(.active) { border-color:var(--border2); color:var(--text2); }
+    .menu-grid-cashier { display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:8px; }
+    .menu-item-c { background:var(--surface); border:1.5px solid var(--border); border-radius:12px; padding:12px 11px; cursor:pointer; transition:all .15s; }
+    .menu-item-c:hover { border-color:var(--primary-light); box-shadow:0 2px 10px rgba(27,94,32,.08); transform:translateY(-1px); }
+    .menu-item-c:active { transform:scale(.97); }
+    .mic-name { font-size:13px; font-weight:700; margin-bottom:4px; color:var(--text); line-height:1.3; }
+    .mic-price { font-size:13px; color:var(--primary-light); font-weight:700; font-family:var(--font-en); }
+    .cart-header-c { padding:13px 16px; border-bottom:1px solid var(--border); font-size:14px; font-weight:700; display:flex; justify-content:space-between; align-items:center; }
+    .cart-body-c { flex:1; overflow-y:auto; padding:10px; }
+    .cart-item-c { background:var(--surface2); border-radius:10px; padding:10px 12px; margin-bottom:7px; border:1px solid var(--border); }
+    .cic-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+    .cic-name { font-size:13px; font-weight:700; flex:1; color:var(--text); }
+    .cic-price { font-size:13px; font-weight:700; color:var(--primary-light); font-family:var(--font-en); }
+    .cic-controls { display:flex; align-items:center; gap:7px; }
+    .cqty-btn { width:27px; height:27px; border-radius:7px; border:none; font-size:16px; cursor:pointer; font-weight:700; display:flex; align-items:center; justify-content:center; transition:opacity .15s; }
+    .cqty-btn.minus { background:rgba(198,40,40,.1); color:var(--red); }
+    .cqty-btn.plus { background:rgba(67,160,71,.1); color:var(--primary-light); }
+    .cqty-btn:hover { opacity:.75; }
+    .cqty-val { font-size:14px; font-weight:700; min-width:22px; text-align:center; font-family:var(--font-en); }
+    .cart-footer-c { padding:14px 16px; border-top:1px solid var(--border); }
+    .cart-total-c { display:flex; justify-content:space-between; font-size:15px; font-weight:800; margin-bottom:4px; }
+    .cart-type-selector { display:flex; gap:8px; margin-bottom:12px; }
+    .type-btn { flex:1; padding:9px; border:1.5px solid var(--border); border-radius:10px; background:var(--surface); font-size:12px; font-weight:600; cursor:pointer; text-align:center; color:var(--muted); font-family:var(--font-ar); transition:all .15s; }
+    .type-btn.active { border-color:var(--primary-light); color:var(--primary); background:rgba(67,160,71,.06); }
+    .table-select { width:100%; padding:9px 12px; border:1.5px solid var(--border); border-radius:10px; font-size:13px; margin-bottom:12px; outline:none; font-family:var(--font-ar); color:var(--text); background:var(--surface); }
+    .table-select:focus { border-color:var(--primary-light); }
+    .btn-submit-c { width:100%; padding:13px; background:var(--primary); color:white; border:none; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; font-family:var(--font-ar); transition:background .15s; }
+    .btn-submit-c:hover:not(:disabled) { background:var(--primary-mid); }
+    .btn-submit-c:disabled { opacity:.4; cursor:not-allowed; }
+    .stats-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:22px; }
+    .stat-card { background:var(--surface); border-radius:14px; padding:18px; border:1px solid var(--border); box-shadow:0 1px 3px rgba(0,0,0,.04); }
+    .stat-label { font-size:11px; color:var(--muted); margin-bottom:8px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+    .stat-value { font-size:26px; font-weight:800; color:var(--primary); font-family:var(--font-en); }
+    .stat-sub { font-size:11px; color:var(--muted2); margin-top:4px; }
+    .reports-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+    .report-card { background:var(--surface); border-radius:14px; padding:18px; border:1px solid var(--border); }
+    .report-card-title { font-size:13px; font-weight:700; margin-bottom:14px; color:var(--text); }
+    .payment-row { display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid var(--border); }
+    .payment-row:last-child { border-bottom:none; }
+    .payment-name { font-size:13px; font-weight:600; color:var(--text2); }
+    .payment-amount { font-size:14px; font-weight:700; color:var(--primary-light); font-family:var(--font-en); }
+    .top-item-row { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); }
+    .top-item-row:last-child { border-bottom:none; }
+    .top-item-rank { width:26px; height:26px; background:var(--primary); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; font-family:var(--font-en); }
+    .top-item-name { flex:1; font-size:13px; font-weight:600; color:var(--text2); }
+    .top-item-count { font-size:12px; color:var(--muted); font-weight:600; font-family:var(--font-en); }
+    .reports-actions { display:flex; gap:10px; margin-top:4px; }
+    .btn-endday { padding:13px 24px; background:var(--red); color:white; border:none; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; font-family:var(--font-ar); transition:opacity .15s; }
+    .btn-endday:hover { opacity:.88; }
+    .btn-reload-report { padding:13px 20px; background:#1565C0; color:white; border:none; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; font-family:var(--font-ar); transition:opacity .15s; }
+    .btn-reload-report:hover { opacity:.88; }
+    .modal-bg { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:200; display:none; align-items:center; justify-content:center; }
+    .modal-bg.open { display:flex; }
+    .modal-box { background:var(--surface); border-radius:20px; width:min(520px,96vw); max-height:92vh; overflow-y:auto; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.15); }
+    .modal-title { font-size:20px; font-weight:800; margin-bottom:5px; color:var(--text); }
+    .modal-sub { font-size:13px; color:var(--muted); margin-bottom:22px; }
+    .modal-section { margin-bottom:18px; }
+    .modal-section-title { font-size:11px; font-weight:700; color:var(--muted2); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
+    .modal-items-list { background:var(--surface2); border-radius:12px; padding:14px; margin-bottom:4px; border:1px solid var(--border); }
+    .modal-item-row { display:flex; justify-content:space-between; padding:6px 0; font-size:13px; border-bottom:1px solid var(--border); }
+    .modal-item-row:last-child { border-bottom:none; }
+    .modal-total-row { display:flex; justify-content:space-between; font-size:17px; font-weight:800; padding:12px 0 0; border-top:1px solid var(--border); margin-top:8px; }
+    .payment-methods { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .pay-method-btn { padding:13px; border:1.5px solid var(--border); border-radius:12px; background:var(--surface); font-size:13px; font-weight:700; cursor:pointer; text-align:center; color:var(--muted); font-family:var(--font-ar); transition:all .15s; }
+    .pay-method-btn.selected { border-color:var(--primary-light); background:rgba(67,160,71,.06); color:var(--primary); }
+    .pay-method-btn:hover:not(.selected) { border-color:var(--border2); color:var(--text2); }
+    .input-group { display:flex; flex-direction:column; gap:6px; margin-bottom:12px; }
+    .input-group label { font-size:12px; font-weight:600; color:var(--text2); }
+    .input-group input { padding:11px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:15px; outline:none; direction:ltr; text-align:left; font-family:var(--font-en); color:var(--text); background:var(--surface); }
+    .input-group input:focus { border-color:var(--primary-light); box-shadow:0 0 0 3px rgba(67,160,71,.1); }
+    .change-display { background:rgba(67,160,71,.08); border:1px solid rgba(67,160,71,.2); border-radius:10px; padding:12px 16px; font-size:16px; font-weight:700; color:var(--primary); text-align:center; margin-top:8px; display:none; font-family:var(--font-en); }
+    .discount-row { display:flex; gap:8px; }
+    .discount-row input { flex:1; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; outline:none; direction:ltr; font-family:var(--font-en); color:var(--text); }
+    .discount-row input:focus { border-color:var(--primary-light); }
+    .discount-row select { padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; outline:none; font-family:var(--font-ar); }
+    .modal-btn-row { display:flex; gap:10px; margin-top:18px; }
+    .btn-modal-cancel { flex:1; padding:13px; background:var(--surface2); color:var(--muted); border:1px solid var(--border); border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; font-family:var(--font-ar); transition:background .15s; }
+    .btn-modal-cancel:hover { background:var(--border); }
+    .btn-modal-confirm { flex:2; padding:13px; background:var(--primary); color:white; border:none; border-radius:10px; font-size:15px; font-weight:700; cursor:pointer; font-family:var(--font-ar); transition:background .15s; }
+    .btn-modal-confirm:hover { background:var(--primary-mid); }
+    .btn-modal-print { flex:1; padding:13px; background:#1565C0; color:white; border:none; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; font-family:var(--font-ar); transition:opacity .15s; }
+    .btn-modal-print:hover { opacity:.88; }
+    .size-modal-bg { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:300; display:none; align-items:center; justify-content:center; }
+    .size-modal-bg.open { display:flex; }
+    .size-modal-box { background:var(--surface); border-radius:18px; padding:24px; width:min(380px,96vw); box-shadow:0 16px 40px rgba(0,0,0,.12); }
+    .size-opts-c { display:flex; gap:10px; margin:14px 0; }
+    .size-opt-c { flex:1; padding:16px; border:2px solid var(--border); border-radius:12px; text-align:center; cursor:pointer; transition:all .15s; }
+    .size-opt-c:hover { border-color:var(--primary-light); background:rgba(67,160,71,.04); transform:translateY(-1px); }
+    .size-opt-c.sel { border-color:var(--primary-light); background:rgba(67,160,71,.08); }
+
+    /* cashier menu search */
+    .cashier-search-wrap {
+      display:flex; align-items:center; gap:8px;
+      background:var(--surface2); border:1.5px solid var(--border);
+      border-radius:10px; padding:8px 12px; margin-bottom:10px;
+      transition:border-color .15s, box-shadow .15s;
+    }
+    .cashier-search-wrap:focus-within { border-color:var(--primary-light); box-shadow:0 0 0 3px rgba(67,160,71,.08); background:var(--surface); }
+    .cashier-search-wrap svg { color:var(--muted2); flex-shrink:0; }
+    .cashier-search-inp {
+      flex:1; background:none; border:none; outline:none;
+      font-size:13px; font-family:var(--font-ar); color:var(--text); min-width:0;
+    }
+    .cashier-search-inp::placeholder { color:var(--muted2); }
+    .cashier-search-clear {
+      background:none; border:none; color:var(--muted2); cursor:pointer;
+      font-size:16px; line-height:1; padding:0 2px; display:none;
+    }
+    .cashier-search-clear.show { display:block; }
+    .size-opt-label-c { font-size:22px; font-weight:800; color:var(--primary); font-family:var(--font-en); }
+    .size-opt-price-c { font-size:14px; color:var(--primary-light); font-weight:700; margin-top:4px; font-family:var(--font-en); }
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--primary); color:white; padding:11px 24px; border-radius:24px; font-size:13px; font-weight:600; z-index:400; opacity:0; transition:opacity .25s; pointer-events:none; white-space:nowrap; box-shadow:0 4px 16px rgba(27,94,32,.25); }
+    .toast.show { opacity:1; }
+    .sound-unlock { position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:500; display:flex; align-items:center; justify-content:center; }
+    .sound-unlock-box { background:var(--surface); border-radius:20px; padding:44px 40px; text-align:center; max-width:360px; box-shadow:0 20px 60px rgba(0,0,0,.2); }
+    .sound-unlock-icon { font-size:52px; margin-bottom:18px; }
+    .sound-unlock-title { font-size:21px; font-weight:800; color:var(--primary); margin-bottom:10px; }
+    .sound-unlock-desc { font-size:13.5px; color:var(--muted); margin-bottom:26px; line-height:1.7; }
+    .sound-unlock-btn { width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; font-family:var(--font-ar); transition:background .15s; }
+    .sound-unlock-btn:hover { background:var(--primary-mid); }
+
+    /* PRINT RECEIPT */
+    @media print {
+      @page { size: 80mm auto; margin: 0mm; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      body { background:#fff !important; }
+      body > *:not(#receipt-print) { display:none !important; visibility:hidden !important; }
+      #receipt-print {
+        display:block !important; visibility:visible !important;
+        width:76mm; margin:0; padding:3mm 2mm;
+        font-family:'Courier New',Courier,monospace;
+        font-size:11pt; color:#000 !important;
+        direction:rtl; unicode-bidi:embed;
+      }
+    }
+    #receipt-print { display:none; }
+
+    /* ── MOBILE RESPONSIVE ─────────────────────── */
+    @media(max-width:767px){
+      body { flex-direction:column; height:auto; min-height:100vh; overflow-y:auto; }
+
+      /* Hide desktop sidebar */
+      .sidebar { display:none !important; }
+
+      /* Main takes full width */
+      .main { width:100%; flex:1; }
+
+      /* Topbar */
+      .topbar { padding:0 14px;
+        padding-top:env(safe-area-inset-top,0);
+        height:calc(52px + env(safe-area-inset-top,0px)); }
+      .topbar-title { font-size:15px; }
+
+      /* Content padding */
+      .content { padding:14px 14px max(14px,env(safe-area-inset-bottom,14px)); }
+
+      /* Mobile bottom nav */
+      .mob-bottom-nav {
+        display:flex !important;
+        position:fixed; bottom:0; left:0; right:0; z-index:200;
+        background:var(--sidebar-bg);
+        border-top:1px solid rgba(255,255,255,.08);
+        padding-bottom:env(safe-area-inset-bottom,0);
+        height:calc(56px + env(safe-area-inset-bottom,0px));
+      }
+      .mob-bottom-nav button {
+        flex:1; background:none; border:none; color:rgba(255,255,255,.55);
+        font-size:10px; font-weight:700; font-family:var(--font-ar);
+        cursor:pointer; display:flex; flex-direction:column; align-items:center;
+        justify-content:center; gap:3px; position:relative; padding-top:8px;
+        transition:color .18s;
+      }
+      .mob-bottom-nav button.active { color:var(--primary-light); }
+      .mob-bottom-nav button svg { width:20px; height:20px; }
+      .mob-bottom-nav .nav-badge {
+        position:absolute; top:6px; right:50%; margin-right:-18px;
+        background:var(--red); color:#fff; border-radius:10px;
+        padding:1px 5px; font-size:10px; font-weight:800;
+      }
+      /* Account for bottom nav */
+      .content { padding-bottom:calc(70px + env(safe-area-inset-bottom,0px)); }
+
+      /* New order layout */
+      .new-order-layout { grid-template-columns:1fr; height:auto; gap:10px; }
+      .cart-section { max-height:50vh; }
+
+      /* Orders grid */
+      .orders-grid-pos { grid-template-columns:1fr; }
+
+      /* Stats cards */
+      .stats-cards { grid-template-columns:1fr 1fr; gap:10px; }
+
+      /* Reports row */
+      .reports-row { grid-template-columns:1fr; }
+
+      /* Modal adjustments */
+      .modal-box { padding:20px; border-radius:16px; }
+      .payment-methods { grid-template-columns:1fr 1fr; gap:8px; }
+      .modal-btn-row { flex-direction:column; gap:8px; }
+      .btn-modal-cancel, .btn-modal-confirm, .btn-modal-print { flex:none; }
+    }
+    /* Desktop: hide mobile nav */
+    .mob-bottom-nav { display:none; }
+
+    /* ══ MOBILE UX OPTIMIZATION ══════════════════ */
+
+    /* Prevent iOS font zoom on inputs */
+    input, select, textarea { font-size: 16px !important; }
+
+    /* Bigger touch targets for category tabs */
+    .cat-tab {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    /* Quantity control buttons — min 36px (padded to 44px by parent) */
+    .cqty-btn { width: 36px; height: 36px; border-radius: 9px; }
+    .cqty-val { min-width: 28px; font-size: 15px; }
+
+    /* Cart item cards — better touch spacing */
+    .cart-item-c { padding: 12px 14px; }
+
+    /* Pay method buttons — comfortable tap area */
+    .pay-method-btn { min-height: 52px; }
+
+    /* Submit button — large, clear CTA */
+    .btn-submit-c { min-height: 50px; font-size: 15px; }
+    .btn-endday, .btn-reload-report { min-height: 48px; }
+    .btn-modal-confirm, .btn-modal-cancel, .btn-modal-print { min-height: 48px; }
+
+    /* Size option cards — tap-friendly */
+    .size-opt-c { min-height: 80px; }
+
+    /* Sound unlock — fix for small screens */
+    .sound-unlock-box {
+      margin: 16px;
+      padding: 36px 24px;
+      border-radius: 20px;
+      max-width: calc(100vw - 32px);
+    }
+
+    @media (max-width: 767px) {
+      /* 2-column menu grid on mobile — more items visible */
+      .menu-grid-cashier { grid-template-columns: repeat(2, 1fr); gap: 7px; }
+
+      /* Bottom-sheet modals instead of centered */
+      .modal-bg { align-items: flex-end; }
+      .modal-box {
+        border-radius: 20px 20px 0 0;
+        width: 100%;
+        max-width: 100%;
+        max-height: 88vh;
+        padding: 20px 16px;
+        padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
+      }
+
+      /* Toast above bottom nav */
+      .toast { bottom: calc(70px + env(safe-area-inset-bottom, 0px)); }
+
+      /* Size modal also bottom sheet */
+      .size-modal-bg { align-items: flex-end; }
+      .size-modal-box {
+        border-radius: 20px 20px 0 0;
+        width: 100%;
+        max-width: 100%;
+        padding: 24px 16px;
+        padding-bottom: max(24px, env(safe-area-inset-bottom, 24px));
+      }
+
+      /* Bottom nav tabs — comfortable thumb targets */
+      .mob-bottom-nav button { min-height: 56px; }
+      .mob-bottom-nav button svg { width: 22px; height: 22px; }
+
+      /* Cart section — better height on mobile */
+      .cart-section { max-height: 42vh; }
+
+      /* Reports stacked on mobile */
+      .reports-actions { flex-direction: column; }
+      .btn-endday, .btn-reload-report { width: 100%; text-align: center; padding: 14px; }
+
+      /* Search bar — taller touch target */
+      .cashier-search-wrap { padding: 10px 14px; }
+      .cashier-search-inp { font-size: 16px !important; }
+
+      /* Type selector buttons */
+      .type-btn { min-height: 44px; font-size: 13px; padding: 11px; }
+
+      /* Table select */
+      .table-select { min-height: 44px; padding: 11px 14px; font-size: 15px; }
+
+      /* Stat cards — tighter on small screens */
+      .stat-value { font-size: 22px; }
+      .stat-card { padding: 14px; }
+    }
+
+    @media (max-width: 390px) {
+      .menu-grid-cashier { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .cat-tab { font-size: 11px; padding: 6px 11px; }
+      .mic-name { font-size: 12px; }
+      .mic-price { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SOUND UNLOCK -->
+<div class="sound-unlock" id="soundUnlock">
+  <div class="sound-unlock-box">
+    <div class="sound-unlock-icon">🔔</div>
+    <div class="sound-unlock-title">تفعيل الإشعارات الصوتية</div>
+    <div class="sound-unlock-desc">انقر للسماح بتشغيل الأصوات عند وصول أوردرات جديدة أو عند جاهزية الأوردرات</div>
+    <button class="sound-unlock-btn" onclick="unlockSound()">تفعيل الصوت والبدء</button>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-text">Tu<span>Comida</span></div>
+    <div class="sidebar-role" id="roleLabel">نظام الكاشير</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-item active" id="nav-orders" onclick="switchScreen('orders')">
+      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4zm2 2H5V5h14v14zM3 3v18h18V3H3z"/></svg>
+      الأوردرات
+      <span class="nav-badge" id="readyBadge" style="display:none">0</span>
+    </div>
+    <div class="nav-item" id="nav-neworder" onclick="switchScreen('neworder')">
+      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+      أوردر جديد
+    </div>
+    <div class="nav-item" id="nav-reports" onclick="switchScreen('reports')">
+      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+      التقارير
+    </div>
+    <div class="nav-item" id="nav-online" onclick="switchScreen('online')">
+      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg>
+      أونلاين
+      <span class="nav-badge" id="onlineBadge" style="display:none">0</span>
+    </div>
+  </div>
+  <div class="sidebar-bottom">
+    <button class="btn-logout-side" onclick="doLogout()">تسجيل خروج</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="screenTitle">الأوردرات الحالية</div>
+    <div class="topbar-time" id="mainClock">--:--</div>
+  </div>
+  <div class="content">
+
+    <!-- ORDERS SCREEN -->
+    <div class="screen active" id="screen-orders">
+      <div class="orders-filters">
+        <div class="filter-chip active" onclick="filterStatus('all',this)">الكل</div>
+        <div class="filter-chip" onclick="filterStatus('pending',this)">في الانتظار</div>
+        <div class="filter-chip" onclick="filterStatus('preparing',this)">قيد التحضير</div>
+        <div class="filter-chip" onclick="filterStatus('ready',this)">جاهز ✅</div>
+      </div>
+      <div id="ordersDisplay"></div>
+    </div>
+
+    <!-- NEW ORDER SCREEN -->
+    <div class="screen" id="screen-neworder">
+      <div class="new-order-layout">
+        <div class="menu-section">
+          <div class="cart-type-selector" style="margin-bottom:14px;">
+            <button class="type-btn active" id="ctype-dine" onclick="setCType('dine-in')">🍽 طاولة</button>
+            <button class="type-btn" id="ctype-takeaway" onclick="setCType('takeaway')">🥡 تيك أواي</button>
+          </div>
+          <select class="table-select" id="cashierTableSelect">
+            <option value="">اختر الطاولة...</option>
+          </select>
+          <div class="cashier-search-wrap">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input class="cashier-search-inp" id="cashierSearchInp" type="search" placeholder="ابحث في المنيو..." autocomplete="off" oninput="cashierSearch(this.value)" onsearch="cashierSearch(this.value)">
+            <button class="cashier-search-clear" id="cashierSearchClear" onclick="clearCashierSearch()">✕</button>
+          </div>
+          <div class="cat-tabs" id="cashierCatTabs"></div>
+          <div class="menu-grid-cashier" id="cashierMenuGrid"></div>
+        </div>
+        <div class="cart-section">
+          <div class="cart-header-c">
+            <span>الأوردر</span>
+            <span id="cashierCartCount" style="background:#E8F5E9;color:var(--green-dark);padding:3px 10px;border-radius:20px;font-size:13px;">0</span>
+          </div>
+          <div class="cart-body-c" id="cashierCartBody"></div>
+          <div class="cart-footer-c">
+            <div class="cart-total-c">
+              <span>الإجمالي</span>
+              <span id="cashierCartTotal" style="color:var(--green-mid)">0 ج</span>
+            </div>
+            <button class="btn-submit-c" id="cashierSubmitBtn" onclick="submitCashierOrder()" disabled style="margin-top:12px;">إرسال للمطبخ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORTS SCREEN -->
+    <div class="screen" id="screen-reports">
+      <div class="stats-cards" id="statsCards">
+        <div class="stat-card"><div class="stat-label">تحميل...</div><div class="stat-value">—</div></div>
+        <div class="stat-card"><div class="stat-label">تحميل...</div><div class="stat-value">—</div></div>
+        <div class="stat-card"><div class="stat-label">تحميل...</div><div class="stat-value">—</div></div>
+        <div class="stat-card"><div class="stat-label">تحميل...</div><div class="stat-value">—</div></div>
+      </div>
+      <div class="reports-row">
+        <div class="report-card">
+          <div class="report-card-title">💳 مبيعات بطريقة الدفع</div>
+          <div id="paymentBreakdown"></div>
+        </div>
+        <div class="report-card">
+          <div class="report-card-title">🏆 أكثر الأيتمز مبيعاً</div>
+          <div id="topItems"></div>
+        </div>
+      </div>
+      <div class="reports-actions">
+        <button class="btn-reload-report" onclick="loadReports()">🔄 تحديث التقرير</button>
+        <button class="btn-endday" onclick="confirmEndDay()">🌙 إنهاء اليوم</button>
+      </div>
+    </div>
+
+    <!-- ONLINE ORDERS SCREEN -->
+    <div class="screen" id="screen-online">
+      <div style="margin-bottom:16px;font-size:14px;color:var(--muted);">أوردرات الموقع الإلكتروني والتوصيل</div>
+      <div class="orders-grid-pos" id="onlineOrdersGrid"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-bg" id="payModal">
+  <div class="modal-box">
+    <div class="modal-title">💳 استلام الدفع</div>
+    <div class="modal-sub" id="payModalSub">أوردر #1001</div>
+    <div class="modal-items-list" id="payModalItems"></div>
+    <div class="modal-section">
+      <div class="modal-section-title">الخصم (اختياري)</div>
+      <div class="discount-row">
+        <input type="number" id="discountVal" placeholder="0" min="0" oninput="calcDiscount()">
+        <select id="discountType" onchange="calcDiscount()">
+          <option value="amount">جنيه</option>
+          <option value="percent">%</option>
+        </select>
+      </div>
+      <div id="discountedTotal" style="font-size:18px;font-weight:800;color:var(--green-dark);margin-top:10px;text-align:center;"></div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">طريقة الدفع</div>
+      <div class="payment-methods">
+        <button class="pay-method-btn selected" onclick="selectPayMethod('cash',this)">💵 كاش</button>
+        <button class="pay-method-btn" onclick="selectPayMethod('visa',this)">💳 فيزا/كارت</button>
+        <button class="pay-method-btn" onclick="selectPayMethod('instapay',this)">📱 إنستاباي</button>
+        <button class="pay-method-btn" onclick="selectPayMethod('fawry',this)">🏪 فوري</button>
+      </div>
+    </div>
+    <div class="modal-section" id="cashAmountSection">
+      <div class="input-group">
+        <label>المبلغ المدفوع</label>
+        <input type="number" id="paidAmount" placeholder="أدخل المبلغ..." oninput="calcChange()">
+      </div>
+      <div class="change-display" id="changeDisplay">الباقي: 0 ج</div>
+    </div>
+    <div class="modal-btn-row">
+      <button class="btn-modal-cancel" onclick="closePayModal()">إلغاء</button>
+      <button class="btn-modal-print" onclick="printReceiptFromModal()">🖨 طباعة</button>
+      <button class="btn-modal-confirm" onclick="confirmPayment()">تأكيد الدفع ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- SIZE MODAL -->
+<div class="size-modal-bg" id="sizeModalC">
+  <div class="size-modal-box">
+    <div style="font-size:18px;font-weight:800;margin-bottom:4px;" id="sizeCTitle">اختر الحجم</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:0;" id="sizeCDesc"></div>
+    <div class="size-opts-c" id="sizeCOpts"></div>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button onclick="closeSizeC()" style="flex:1;padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:14px;cursor:pointer;font-family:var(--font-ar);color:var(--muted);">إلغاء</button>
+      <button onclick="confirmSizeC()" style="flex:2;padding:12px;background:var(--primary);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-ar);">إضافة للأوردر ✓</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="receipt-print"></div>
+
+<!-- Mobile Bottom Nav (hidden on desktop via CSS) -->
+<nav class="mob-bottom-nav" id="mobBottomNav">
+  <button onclick="switchScreen('orders')" id="mbn-orders" class="active">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4zm2.5 2.1h-15V5h15v14.1zm0-16.1h-15c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+    الأوردرات
+    <span class="nav-badge" id="mbn-ready-badge" style="display:none">0</span>
+  </button>
+  <button onclick="switchScreen('neworder')" id="mbn-neworder">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+    أوردر جديد
+  </button>
+  <button onclick="switchScreen('reports')" id="mbn-reports">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+    تقارير
+  </button>
+  <button onclick="switchScreen('online')" id="mbn-online">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg>
+    أونلاين
+    <span class="nav-badge" id="mbn-online-badge" style="display:none">0</span>
+  </button>
+</nav>
+
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  <script src="/shared/firebase-config.js"></script>
+<script>
+/* ═══════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════ */
+let currentUser = null;
+let currentRole = null;
+let menuData = { categories:{}, items:{} };
+
+// Active orders (pending / preparing / ready only)
+let allOrders = {};         // dine-in + takeaway
+let onlineOrders = {};      // online orders
+
+// Initial-load sets — child_added fires for existing data on mount;
+// we skip those so we don't play false chimes
+let initialDineIds    = new Set();
+let initialOnlineIds  = new Set();
+
+let cashierCart = [], cashierOrderType = 'dine-in';
+let payOrderId = null, payOrderData = null, selectedPayMethod = 'cash';
+let selectedDiscountedTotal = 0;
+let sizeItemC = null, selectedSizeC = null;
+let currentStatusFilter = 'all';
+
+// Audio
+let audioCtx = null;
+let soundUnlocked = false;
+
+/* ═══════════════════════════════════════════════
+   SOUND UNLOCK
+═══════════════════════════════════════════════ */
+function unlockSound() {
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const buf = audioCtx.createBuffer(1, 1, 22050);
+    const src = audioCtx.createBufferSource();
+    src.buffer = buf; src.connect(audioCtx.destination); src.start(0);
+    soundUnlocked = true;
+    // Re-resume on any interaction (handles browser auto-suspend)
+    document.addEventListener('click',      _resumeCashierAudio, { passive: true });
+    document.addEventListener('touchstart', _resumeCashierAudio, { passive: true });
+  } catch(e) { console.warn('AudioContext error:', e); }
+  document.getElementById('soundUnlock').style.display = 'none';
+}
+function _resumeCashierAudio() {
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+}
+function _playIfReady(fn) {
+  if (!soundUnlocked || !audioCtx) return;
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume().then(() => { if (audioCtx.state === 'running') fn(); }).catch(() => {});
+    return;
+  }
+  fn();
+}
+
+/* 3-tone chime for "order ready" */
+function playReadyChime() {
+  _playIfReady(() => {
+    [523.25, 659.25, 783.99].forEach((f, i) => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination); o.type = 'sine'; o.frequency.value = f;
+      const t = audioCtx.currentTime + i * 0.18;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.45, t + 0.04);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+      o.start(t); o.stop(t + 0.5);
+    });
+  });
+}
+
+/* double-beep for new order */
+function playNewOrderBeep() {
+  _playIfReady(() => {
+    [0, 0.2].forEach(delay => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination); o.type = 'square'; o.frequency.value = 1000;
+      const t = audioCtx.currentTime + delay;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.35, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+      o.start(t); o.stop(t + 0.2);
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   CLOCK
+═══════════════════════════════════════════════ */
+setInterval(() => {
+  const n = new Date();
+  document.getElementById('mainClock').textContent =
+    `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
+}, 1000);
+
+/* ═══════════════════════════════════════════════
+   AUTH
+═══════════════════════════════════════════════ */
+(function initAuth() {
+  const s = JSON.parse(sessionStorage.getItem('tc_pos_session') || 'null');
+  if (!s || !['cashier','owner'].includes(s.role)) { window.location.href = '/login/'; return; }
+  currentRole = s.role;
+  document.getElementById('roleLabel').textContent = s.role === 'owner' ? 'أونر' : 'كاشير';
+  let _listenersUp = false;
+  auth.onAuthStateChanged(async user => {
+    if (!user) {
+      if (_listenersUp) { sessionStorage.removeItem('tc_pos_session'); window.location.href = '/login/'; }
+      return;
+    }
+    if (_listenersUp) return;
+    _listenersUp = true;
+    // Server-side role verification (MED-01) — 5s timeout safety
+    try {
+      const _timeout = new Promise(res => setTimeout(() => res(null), 5000));
+      const _roleSnap = await Promise.race([
+        db.ref(`users/${user.uid}/role`).once('value'),
+        _timeout
+      ]);
+      const _role = _roleSnap && typeof _roleSnap.val === 'function' ? _roleSnap.val() : currentRole;
+      if (!['cashier','owner'].includes(_role)) {
+        sessionStorage.removeItem('tc_pos_session');
+        await auth.signOut(); window.location.href = '/login/'; return;
+      }
+    } catch(e) { /* DB unreachable — fall through using session role */ }
+    currentUser = user;
+    setupPresence(user, currentRole);
+    // Auto-logout on inactivity (45 min)
+    if (typeof TC_CONFIG !== "undefined" && TC_CONFIG.FEATURES.AUTO_LOGOUT) {
+      setupInactivityTimer(TC_CONFIG.INACTIVITY_TIMEOUT_MS, doLogout);
+    }
+    listenDineOrders();
+    listenOnlineOrders();
+    loadMenu();
+    loadTables();
+  });
+})();
+
+function doLogout() {
+  if (currentUser) logActivity(currentUser.uid, currentRole||'cashier', 'logout', {});
+  sessionStorage.removeItem('tc_pos_session');
+  auth.signOut().then(() => window.location.href = '/login/');
+}
+
+/* ═══════════════════════════════════════════════
+   DINE ORDERS — child_added/changed/removed
+═══════════════════════════════════════════════ */
+async function listenDineOrders() {
+  // Scope to today — prevents loading full order history on startup
+  const _today = getDayId();
+
+  // Step 1: silent initial snapshot — populate state without sound
+  const snap = await db.ref('orders').orderByChild('dayId').equalTo(_today).once('value');
+  initialDineIds = new Set();
+  Object.entries(snap.val() || {}).forEach(([id, o]) => {
+    initialDineIds.add(id);
+    if (['pending','preparing','ready'].includes(o.status)) {
+      allOrders[id] = o;
+    }
+  });
+  renderOrders();
+  updateReadyBadge();
+
+  // Step 2: incremental real-time — sound only for NEW events, scoped to today
+  db.ref('orders').orderByChild('dayId').equalTo(_today).on('child_added', snap => {
+    if (initialDineIds.has(snap.key)) return; // skip boot batch
+    const o = snap.val();
+    if (['pending','preparing','ready'].includes(o.status)) {
+      allOrders[snap.key] = o;
+      renderOrders(); updateReadyBadge();
+      if (o.status === 'ready') playReadyChime(); else playNewOrderBeep();
+      flashCard(snap.key);
+    }
+  });
+
+  db.ref('orders').orderByChild('dayId').equalTo(_today).on('child_changed', snap => {
+    const o = snap.val();
+    const prev = allOrders[snap.key];
+    if (['pending','preparing','ready'].includes(o.status)) {
+      const prevStatus = prev ? prev.status : null;
+      allOrders[snap.key] = o;
+      if (o.status === 'ready' && prevStatus !== 'ready') {
+        playReadyChime();
+        flashCard(snap.key);
+      }
+      renderOrders(); updateReadyBadge();
+    } else {
+      // completed / cancelled — remove from active
+      if (allOrders[snap.key]) {
+        delete allOrders[snap.key];
+        renderOrders(); updateReadyBadge();
+      }
+    }
+  });
+
+  db.ref('orders').orderByChild('dayId').equalTo(_today).on('child_removed', snap => {
+    if (allOrders[snap.key]) {
+      delete allOrders[snap.key];
+      renderOrders(); updateReadyBadge();
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   ONLINE ORDERS — child_added/changed/removed
+═══════════════════════════════════════════════ */
+async function listenOnlineOrders() {
+  // Scope to today — prevents loading full order history on startup
+  const _today = getDayId();
+
+  const snap = await db.ref('online_orders').orderByChild('dayId').equalTo(_today).once('value');
+  initialOnlineIds = new Set();
+  Object.entries(snap.val() || {}).forEach(([id, o]) => {
+    initialOnlineIds.add(id);
+    if (['pending','preparing','ready'].includes(o.status)) {
+      onlineOrders[id] = o;
+    }
+  });
+  renderOnlineOrders(); updateOnlineBadge();
+
+  db.ref('online_orders').orderByChild('dayId').equalTo(_today).on('child_added', snap => {
+    if (initialOnlineIds.has(snap.key)) return;
+    const o = snap.val();
+    if (['pending','preparing','ready'].includes(o.status)) {
+      onlineOrders[snap.key] = o;
+      renderOnlineOrders(); updateOnlineBadge();
+      playNewOrderBeep();
+    }
+  });
+
+  db.ref('online_orders').orderByChild('dayId').equalTo(_today).on('child_changed', snap => {
+    const o = snap.val();
+    if (['pending','preparing','ready'].includes(o.status)) {
+      const prev = onlineOrders[snap.key];
+      const prevStatus = prev ? prev.status : null;
+      onlineOrders[snap.key] = o;
+      if (o.status === 'ready' && prevStatus !== 'ready') playReadyChime();
+      renderOnlineOrders(); updateOnlineBadge();
+    } else {
+      if (onlineOrders[snap.key]) {
+        delete onlineOrders[snap.key];
+        renderOnlineOrders(); updateOnlineBadge();
+      }
+    }
+  });
+
+  db.ref('online_orders').orderByChild('dayId').equalTo(_today).on('child_removed', snap => {
+    if (onlineOrders[snap.key]) {
+      delete onlineOrders[snap.key];
+      renderOnlineOrders(); updateOnlineBadge();
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   RENDER ORDERS
+═══════════════════════════════════════════════ */
+function filterStatus(status, el) {
+  currentStatusFilter = status;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderOrders();
+}
+
+function renderOrders() {
+  const container = document.getElementById('ordersDisplay');
+  const active = Object.entries(allOrders)
+    .filter(([,o]) => currentStatusFilter === 'all' || o.status === currentStatusFilter)
+    .sort((a,b) => (a[1].createdAt||0) - (b[1].createdAt||0));
+
+  if (!active.length) {
+    container.innerHTML = '<div style="text-align:center;padding:60px;color:var(--muted);font-size:16px;">لا توجد أوردرات نشطة 🎉</div>';
+    return;
+  }
+
+  const groups = { pending:[], preparing:[], ready:[] };
+  active.forEach(([id,o]) => { if (groups[o.status]) groups[o.status].push([id,o]); });
+
+  const labels = { pending:'⏳ في الانتظار', preparing:'🍳 قيد التحضير', ready:'✅ جاهز للتسليم' };
+  const dots   = { pending:'dot-pending', preparing:'dot-preparing', ready:'dot-ready' };
+  const badges = { pending:'badge-pending', preparing:'badge-preparing', ready:'badge-ready' };
+  const badgeLabels = { pending:'انتظار', preparing:'تحضير', ready:'جاهز' };
+
+  container.innerHTML = '';
+  ['pending','preparing','ready'].forEach(status => {
+    if (!groups[status].length) return;
+    if (currentStatusFilter !== 'all' && currentStatusFilter !== status) return;
+
+    const sec = document.createElement('div');
+    sec.className = 'status-section';
+    sec.innerHTML = `<div class="status-section-title"><span class="status-dot ${dots[status]}"></span>${labels[status]} (${groups[status].length})</div><div class="orders-grid-pos" id="grid-${status}"></div>`;
+    container.appendChild(sec);
+
+    const grid = sec.querySelector(`#grid-${status}`);
+    groups[status].forEach(([id,o]) => {
+      const tableInfo = o.type === 'takeaway' ? 'تيك أواي 🥡' : `طاولة ${o.tableNumber}`;
+      const itemsHtml = (o.items||[]).map(i =>
+        `${escapeHtml(String(i.quantity||0))}× ${escapeHtml(i.name||'')}${i.size?` (${escapeHtml(i.size)})` :''}${i.notes?` — <em>${escapeHtml(i.notes)}</em>`:''}`
+      ).join('<br>');
+
+      const payBtn = o.status === 'ready'
+        ? `<button class="btn-pay" onclick="openPayModal('${id}')">💳 استلام الدفع</button>`
+        : `<button class="btn-pay disabled-btn">⏳ ${badgeLabels[o.status]}</button>`;
+
+      const card = document.createElement('div');
+      card.className = `order-card-pos ${o.status}`;
+      card.id = `oc-${id}`;
+      card.innerHTML = `
+        <div class="ocard-header">
+          <div class="ocard-num">#${o.orderNumber}</div>
+          <div class="ocard-badge ${badges[o.status]}">${badgeLabels[o.status]}</div>
+        </div>
+        <div class="ocard-meta">${tableInfo} — ${formatTime(o.createdAt)}</div>
+        <div class="ocard-items">${itemsHtml}</div>
+        <div class="ocard-total"><span>الإجمالي</span><span style="color:var(--green-mid)">${o.total} ج</span></div>
+        ${payBtn}
+      `;
+      grid.appendChild(card);
+    });
+  });
+}
+
+function flashCard(id) {
+  // Flash the card after it's rendered (setTimeout to let DOM update)
+  setTimeout(() => {
+    const el = document.getElementById(`oc-${id}`);
+    if (el) { el.classList.add('new-flash'); setTimeout(()=>el.classList.remove('new-flash'),700); }
+  }, 60);
+}
+
+function updateReadyBadge() {
+  const count = Object.values(allOrders).filter(o => o.status === 'ready').length;
+  const el = document.getElementById('readyBadge');
+  el.textContent = count;
+  el.style.display = count ? 'inline' : 'none';
+}
+
+/* ═══════════════════════════════════════════════
+   RENDER ONLINE ORDERS
+═══════════════════════════════════════════════ */
+function renderOnlineOrders() {
+  const grid = document.getElementById('onlineOrdersGrid');
+  const entries = Object.entries(onlineOrders)
+    .sort((a,b) => (a[1].createdAt||0) - (b[1].createdAt||0));
+
+  if (!entries.length) {
+    grid.innerHTML = '<div style="text-align:center;padding:60px;color:var(--muted);">لا توجد أوردرات أونلاين حالياً</div>';
+    return;
+  }
+  const badges = { pending:'badge-pending', preparing:'badge-preparing', ready:'badge-ready' };
+  const bl = { pending:'انتظار', preparing:'تحضير', ready:'جاهز' };
+
+  grid.innerHTML = '';
+  entries.forEach(([id,o]) => {
+    const typeLabel = o.type === 'pickup' ? '🏃 استلام من المحل' : '🛵 توصيل';
+    const itemsHtml = (o.items||[]).map(i => `${Number(i.quantity||0)}× ${escapeHtml(i.name||'')}${i.size?` (${escapeHtml(i.size)})`:''}`).join('<br>');
+    const card = document.createElement('div');
+    card.className = 'order-card-pos online-card';
+    card.innerHTML = `
+      <div class="ocard-header">
+        <div class="ocard-num" style="color:var(--orange)">#${Number(o.orderNumber||0)}</div>
+        <div class="ocard-badge ${badges[o.status]||''}">${bl[o.status]||''}</div>
+      </div>
+      <div class="ocard-meta">${escapeHtml(typeLabel)} — ${escapeHtml(o.customerName||'عميل')} — ${escapeHtml(o.customerPhone||'')}</div>
+      ${o.customerAddress?`<div style="font-size:12px;color:var(--muted);margin-bottom:8px;">📍 ${escapeHtml(o.customerAddress)}</div>`:''}
+      <div class="ocard-items">${itemsHtml}</div>
+      <div class="ocard-total"><span>الإجمالي</span><span style="color:var(--orange)">${o.total} ج</span></div>
+      ${o.status==='ready'
+        ? `<button class="btn-pay" onclick="openPayModalOnline('${id}')">💳 استلام الدفع</button>`
+        : `<button class="btn-pay disabled-btn">⏳ ${bl[o.status]}</button>`}
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function updateOnlineBadge() {
+  const count = Object.values(onlineOrders).filter(o => ['pending','preparing'].includes(o.status)).length;
+  const el = document.getElementById('onlineBadge');
+  el.textContent = count;
+  el.style.display = count ? 'inline' : 'none';
+}
+
+/* ═══════════════════════════════════════════════
+   PAYMENT MODAL
+═══════════════════════════════════════════════ */
+function openPayModal(orderId) {
+  payOrderId = orderId;
+  payOrderData = { ...allOrders[orderId] };
+  selectedPayMethod = 'cash';
+  openPayModalCommon();
+}
+
+function openPayModalOnline(orderId) {
+  payOrderId = orderId;
+  payOrderData = { ...onlineOrders[orderId], _isOnline: true };
+  selectedPayMethod = 'cash';
+  openPayModalCommon();
+}
+
+function openPayModalCommon() {
+  const o = payOrderData;
+  const loc = o.type === 'takeaway' ? 'تيك أواي' : o.type === 'delivery' ? 'توصيل' : `طاولة ${o.tableNumber}`;
+  document.getElementById('payModalSub').textContent = `أوردر #${o.orderNumber} — ${loc}`;
+  document.getElementById('discountVal').value = '';
+  document.getElementById('paidAmount').value = '';
+  document.getElementById('changeDisplay').style.display = 'none';
+  selectedDiscountedTotal = o.total;
+  document.getElementById('discountedTotal').textContent = `الإجمالي: ${o.total} ج`;
+  document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelector('.pay-method-btn').classList.add('selected');
+  document.getElementById('cashAmountSection').style.display = 'block';
+
+  const itemsHtml = (o.items||[]).map(i =>
+    `<div class="modal-item-row"><span>${escapeHtml(String(i.quantity||0))}× ${escapeHtml(i.name||'')}${i.size?` (${escapeHtml(i.size)})`:''}</span><span>${escapeHtml(String((i.price||0)*(i.quantity||0)))} ج</span></div>`
+  ).join('');
+  document.getElementById('payModalItems').innerHTML = itemsHtml +
+    `<div class="modal-total-row"><span>الإجمالي</span><span>${escapeHtml(String(o.total||0))} ج</span></div>`;
+
+  document.getElementById('payModal').classList.add('open');
+}
+
+function closePayModal() {
+  document.getElementById('payModal').classList.remove('open');
+  payOrderId = null; payOrderData = null;
+}
+
+function selectPayMethod(method, el) {
+  selectedPayMethod = method;
+  document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('cashAmountSection').style.display = method === 'cash' ? 'block' : 'none';
+}
+
+function calcDiscount() {
+  if (!payOrderData) return;
+  const val = parseFloat(document.getElementById('discountVal').value) || 0;
+  const type = document.getElementById('discountType').value;
+  const sub = payOrderData.total;
+  let discount = type === 'percent' ? (sub * val / 100) : val;
+  discount = Math.min(discount, sub);
+  selectedDiscountedTotal = Math.max(0, sub - discount);
+  document.getElementById('discountedTotal').textContent =
+    discount > 0
+      ? `الإجمالي بعد الخصم: ${selectedDiscountedTotal} ج  (خصم ${discount} ج)`
+      : `الإجمالي: ${selectedDiscountedTotal} ج`;
+  calcChange();
+}
+
+function calcChange() {
+  if (selectedPayMethod !== 'cash') return;
+  const paid = parseFloat(document.getElementById('paidAmount').value) || 0;
+  const change = paid - selectedDiscountedTotal;
+  const el = document.getElementById('changeDisplay');
+  if (paid > 0) {
+    el.style.display = 'block';
+    el.textContent = change >= 0
+      ? `الباقي: ${change.toFixed(2)} ج`
+      : `⚠️ المبلغ غير كافٍ (ناقص ${Math.abs(change).toFixed(2)} ج)`;
+    el.style.background = change >= 0 ? '#E8F5E9' : '#FFEBEE';
+    el.style.color = change >= 0 ? 'var(--green-dark)' : 'var(--red)';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+async function confirmPayment() {
+  if (!payOrderId || !payOrderData) return;
+  const btn = document.querySelector('.btn-modal-confirm');
+  btn.disabled = true; btn.textContent = 'جاري الحفظ...';
+
+  const discountVal  = parseFloat(document.getElementById('discountVal').value) || 0;
+  const discountType = document.getElementById('discountType').value;
+  const paidAmount   = parseFloat(document.getElementById('paidAmount').value) || 0;
+  const change       = selectedPayMethod === 'cash' ? (paidAmount - selectedDiscountedTotal) : 0;
+
+  const update = {
+    status: 'completed',
+    discount: discountVal, discountType,
+    total: selectedDiscountedTotal,
+    paymentMethod: selectedPayMethod,
+    paidAmount: selectedPayMethod === 'cash' ? paidAmount : selectedDiscountedTotal,
+    change: Math.max(0, change),
+    completedAt: Date.now(), completedBy: currentUser.uid, updatedAt: Date.now()
+  };
+
+  try {
+    const isOnline = payOrderData._isOnline;
+    const ref = isOnline ? db.ref(`online_orders/${payOrderId}`) : db.ref(`orders/${payOrderId}`);
+    await ref.update(update);
+
+    if (!isOnline && payOrderData.tableId) {
+      await db.ref(`tables/${payOrderData.tableId}/status`).set('available');
+    }
+
+    await logActivity(currentUser.uid, 'cashier', 'payment', {
+      orderId: payOrderId, orderNumber: payOrderData.orderNumber,
+      total: selectedDiscountedTotal, method: selectedPayMethod
+    });
+
+    showToast(`✅ تم استلام الدفع #${payOrderData.orderNumber}`);
+    closePayModal();
+  } catch(e) {
+    console.error(e);
+    showToast('❌ خطأ في الحفظ');
+  } finally {
+    btn.disabled = false; btn.textContent = 'تأكيد الدفع ✓';
+  }
+}
+
+function printReceiptFromModal() {
+  if (!payOrderData) return;
+  const discountVal = parseFloat(document.getElementById('discountVal').value) || 0;
+  const paidAmount  = parseFloat(document.getElementById('paidAmount').value) || 0;
+  printReceipt(payOrderData, selectedDiscountedTotal, discountVal, selectedPayMethod, paidAmount);
+}
+
+function printReceipt(order, total, discount, payMethod, paid) {
+  const change = payMethod === 'cash' ? Math.max(0, paid - total) : 0;
+  const pmLabel = { cash:'كاش', visa:'فيزا/كارت', instapay:'إنستاباي', fawry:'فوري' };
+  const tableInfo = order.type === 'takeaway' ? 'تيك أواي' : order.type === 'delivery' ? 'توصيل' : `طاولة ${order.tableNumber}`;
+  const dateStr = new Date().toLocaleDateString('ar-EG') + ' — ' + new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
+  const R = (txt) => `<span style="float:left;direction:ltr">${txt}</span>`;
+  const sep = `<div style="border-top:1px dashed #000;margin:6px 0;clear:both"></div>`;
+  const row = (label, val, bold) =>
+    `<div style="${bold?'font-weight:bold;':''}margin:2px 0;overflow:hidden">${label}${R(val)}</div>`;
+
+  const itemsHtml = (order.items||[]).map(i => {
+    const nm = `${escapeHtml(String(i.quantity||0))}x ${escapeHtml(i.name||'')}${i.size?' '+escapeHtml(i.size):''}`;
+    const pr = `${(i.price||0)*(i.quantity||0)} ج`;
+    return `<div style="margin:2px 0;overflow:hidden">${nm}${R(pr)}</div>`;
+  }).join('');
+
+  document.getElementById('receipt-print').innerHTML =
+    `<div style="text-align:center;font-weight:bold;font-size:15pt;margin-bottom:3px">TuComida</div>
+    <div style="text-align:center;font-size:9pt;margin-bottom:1px">fresh &amp; healthy</div>
+    <div style="text-align:center;font-size:9pt;margin-bottom:1px">دمياط الجديدة</div>
+    <div style="text-align:center;font-size:9pt;margin-bottom:5px">01102708550</div>
+    ${sep}
+    <div style="margin:2px 0">فاتورة: #${order.orderNumber}</div>
+    <div style="margin:2px 0">${dateStr}</div>
+    <div style="margin:2px 0">${tableInfo}</div>
+    ${sep}
+    ${itemsHtml}
+    ${sep}
+    ${row('المجموع:', (order.subtotal||order.total||0)+' ج', false)}
+    ${discount>0 ? row('خصم:', '-'+discount+' ج', false) : ''}
+    ${row('الإجمالي:', total+' ج', true)}
+    ${sep}
+    <div style="margin:2px 0">الدفع: ${pmLabel[payMethod]||payMethod}</div>
+    ${payMethod==='cash'&&paid>0 ? row('المدفوع:', paid+' ج', false)+row('الباقي:', change.toFixed(2)+' ج', true) : ''}
+    ${sep}
+    <div style="text-align:center;font-weight:bold;margin:5px 0">شكراً لزيارتكم!</div>
+    <div style="text-align:center;font-size:9pt">tucomida.web.app</div>`;
+  window.print();
+}
+
+/* ═══════════════════════════════════════════════
+   CASHIER NEW ORDER
+═══════════════════════════════════════════════ */
+function loadMenu() {
+  db.ref('menu').on('value', snap => {
+    menuData = snap.val() || { categories:{}, items:{} };
+    renderCashierCats();
+    renderCashierMenu(null);
+  });
+}
+
+function loadTables() {
+  db.ref('tables').on('value', snap => {
+    const tables = snap.val() || {};
+    const sel = document.getElementById('cashierTableSelect');
+    const current = sel.value;
+    sel.innerHTML = '<option value="">اختر الطاولة...</option>';
+    Object.entries(tables).sort((a,b) => a[1].number - b[1].number).forEach(([id,t]) => {
+      const opt = document.createElement('option');
+      opt.value = id;
+      opt.dataset.num = t.number;
+      opt.textContent = `طاولة ${t.number} (${t.status==='available'?'متاحة 🟢':'مشغولة 🔴'})`;
+      if (id === current) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  });
+}
+
+function setCType(type) {
+  cashierOrderType = type;
+  document.getElementById('ctype-dine').className = 'type-btn' + (type==='dine-in'?' active':'');
+  document.getElementById('ctype-takeaway').className = 'type-btn' + (type==='takeaway'?' active':'');
+  document.getElementById('cashierTableSelect').style.display = type==='dine-in' ? 'block' : 'none';
+}
+
+let _cashierSearchQ = '';
+
+function cashierSearch(q) {
+  _cashierSearchQ = (q || '').trim().toLowerCase();
+  const clearBtn = document.getElementById('cashierSearchClear');
+  if (clearBtn) clearBtn.classList.toggle('show', _cashierSearchQ.length > 0);
+  // عند البحث نشيل تحديد الكاتيجوري
+  if (_cashierSearchQ) {
+    document.querySelectorAll('#cashierCatTabs .cat-tab').forEach(b => b.classList.remove('active'));
+  }
+  renderCashierMenu(null, null, _cashierSearchQ);
+}
+
+function clearCashierSearch() {
+  const inp = document.getElementById('cashierSearchInp');
+  if (inp) inp.value = '';
+  _cashierSearchQ = '';
+  const clearBtn = document.getElementById('cashierSearchClear');
+  if (clearBtn) clearBtn.classList.remove('show');
+  // أعد تفعيل "الكل"
+  const firstTab = document.querySelector('#cashierCatTabs .cat-tab');
+  if (firstTab) firstTab.classList.add('active');
+  renderCashierMenu(null, null, '');
+}
+
+function renderCashierCats() {
+  const cats = Object.entries(menuData.categories||{})
+    .filter(([,c]) => c.active !== false)
+    .sort((a,b) => (a[1].order||0) - (b[1].order||0));
+  const tabs = document.getElementById('cashierCatTabs');
+  tabs.innerHTML = '<button class="cat-tab active" onclick="selectCashierCat(null,this)">الكل</button>';
+  cats.forEach(([id,c]) => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-tab';
+    btn.textContent = c.name || c.nameAr;
+    btn.onclick = function(){ selectCashierCat(id, this); };
+    tabs.appendChild(btn);
+  });
+}
+
+function selectCashierCat(catId, btn) {
+  // مسح البحث عند اختيار كاتيجوري
+  const inp = document.getElementById('cashierSearchInp');
+  if (inp) inp.value = '';
+  _cashierSearchQ = '';
+  const clearBtn = document.getElementById('cashierSearchClear');
+  if (clearBtn) clearBtn.classList.remove('show');
+  renderCashierMenu(catId, btn, '');
+}
+
+function renderCashierMenu(catId, btn, searchQ) {
+  const q = (searchQ !== undefined ? searchQ : _cashierSearchQ).toLowerCase();
+  if (btn) {
+    document.querySelectorAll('#cashierCatTabs .cat-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  const grid = document.getElementById('cashierMenuGrid');
+  grid.innerHTML = '';
+  const items = Object.entries(menuData.items||{})
+    .filter(([,i]) => {
+      if (i.active === false) return false;
+      if (catId && i.categoryId !== catId) return false;
+      if (q) {
+        const name = (i.name||'').toLowerCase();
+        const nameAr = (i.nameAr||'').toLowerCase();
+        return name.includes(q) || nameAr.includes(q);
+      }
+      return true;
+    });
+  if (!items.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);font-size:13px;">لا توجد نتائج</div>';
+    return;
+  }
+  items.forEach(([id,item]) => {
+    const hasSizes = item.sizes && Object.keys(item.sizes).length > 0;
+    const div = document.createElement('div');
+    div.className = 'menu-item-c';
+    div.innerHTML = `<div class="mic-name">${escapeHtml(item.name||'')}</div><div class="mic-price">${hasSizes ? 'M / L' : (item.singlePrice||0) + ' ج'}</div>`;
+    div.onclick = () => hasSizes ? openSizeC(id, item) : addToCashierCart(id, item, null, item.singlePrice || 0);
+    grid.appendChild(div);
+  });
+}
+
+function openSizeC(itemId, item) {
+  sizeItemC = { itemId, item };
+  selectedSizeC = null;
+  document.getElementById('sizeCTitle').textContent = item.name;
+  document.getElementById('sizeCDesc').textContent = '';
+  const opts = document.getElementById('sizeCOpts');
+  opts.innerHTML = '';
+  Object.entries(item.sizes).forEach(([size, data]) => {
+    const d = document.createElement('div');
+    d.className = 'size-opt-c';
+    d.innerHTML = `<div class="size-opt-label-c">${escapeHtml(size)}</div><div class="size-opt-price-c">${escapeHtml(String(data.price||0))} ج</div>`;
+    d.onclick = () => {
+      // تحديد بصري
+      document.querySelectorAll('.size-opt-c').forEach(o => o.classList.remove('sel'));
+      d.classList.add('sel');
+      selectedSizeC = { size, ...data };
+      // إضافة فورية للأوردر وإغلاق الموديل
+      addToCashierCart(itemId, item, size, data.price);
+      setTimeout(() => closeSizeC(), 120); // تأخير بسيط لرؤية الاختيار
+    };
+    opts.appendChild(d);
+  });
+  document.getElementById('sizeModalC').classList.add('open');
+}
+
+function closeSizeC() { document.getElementById('sizeModalC').classList.remove('open'); sizeItemC = null; selectedSizeC = null; }
+
+function confirmSizeC() {
+  if (!selectedSizeC || !sizeItemC) { showToast('اختر الحجم أولاً'); return; }
+  addToCashierCart(sizeItemC.itemId, sizeItemC.item, selectedSizeC.size, selectedSizeC.price);
+  closeSizeC();
+}
+
+function addToCashierCart(itemId, item, size, price) {
+  const existing = cashierCart.find(c => c.itemId === itemId && c.size === size);
+  if (existing) existing.quantity++;
+  else cashierCart.push({ itemId, name: item.name, size, price, quantity: 1, notes: '' });
+  renderCashierCart();
+}
+
+function renderCashierCart() {
+  const body    = document.getElementById('cashierCartBody');
+  const btn     = document.getElementById('cashierSubmitBtn');
+  const countEl = document.getElementById('cashierCartCount');
+  const totalEl = document.getElementById('cashierCartTotal');
+
+  if (!cashierCart.length) {
+    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px;">ابدأ بإضافة أيتمز من القائمة</div>';
+    btn.disabled = true;
+    totalEl.textContent = '0 ج';
+    countEl.textContent = '0';
+    return;
+  }
+  btn.disabled = false;
+  let total = 0, count = 0;
+  body.innerHTML = '';
+  cashierCart.forEach((ci, idx) => {
+    total += ci.price * ci.quantity; count += ci.quantity;
+    const div = document.createElement('div');
+    div.className = 'cart-item-c';
+    div.innerHTML = `
+      <div class="cic-top">
+        <div class="cic-name">${escapeHtml(ci.name||'')}${ci.size ? ` (${escapeHtml(ci.size)})` : ''}</div>
+        <div class="cic-price">${escapeHtml(String(ci.price * ci.quantity))} ج</div>
+      </div>
+      <div class="cic-controls">
+        <button class="cqty-btn minus" onclick="changeCQty(${idx},-1)">−</button>
+        <span class="cqty-val">${ci.quantity}</span>
+        <button class="cqty-btn plus" onclick="changeCQty(${idx},1)">+</button>
+      </div>
+    `;
+    body.appendChild(div);
+  });
+  totalEl.textContent = total + ' ج';
+  countEl.textContent = count;
+}
+
+function changeCQty(idx, delta) {
+  cashierCart[idx].quantity += delta;
+  if (cashierCart[idx].quantity <= 0) cashierCart.splice(idx, 1);
+  renderCashierCart();
+}
+
+async function submitCashierOrder() {
+  if (!cashierCart.length) return;
+  const btn = document.getElementById('cashierSubmitBtn');
+  btn.disabled = true; btn.textContent = 'جاري الإرسال...';
+
+  const tableSelEl = document.getElementById('cashierTableSelect');
+  const selectedOpt = tableSelEl.options[tableSelEl.selectedIndex];
+
+  if (cashierOrderType === 'dine-in' && !tableSelEl.value) {
+    showToast('اختر الطاولة أولاً');
+    btn.disabled = false; btn.textContent = 'إرسال للمطبخ';
+    return;
+  }
+
+  try {
+    const sessionId   = await getCurrentSession();
+    const orderNumber = await getNextOrderNumber();
+    const subtotal    = cashierCart.reduce((s,i) => s + i.price * i.quantity, 0);
+    const orderId     = generateId();
+
+    await db.ref(`orders/${orderId}`).set({
+      orderNumber, type: cashierOrderType,
+      tableId:     cashierOrderType === 'dine-in' ? tableSelEl.value       : null,
+      tableNumber: cashierOrderType === 'dine-in' ? parseInt(selectedOpt.dataset.num) : null,
+      status: 'pending',
+      items: cashierCart.map(i => ({
+        itemId: i.itemId, name: i.name, size: i.size || null,
+        price: i.price, quantity: i.quantity, notes: i.notes || ''
+      })),
+      subtotal, discount: 0, total: subtotal, paymentMethod: null,
+      createdAt: Date.now(), createdBy: currentUser.uid, createdByRole: 'cashier',
+      updatedAt: Date.now(), cancelRequested: false, cancelRequestedBy: null,
+      cancelRequestedAt: null, cancelApproved: false, cancelApprovedBy: null,
+      dayId: getDayId(), sessionId
+    });
+
+    if (cashierOrderType === 'dine-in' && tableSelEl.value) {
+      await db.ref(`tables/${tableSelEl.value}/status`).set('occupied');
+    }
+
+    showToast(`✅ تم إرسال الأوردر #${orderNumber} للمطبخ`);
+    // Deduct from inventory (silent, non-blocking)
+    _deductInventory(cashierCart.map(i => ({ itemId:i.itemId, quantity:i.quantity })));
+    cashierCart = [];
+    renderCashierCart();
+    switchScreen('orders');
+  } catch(e) {
+    console.error(e);
+    showToast('❌ حدث خطأ — حاول مرة ثانية');
+    btn.disabled = false; btn.textContent = 'إرسال للمطبخ';
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   REPORTS — fresh query on demand (not from RAM)
+═══════════════════════════════════════════════ */
+async function loadReports() {
+  const dayId = getDayId();
+
+  // Query all orders for today
+  const snap = await db.ref('orders').orderByChild('dayId').equalTo(dayId).once('value');
+  const todayOrders = Object.values(snap.val() || {});
+  const completed   = todayOrders.filter(o => o.status === 'completed');
+  const active      = todayOrders.filter(o => ['pending','preparing','ready'].includes(o.status));
+
+  const totalSales  = completed.reduce((s,o) => s + (o.total || 0), 0);
+  const avgBill     = completed.length ? Math.round(totalSales / completed.length) : 0;
+
+  document.getElementById('statsCards').innerHTML = `
+    <div class="stat-card"><div class="stat-label">💰 مبيعات اليوم</div><div class="stat-value">${totalSales.toLocaleString()}</div><div class="stat-sub">جنيه مصري</div></div>
+    <div class="stat-card"><div class="stat-label">📋 أوردرات مكتملة</div><div class="stat-value">${completed.length}</div><div class="stat-sub">أوردر اليوم</div></div>
+    <div class="stat-card"><div class="stat-label">📊 متوسط الفاتورة</div><div class="stat-value">${avgBill}</div><div class="stat-sub">جنيه</div></div>
+    <div class="stat-card"><div class="stat-label">⏳ أوردرات نشطة</div><div class="stat-value">${active.length}</div><div class="stat-sub">حالياً</div></div>
+  `;
+
+  // Payment breakdown
+  const payMethods = {};
+  completed.forEach(o => { payMethods[o.paymentMethod] = (payMethods[o.paymentMethod] || 0) + (o.total || 0); });
+  const pmLabels = { cash:'💵 كاش', visa:'💳 فيزا/كارت', instapay:'📱 إنستاباي', fawry:'🏪 فوري' };
+  document.getElementById('paymentBreakdown').innerHTML =
+    Object.keys(payMethods).length
+      ? Object.entries(payMethods).sort((a,b) => b[1]-a[1]).map(([m,v]) =>
+          `<div class="payment-row"><span class="payment-name">${pmLabels[m]||m}</span><span class="payment-amount">${v.toLocaleString()} ج</span></div>`
+        ).join('')
+      : '<div style="text-align:center;padding:20px;color:var(--muted);">لا توجد مبيعات اليوم</div>';
+
+  // Top items
+  const itemCounts = {};
+  completed.forEach(o => (o.items||[]).forEach(i => {
+    const k = i.name + (i.size ? ` ${i.size}` : '');
+    itemCounts[k] = (itemCounts[k] || 0) + (i.quantity || 1);
+  }));
+  const top5 = Object.entries(itemCounts).sort((a,b) => b[1]-a[1]).slice(0,5);
+  document.getElementById('topItems').innerHTML =
+    top5.length
+      ? top5.map(([name,cnt], i) =>
+          `<div class="top-item-row"><div class="top-item-rank">${i+1}</div><div class="top-item-name">${escapeHtml(name)}</div><div class="top-item-count">${escapeHtml(String(cnt))}×</div></div>`
+        ).join('')
+      : '<div style="text-align:center;padding:20px;color:var(--muted);">لا بيانات اليوم</div>';
+}
+
+async function confirmEndDay() {
+  if (!confirm('هل تريد إنهاء اليوم الحالي وبدء جلسة جديدة؟')) return;
+  const dayId     = getDayId();
+  const sessionId = await getCurrentSession();
+
+  // Query both dine-in/takeaway orders AND online orders for the current day
+  const [snapDine, snapOnline] = await Promise.all([
+    db.ref('orders').orderByChild('dayId').equalTo(dayId).once('value'),
+    db.ref('online_orders').orderByChild('dayId').equalTo(dayId).once('value')
+  ]);
+
+  const dineOrders   = Object.values(snapDine.val()   || {}).filter(o => o.status === 'completed');
+  const onlineOrders = Object.values(snapOnline.val() || {}).filter(o => o.status === 'completed');
+  const allOrders    = [...dineOrders, ...onlineOrders];
+  const totalSales   = allOrders.reduce((s,o) => s + (o.total||0), 0);
+  const totalOrders  = allOrders.length;
+
+  if (sessionId) {
+    await db.ref(`sessions/${sessionId}`).update({
+      active: false,
+      endedAt: Date.now(),
+      totalSales,
+      totalOrders,
+      dineOrders:  dineOrders.length,
+      onlineOrders: onlineOrders.length
+    });
+  }
+
+  const newSessionId = `session_${Date.now()}`;
+  const newDayId     = new Date().toISOString().split('T')[0];
+  await db.ref(`sessions/${newSessionId}`).set({ dayId:newDayId, startedAt:Date.now(), endedAt:null, active:true, totalSales:0, totalOrders:0 });
+  await db.ref('settings').update({ currentSession:newSessionId, currentDayId:newDayId });
+
+  await logActivity(currentUser.uid, 'cashier', 'end_day', { dayId, totalSales, totalOrders, dineOrders:dineOrders.length, onlineOrders:onlineOrders.length });
+  showToast(`✅ تم إنهاء اليوم — ${totalOrders} أوردر / ${totalSales.toLocaleString()} ج`);
+  loadReports();
+}
+
+/* ═══════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════ */
+function switchScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  // Sync mobile bottom nav
+  document.querySelectorAll('.mob-bottom-nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(`screen-${name}`).classList.add('active');
+  const sideNav = document.getElementById(`nav-${name}`);
+  if (sideNav) sideNav.classList.add('active');
+  const mobNav = document.getElementById(`mbn-${name}`);
+  if (mobNav) mobNav.classList.add('active');
+  const titles = { orders:'الأوردرات الحالية', neworder:'أوردر جديد', reports:'تقارير اليوم', online:'الأوردرات أونلاين' };
+  document.getElementById('screenTitle').textContent = titles[name] || '';
+  if (name === 'reports') loadReports();
+  if (name === 'neworder') { cashierCart = []; renderCashierCart(); setCType('dine-in'); }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// Set initial table-select visibility
+document.getElementById('cashierTableSelect').style.display = 'block';
+</script>
+</body>
+</html>

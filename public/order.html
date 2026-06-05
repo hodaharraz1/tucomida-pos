@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2A6041">
+  <title>اطلب أونلاين | TuComida — مطعم أكل صحي دمياط الجديدة</title>
+  <meta name="description" content="اطلب وجبتك الصحية من TuComida أونلاين — راب، سلطة، سموثي، بروتين عالي. توصيل داخل دمياط الجديدة أو استلام. Order healthy food online from TuComida New Damietta.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://tucomida-pos.web.app/order.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="اطلب أونلاين | TuComida دمياط الجديدة">
+  <meta property="og:description" content="اطلب وجبتك الصحية الآن — راب، سلطة، سموثي، بروتين. توصيل لحد بيتك في دمياط الجديدة.">
+  <meta property="og:image" content="https://tucomida-pos.web.app/images/food/food-10.jpg">
+  <meta property="og:url" content="https://tucomida-pos.web.app/order.html">
+  <meta property="og:site_name" content="TuComida — Fresh & Healthy">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"OrderAction","target":"https://tucomida-pos.web.app/order.html","name":"اطلب من TuComida أونلاين","object":{"@type":"FoodEstablishment","name":"TuComida","telephone":"+201102708550","address":{"@type":"PostalAddress","addressLocality":"دمياط الجديدة","addressCountry":"EG"}}}</script>
+  <!-- Performance: preconnect to critical origins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://tucomida-pos-default-rtdb.firebaseio.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --g1:#1B5E20;--g2:#2E7D32;--g3:#43A047;
+  --o:#E67B20;--ol:#F09030;
+  --bg:#F4F7F2;--w:#fff;--s1:#EEF3EA;--s2:#E0EBD9;--bd:#DFE8D9;
+  --ink:#0A160A;--dim:#2A3D2A;--sub:#5A7A5A;--mute:#8FAA8F;
+  --e1:0 1px 3px rgba(10,22,10,.04),0 4px 14px rgba(10,22,10,.06);
+  --e2:0 2px 8px rgba(10,22,10,.06),0 16px 40px rgba(10,22,10,.10);
+  --f:'Cairo',sans-serif;--fe:'Inter',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);min-height:100vh}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:var(--f);border:none;background:none}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:200;background:var(--w);border-bottom:1px solid var(--bd);
+  padding:10px 16px;display:flex;align-items:center;gap:10px;
+  box-shadow:0 1px 0 var(--bd),0 2px 12px rgba(10,22,10,.05)}
+.nav-logo img{height:38px;width:auto;border-radius:8px;object-fit:contain}
+.nav-search{
+  flex:1;display:flex;align-items:center;gap:8px;
+  background:var(--s1);border:1.5px solid var(--s2);border-radius:50px;
+  padding:8px 14px;transition:border-color .18s,box-shadow .18s;
+}
+.nav-search:focus-within{border-color:var(--g2);box-shadow:0 0 0 3px rgba(46,125,50,.1);background:var(--w)}
+.nav-search input{
+  flex:1;background:none;border:none;outline:none;font-size:13px;
+  font-family:var(--f);color:var(--ink);min-width:0;
+}
+.nav-search input::placeholder{color:var(--mute)}
+.nav-search svg{flex-shrink:0;color:var(--sub)}
+.nav-cart-btn{
+  background:var(--g1);color:#fff;border-radius:50px;
+  padding:9px 16px;font-size:13px;font-weight:700;
+  display:flex;align-items:center;gap:6px;flex-shrink:0;
+  transition:background .18s;position:relative;
+}
+.nav-cart-btn:hover{background:var(--g2)}
+.nav-cart-badge{
+  background:var(--o);color:#fff;border-radius:50%;
+  width:18px;height:18px;font-size:10px;font-weight:800;
+  display:none;align-items:center;justify-content:center;
+  font-family:var(--fe);flex-shrink:0;
+}
+.nav-cart-badge.show{display:flex}
+
+/* ── TYPE SELECTOR ── */
+.type-bar{
+  background:var(--w);border-bottom:1px solid var(--bd);
+  padding:10px 16px;display:flex;gap:8px;
+}
+.type-pill{
+  flex:1;padding:9px;border-radius:12px;border:1.5px solid var(--bd);
+  background:var(--bg);font-size:13px;font-weight:700;
+  color:var(--sub);text-align:center;transition:all .18s;cursor:pointer;
+  font-family:var(--f);
+}
+.type-pill.active{background:var(--g1);border-color:var(--g1);color:#fff}
+
+/* ── CAT TABS ── */
+.cat-bar{
+  background:var(--w);border-bottom:1px solid var(--bd);
+  padding:0 16px;position:sticky;top:59px;z-index:100;
+  box-shadow:0 2px 8px rgba(10,22,10,.04);
+}
+.cat-bar-inner{
+  display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;
+  padding:10px 0;width:100%;
+}
+.cat-bar-inner::-webkit-scrollbar{display:none}
+.cat-tab{
+  white-space:nowrap;padding:7px 16px;border-radius:50px;
+  border:1.5px solid var(--s2);background:var(--bg);
+  font-size:12px;font-weight:700;color:var(--sub);cursor:pointer;
+  font-family:var(--f);transition:all .18s;flex-shrink:0;
+}
+.cat-tab.active{background:var(--g1);border-color:var(--g1);color:#fff}
+.cat-tab:hover:not(.active){border-color:var(--g3);color:var(--g2)}
+
+/* ── MENU ── */
+.menu-wrap{max-width:700px;margin:0 auto;padding:14px 14px 100px}
+.cat-section-title{
+  font-size:13px;font-weight:800;color:var(--sub);
+  text-transform:uppercase;letter-spacing:.5px;
+  padding:16px 4px 8px;display:flex;align-items:center;gap:8px;
+}
+.cat-section-title::after{content:'';flex:1;height:1px;background:var(--s2)}
+.items-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:8px;
+}
+@media(max-width:500px){.items-grid{grid-template-columns:repeat(2,1fr)}}
+.food-card{
+  background:var(--w);border-radius:16px;border:1.5px solid var(--bd);
+  overflow:hidden;cursor:pointer;transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s,border-color .18s;
+  display:flex;flex-direction:column;position:relative;
+}
+.food-card:hover{transform:translateY(-3px);box-shadow:var(--e2);border-color:var(--s2)}
+.food-card.in-cart{border-color:var(--g2);box-shadow:0 0 0 2px rgba(46,125,50,.15)}
+.food-card-img{
+  aspect-ratio:1;background:var(--s1);display:flex;align-items:center;
+  justify-content:center;font-size:40px;position:relative;overflow:hidden;
+}
+.food-card-photo{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.food-card-body{padding:10px 11px 12px;flex:1;display:flex;flex-direction:column}
+.food-card-name{font-size:13px;font-weight:800;color:var(--ink);line-height:1.25;margin-bottom:2px}
+.food-card-desc{font-size:10px;color:var(--mute);line-height:1.4;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.food-card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;gap:6px}
+.food-card-price{font-size:14px;font-weight:900;color:var(--g1);font-family:var(--fe);line-height:1}
+.food-card-cal{font-size:9px;color:var(--o);background:rgba(230,123,32,.09);padding:2px 6px;border-radius:8px;font-weight:700;font-family:var(--fe)}
+.add-btn{
+  width:30px;height:30px;border-radius:50%;background:var(--g1);
+  color:#fff;font-size:20px;font-weight:400;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;transition:all .18s;
+  box-shadow:0 2px 8px rgba(27,94,32,.25);line-height:1;
+}
+.add-btn:hover{background:var(--g2);transform:scale(1.1)}
+.qty-ctrl{display:flex;align-items:center;gap:4px}
+.qty-btn{
+  width:26px;height:26px;border-radius:50%;font-size:15px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;transition:all .15s;
+}
+.qty-btn.minus{background:rgba(198,40,40,.1);color:#C62828}
+.qty-btn.plus{background:rgba(46,125,50,.1);color:var(--g2)}
+.qty-btn:hover{opacity:.8}
+.qty-n{font-size:13px;font-weight:800;min-width:18px;text-align:center;color:var(--ink);font-family:var(--fe)}
+/* New badge */
+.new-tag{
+  position:absolute;top:7px;right:7px;
+  background:var(--o);color:#fff;border-radius:6px;
+  font-size:9px;font-weight:800;padding:2px 6px;letter-spacing:.3px;
+  text-transform:uppercase;
+}
+/* Sizes list */
+.size-row{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+.size-pill{
+  font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;
+  border:1.5px solid var(--s2);cursor:pointer;background:var(--bg);
+  color:var(--g2);font-family:var(--fe);transition:all .15s;
+}
+.size-pill:hover{border-color:var(--g2);background:var(--s1)}
+/* Empty */
+.empty-menu{text-align:center;padding:60px 20px;color:var(--mute)}
+.empty-menu svg{margin:0 auto 16px;opacity:.4}
+
+/* ── FLOAT CART ── */
+.float-cart{
+  position:fixed;bottom:0;left:0;right:0;z-index:300;
+  background:var(--w);border-top:1px solid var(--bd);
+  padding:12px 16px max(12px,env(safe-area-inset-bottom,12px));
+  transform:translateY(100%);transition:transform .32s cubic-bezier(.22,1,.36,1);
+  box-shadow:0 -4px 24px rgba(10,22,10,.1);
+}
+.float-cart.show{transform:translateY(0)}
+.float-cart-inner{max-width:700px;margin:0 auto;display:flex;gap:12px;align-items:center}
+.float-cart-info{flex:1}
+.float-cart-count{font-size:11px;font-weight:600;color:var(--sub)}
+.float-cart-total{font-size:20px;font-weight:900;color:var(--g1);font-family:var(--fe);line-height:1.1}
+.float-cart-btn{
+  padding:13px 24px;background:var(--g1);color:#fff;border-radius:50px;
+  font-size:14px;font-weight:800;font-family:var(--f);
+  transition:all .2s;white-space:nowrap;
+  box-shadow:0 4px 16px rgba(27,94,32,.3);
+}
+.float-cart-btn:hover{background:var(--g2);transform:translateY(-1px)}
+
+/* ── CHECKOUT MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;
+  display:none;align-items:flex-end;justify-content:center;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.open{display:flex}
+.checkout-sheet{
+  background:var(--w);border-radius:24px 24px 0 0;
+  width:100%;max-width:700px;max-height:92vh;overflow-y:auto;
+  padding:0 0 max(24px,env(safe-area-inset-bottom,24px));
+  animation:sheetUp .35s cubic-bezier(.22,1,.36,1);
+}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;background:var(--s2);border-radius:2px;margin:14px auto}
+.sheet-title{font-size:19px;font-weight:900;color:var(--ink);padding:0 20px 16px;border-bottom:1px solid var(--s1)}
+.sheet-body{padding:20px}
+.sheet-section{margin-bottom:20px}
+.sheet-section-title{font-size:12px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+/* Order summary in checkout */
+.checkout-items{background:var(--s1);border-radius:12px;padding:12px;margin-bottom:4px}
+.checkout-item-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--s2)}
+.checkout-item-row:last-child{border-bottom:none}
+.checkout-total{display:flex;justify-content:space-between;font-size:17px;font-weight:900;padding-top:14px;border-top:1px solid var(--s2)}
+/* Form fields */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:700;color:var(--dim);margin-bottom:6px}
+.field input,.field textarea{
+  width:100%;padding:12px 14px;background:var(--s1);
+  border:1.5px solid var(--bd);border-radius:12px;
+  font-size:15px;font-family:var(--f);color:var(--ink);outline:none;
+  transition:border-color .18s,box-shadow .18s;
+}
+.field input:focus,.field textarea:focus{
+  background:var(--w);border-color:var(--g2);
+  box-shadow:0 0 0 3px rgba(46,125,50,.1);
+}
+.field textarea{resize:none;line-height:1.6}
+.field input.err{border-color:#C62828;background:#FFF5F5}
+/* Type switcher in checkout */
+.type-switch{display:flex;gap:8px;margin-bottom:4px}
+.type-switch-btn{
+  flex:1;padding:11px;border-radius:12px;border:1.5px solid var(--bd);
+  background:var(--bg);font-size:13px;font-weight:700;color:var(--sub);
+  cursor:pointer;font-family:var(--f);transition:all .18s;
+}
+.type-switch-btn.active{background:var(--g1);border-color:var(--g1);color:#fff}
+/* Payment badge */
+.pay-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(230,123,32,.08);border:1.5px solid rgba(230,123,32,.22);
+  border-radius:12px;padding:12px 16px;font-size:14px;color:var(--o);font-weight:700;width:100%;
+}
+/* Submit */
+.checkout-submit{
+  width:100%;padding:15px;background:var(--g1);color:#fff;border-radius:14px;
+  font-size:16px;font-weight:800;font-family:var(--f);cursor:pointer;
+  transition:background .18s,box-shadow .18s;
+  box-shadow:0 4px 16px rgba(27,94,32,.28);
+}
+.checkout-submit:hover:not(:disabled){background:var(--g2);box-shadow:0 6px 22px rgba(27,94,32,.36)}
+.checkout-submit:disabled{opacity:.5;cursor:not-allowed}
+
+/* ── SIZE PICKER MODAL ── */
+.size-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:600;display:none;align-items:flex-end;justify-content:center}
+.size-modal-bg.open{display:flex}
+.size-sheet{background:var(--w);border-radius:22px 22px 0 0;padding:0 0 max(24px,env(safe-area-inset-bottom,24px));width:100%;max-width:700px}
+.size-sheet-title{font-size:17px;font-weight:900;color:var(--ink);padding:18px 20px 4px}
+.size-sheet-sub{font-size:13px;color:var(--sub);padding:0 20px 16px}
+.size-options{display:flex;gap:10px;padding:0 20px 20px;overflow-x:auto}
+.size-opt{
+  flex:1;min-width:120px;padding:16px;border-radius:14px;border:2px solid var(--s2);
+  background:var(--bg);text-align:center;cursor:pointer;transition:all .18s;
+}
+.size-opt:hover{border-color:var(--g2)}
+.size-opt.sel{border-color:var(--g2);background:rgba(46,125,50,.06)}
+.size-opt-lbl{font-size:22px;font-weight:900;color:var(--ink);font-family:var(--fe);margin-bottom:4px}
+.size-opt-price{font-size:14px;font-weight:800;color:var(--g2);font-family:var(--fe)}
+.size-opt-cal{font-size:10px;color:var(--o);margin-top:3px}
+.size-btns{display:flex;gap:10px;padding:0 20px}
+.size-cancel{flex:1;padding:13px;background:var(--s1);border-radius:12px;font-size:14px;font-weight:700;color:var(--sub);cursor:pointer;font-family:var(--f)}
+.size-confirm{flex:2;padding:13px;background:var(--g1);color:#fff;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--f);transition:background .18s}
+.size-confirm:hover{background:var(--g2)}
+
+/* ── SUCCESS ── */
+.success-screen{display:none;position:fixed;inset:0;z-index:999;text-align:center;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;padding:40px 24px}
+.success-screen.show{display:flex}
+.success-icon{font-size:72px;margin-bottom:20px;animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
+.success-title{font-size:26px;font-weight:900;color:var(--g1);margin-bottom:10px}
+.success-num{display:inline-block;background:var(--w);border:1.5px solid var(--g1);color:var(--g1);font-size:22px;font-weight:900;border-radius:20px;padding:10px 28px;margin-bottom:20px;box-shadow:var(--e1);font-family:var(--fe)}
+.success-msg{font-size:14px;color:var(--sub);line-height:1.9;margin-bottom:32px}
+.success-actions{display:flex;flex-direction:column;gap:12px;align-items:center}
+
+/* ── WA FLOAT ── */
+.wa-float{position:fixed;bottom:88px;left:16px;z-index:290;background:#25D366;color:#fff;border-radius:28px;padding:10px 16px;display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;font-family:var(--f);box-shadow:0 4px 18px rgba(37,211,102,.35);text-decoration:none;transition:transform .2s}
+.wa-float:hover{transform:translateY(-2px)}
+.float-cart.show ~ .wa-float,.float-cart-open .wa-float{bottom:90px}
+
+/* ── TOAST ── */
+.toast-msg{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--g1);color:#fff;padding:10px 22px;border-radius:28px;font-size:13px;font-weight:700;z-index:400;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;box-shadow:var(--e2)}
+.toast-msg.show{opacity:1}
+
+@media(min-width:640px){.items-grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:900px){.items-grid{grid-template-columns:repeat(4,1fr)}}
+</style></head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo-brand.jpeg" alt="TuComida">
+  </a>
+  <div class="nav-search">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input id="menuSearch" type="search" placeholder="ابحث عن أي طبق..." autocomplete="off" oninput="handleSearch(this.value)">
+  </div>
+  <button class="nav-cart-btn" onclick="openCheckout()">
+    🛒
+    <span class="nav-cart-badge" id="navCartBadge">0</span>
+  </button>
+</nav>
+
+<!-- ── TYPE ── -->
+<div class="type-bar">
+  <button class="type-pill active" id="tp-delivery" onclick="quickSetType('delivery')">🛵 توصيل</button>
+  <button class="type-pill" id="tp-pickup" onclick="quickSetType('pickup')">🏪 استلام</button>
+</div>
+
+<!-- ── CAT TABS ── -->
+<div class="cat-bar">
+  <div class="cat-bar-inner" id="catTabs">
+    <button class="cat-tab active" data-cat="all" onclick="filterCat(null,this)">🍴 الكل</button>
+  </div>
+</div>
+
+<!-- ── MENU ── -->
+<div class="menu-wrap">
+  <div id="menuContainer">
+    <div class="empty-menu">
+      <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+      <p style="font-size:15px;color:var(--mute)">جاري تحميل المنيو...</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── FLOAT CART ── -->
+<div class="float-cart" id="floatCart">
+  <div class="float-cart-inner">
+    <div class="float-cart-info">
+      <div class="float-cart-count" id="floatCount">0 أيتم</div>
+      <div class="float-cart-total" id="floatTotal">0 ج</div>
+    </div>
+    <button class="float-cart-btn" onclick="openCheckout()">
+      تأكيد الطلب ←
+    </button>
+  </div>
+</div>
+
+<!-- ── WA FLOAT ── -->
+<a href="https://wa.me/201102708550" target="_blank" rel="noopener" class="wa-float" id="waFloat">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  احجز واتساب
+</a>
+
+<!-- ── CHECKOUT MODAL ── -->
+<div class="modal-overlay" id="checkoutOverlay" onclick="overlayClose(event)">
+  <div class="checkout-sheet" id="checkoutSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">🧾 تأكيد الطلب</div>
+    <div class="sheet-body">
+
+      <!-- Order type -->
+      <div class="sheet-section">
+        <div class="sheet-section-title">نوع الطلب</div>
+        <div class="type-switch">
+          <button class="type-switch-btn active" id="cs-delivery" onclick="setCheckoutType('delivery')">🛵 توصيل</button>
+          <button class="type-switch-btn" id="cs-pickup" onclick="setCheckoutType('pickup')">🏪 استلام من المطعم</button>
+        </div>
+      </div>
+
+      <!-- Customer info -->
+      <div class="sheet-section">
+        <div class="sheet-section-title">بياناتك</div>
+        <div class="field">
+          <label>الاسم *</label>
+          <input type="text" id="custName" placeholder="محمد محمد" autocomplete="name">
+        </div>
+        <div class="field">
+          <label>رقم الموبايل *</label>
+          <input type="tel" id="custPhone" placeholder="01012345678" dir="ltr" autocomplete="tel" inputmode="numeric">
+        </div>
+        <div class="field" id="addressField">
+          <label>العنوان التفصيلي *</label>
+          <input type="text" id="custAddress" placeholder="الشارع والمنطقة...">
+        </div>
+      </div>
+
+      <!-- Order summary -->
+      <div class="sheet-section">
+        <div class="sheet-section-title">ملخص الطلب</div>
+        <div class="checkout-items" id="checkoutItems"></div>
+        <div class="field" style="margin-top:12px">
+          <label>ملاحظات (اختياري)</label>
+          <textarea id="orderNotes" rows="2" placeholder="أي تفاصيل إضافية..."></textarea>
+        </div>
+      </div>
+
+      <!-- Payment -->
+      <div class="sheet-section">
+        <div class="sheet-section-title">الدفع</div>
+        <div class="pay-badge">💵 كاش عند الاستلام فقط</div>
+      </div>
+
+      <div class="checkout-total" id="checkoutTotal">
+        <span>الإجمالي</span>
+        <span style="color:var(--g1);font-family:var(--fe)">0 ج</span>
+      </div>
+
+      <button class="checkout-submit" id="checkoutSubmitBtn" onclick="submitOnlineOrder()" style="margin-top:18px">
+        تأكيد وإرسال الطلب 🚀
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SIZE PICKER ── -->
+<div class="size-modal-bg" id="sizeBg" onclick="sizeBgClose(event)">
+  <div class="size-sheet">
+    <div class="sheet-handle"></div>
+    <div class="size-sheet-title" id="sizeName">اختر الحجم</div>
+    <div class="size-sheet-sub" id="sizeSub"></div>
+    <div class="size-options" id="sizeOpts"></div>
+    <div class="size-btns">
+      <button class="size-cancel" onclick="closeSizePicker()">إلغاء</button>
+      <button class="size-confirm" onclick="confirmSizePick()">إضافة للسلة ✓</button>
+    </div>
+    <div style="height:8px"></div>
+  </div>
+</div>
+
+<!-- ── SUCCESS ── -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">✅</div>
+  <div class="success-title">تم الطلب بنجاح!</div>
+  <div class="success-num" id="successNum">#5001</div>
+  <div class="success-msg">شكراً لطلبك من TuComida!<br>هيوصلك قريباً أو تعالى تستلم.</div>
+  <div class="success-actions">
+    <a href="/" style="display:inline-block;background:var(--g1);color:#fff;padding:14px 36px;border-radius:28px;font-size:15px;font-weight:700;text-decoration:none;box-shadow:var(--e1)">← الرئيسية</a>
+    <a href="https://wa.me/201102708550" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;padding:13px 28px;border-radius:28px;font-size:14px;font-weight:700;text-decoration:none">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      تواصل واتساب
+    </a>
+  </div>
+</div>
+
+<div class="toast-msg" id="toastMsg"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  <script>
+    // Direct Firebase init — no dependency on firebase-config.js
+    if (!firebase.apps.length) {
+      firebase.initializeApp({
+        apiKey: "AIzaSyDXVIFKaiLP4ty0GHOhznN4O6FEbFFhzVo",
+        authDomain: "tucomida-pos.firebaseapp.com",
+        databaseURL: "https://tucomida-pos-default-rtdb.firebaseio.com",
+        projectId: "tucomida-pos",
+        storageBucket: "tucomida-pos.firebasestorage.app",
+        messagingSenderId: "698661717103",
+        appId: "1:698661717103:web:69e9100e49ac2669b9799a"
+      });
+    }
+    var db = firebase.database();
+    function getDayId(){ return new Date().toISOString().split('T')[0]; }
+    function sanitizeText(s,n){ return s ? String(s).replace(/[<>&"'`]/g,'').trim().substring(0,n||300) : ''; }
+    function sanitizePhone(s){
+      if(!s) return '';
+      // Convert Arabic-Indic + Persian numerals to Western digits
+      return String(s)
+        .replace(/[٠-٩]/g, function(d){ return d.charCodeAt(0)-0x0660; })
+        .replace(/[۰-۹]/g, function(d){ return d.charCodeAt(0)-0x06F0; })
+        .replace(/\D/g,'').substring(0,15);
+    }
+    function getNextOnlineOrderNumber(){
+      var ref = db.ref('settings/onlineOrderCounter');
+      return ref.transaction(function(n){ return (n||5000)+1; }).then(function(r){ return r.snapshot.val(); });
+    }
+  </script>
+
+<script>
+/* ════════════════════════════════════
+   NEW ORDER.HTML STATE
+════════════════════════════════════ */
+let orderType = 'delivery';
+let menuData = {categories:{}, items:{}};
+let cart = [];
+let selectedSizeItem = null;
+let selectedSizePick = null;
+
+/* ── TYPE ── */
+function quickSetType(t) {
+  orderType = t;
+  document.getElementById('tp-delivery').classList.toggle('active', t==='delivery');
+  document.getElementById('tp-pickup').classList.toggle('active', t==='pickup');
+  document.getElementById('cs-delivery').classList.toggle('active', t==='delivery');
+  document.getElementById('cs-pickup').classList.toggle('active', t==='pickup');
+  document.getElementById('addressField').style.display = t==='delivery' ? '' : 'none';
+}
+function setCheckoutType(t) { quickSetType(t); }
+
+/* ── CART ── */
+function updateUI() {
+  const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const count = cart.reduce((s,i)=>s+i.qty,0);
+  const badge = document.getElementById('navCartBadge');
+  badge.textContent = count;
+  badge.classList.toggle('show', count>0);
+  document.getElementById('floatCount').textContent = count + ' أيتم';
+  document.getElementById('floatTotal').textContent = total.toLocaleString() + ' ج';
+  document.getElementById('floatCart').classList.toggle('show', count>0);
+  // Update add buttons
+  document.querySelectorAll('.food-card').forEach(c => {
+    const iid = c.dataset.iid;
+    const size = c.dataset.size||null;
+    const ci = cart.find(x=>x.iid===iid && x.size===size);
+    const addBtn = c.querySelector('.add-btn');
+    const qtyCtrl = c.querySelector('.qty-ctrl');
+    if (!addBtn) return;
+    if (ci && ci.qty>0) {
+      addBtn.style.display='none';
+      qtyCtrl.style.display='flex';
+      c.querySelector('.qty-n').textContent = ci.qty;
+      c.classList.add('in-cart');
+    } else {
+      addBtn.style.display='flex';
+      qtyCtrl.style.display='none';
+      c.classList.remove('in-cart');
+    }
+  });
+}
+
+function addItem(iid, name, price, size, cal) {
+  const totalItems = cart.reduce((s,i)=>s+i.qty,0);
+  if (totalItems >= 50) { showToast('⚠️ الحد الأقصى 50 صنف في الطلب الواحد'); return; }
+  const ci = cart.find(x=>x.iid===iid && x.size===size);
+  if (ci) ci.qty++;
+  else cart.push({iid, name, price, size, cal, qty:1});
+  updateUI();
+  showToast('✓ تمت الإضافة');
+}
+function changeQty(iid, size, delta) {
+  const idx = cart.findIndex(x=>x.iid===iid && x.size===size);
+  if (idx<0) return;
+  cart[idx].qty += delta;
+  if (cart[idx].qty<=0) cart.splice(idx,1);
+  updateUI();
+}
+
+/* ── SIZE PICKER ── */
+function openSizePicker(iid, item) {
+  selectedSizeItem = {iid, item};
+  selectedSizePick = null;
+  document.getElementById('sizeName').textContent = item.name || item.nameAr;
+  document.getElementById('sizeSub').textContent = item.description || '';
+  const opts = document.getElementById('sizeOpts');
+  opts.innerHTML = '';
+  Object.entries(item.sizes||{}).forEach(([sz,d])=>{
+    const div = document.createElement('div');
+    div.className = 'size-opt';
+    div.innerHTML = `<div class="size-opt-lbl">${sz}</div>
+      <div class="size-opt-price">${d.price} ج</div>
+      ${d.calories?`<div class="size-opt-cal">${d.calories} ك</div>`:''}`;
+    div.onclick = ()=>{
+      document.querySelectorAll('.size-opt').forEach(o=>o.classList.remove('sel'));
+      div.classList.add('sel');
+      selectedSizePick = {sz, price:d.price, cal:d.calories};
+    };
+    opts.appendChild(div);
+  });
+  document.getElementById('sizeBg').classList.add('open');
+}
+function closeSizePicker() { document.getElementById('sizeBg').classList.remove('open'); }
+function sizeBgClose(e) { if (e.target===document.getElementById('sizeBg')) closeSizePicker(); }
+function confirmSizePick() {
+  if (!selectedSizePick||!selectedSizeItem) return;
+  const {iid, item} = selectedSizeItem;
+  addItem(iid, item.name+(` ${selectedSizePick.sz}`), selectedSizePick.price, selectedSizePick.sz, selectedSizePick.cal);
+  closeSizePicker();
+}
+
+/* ── CHECKOUT MODAL ── */
+function openCheckout() {
+  if (!cart.length) { showToast('أضف أيتمز للسلة أولاً'); return; }
+  // Build summary
+  const cont = document.getElementById('checkoutItems');
+  const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  cont.innerHTML = cart.map(ci=>`
+    <div class="checkout-item-row">
+      <span style="font-size:14px;font-weight:700">${ci.qty}× ${ci.name}${ci.size?` (${ci.size})`:''}</span>
+      <span style="font-size:14px;font-weight:700;color:var(--g1);font-family:var(--fe)">${(ci.price*ci.qty).toLocaleString()} ج</span>
+    </div>`).join('');
+  document.getElementById('checkoutTotal').innerHTML = `
+    <span style="font-size:17px;font-weight:900">الإجمالي</span>
+    <span style="font-size:20px;font-weight:900;color:var(--g1);font-family:var(--fe)">${total.toLocaleString()} ج</span>`;
+  document.getElementById('checkoutOverlay').classList.add('open');
+  document.getElementById('addressField').style.display = orderType==='delivery' ? '' : 'none';
+}
+function closeCheckout() { document.getElementById('checkoutOverlay').classList.remove('open'); }
+function overlayClose(e) { if (e.target===document.getElementById('checkoutOverlay')) closeCheckout(); }
+
+/* ── SUBMIT ── */
+async function submitOnlineOrder() {
+  const name = document.getElementById('custName').value.trim();
+  const phone = document.getElementById('custPhone').value.trim();
+  const address = document.getElementById('custAddress').value.trim();
+  const notes = document.getElementById('orderNotes').value.trim();
+  const nameEl = document.getElementById('custName');
+  const phoneEl = document.getElementById('custPhone');
+  const addrEl = document.getElementById('custAddress');
+  // Validate
+  let ok = true;
+  if (!name||name.length<2) { nameEl.classList.add('err'); ok=false; } else nameEl.classList.remove('err');
+  const ph = sanitizePhone(phone);
+  if (ph.length<8) { phoneEl.classList.add('err'); ok=false; } else phoneEl.classList.remove('err');
+  if (orderType==='delivery' && !address) { addrEl.classList.add('err'); ok=false; } else addrEl&&addrEl.classList.remove('err');
+  if (!ok) { showToast('يرجى إكمال البيانات المطلوبة'); return; }
+  const btn = document.getElementById('checkoutSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ جاري الإرسال...';
+  try {
+    const orderNumber = await getNextOnlineOrderNumber();
+    const total = cart.reduce((s,i)=>s+i.price*i.qty, 0);
+    const items = cart.map(i=>({name:i.name,quantity:i.qty,price:i.price,size:i.size||null,cal:i.cal||null}));
+    await db.ref('online_orders').push({
+      orderNumber,
+      type: orderType,
+      customerName: sanitizeText(name, 200),
+      customerPhone: ph,
+      customerAddress: orderType==='delivery' ? sanitizeText(address,500) : '',
+      notes: sanitizeText(notes, 300),
+      items,
+      total,
+      status: 'pending',
+      createdAt: Date.now(),
+      dayId: getDayId()
+    });
+    closeCheckout();
+    cart = [];
+    updateUI();
+    document.getElementById('successNum').textContent = '#' + orderNumber;
+    document.getElementById('successScreen').classList.add('show');
+    window.scrollTo(0,0);
+  } catch(e) {
+    console.error(e);
+    showToast('حدث خطأ — حاول مرة ثانية');
+    btn.disabled = false;
+    btn.textContent = 'تأكيد وإرسال الطلب 🚀';
+  }
+}
+
+/* ── MENU LOADING ── */
+let _activeCat = null;
+let _allItems = [];
+
+window.addEventListener('load', ()=>{
+  if (typeof db==='undefined') return;
+  db.ref('menu').once('value').then(snap=>{
+    menuData = snap.val()||{categories:{},items:{}};
+    buildCatTabs();
+    renderMenu(null, '');
+  }).catch(()=>{
+    document.getElementById('menuContainer').innerHTML =
+      '<div class="empty-menu"><p>تعذّر تحميل المنيو — <a href="/order.html" style="color:var(--g1)">أعد المحاولة</a></p></div>';
+  });
+});
+
+function buildCatTabs() {
+  const cats = Object.entries(menuData.categories||{})
+    .filter(([,c])=>c.active!==false).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
+  const row = document.getElementById('catTabs');
+  row.innerHTML = '<button class="cat-tab active" data-cat="all" onclick="filterCat(null,this)">🍴 الكل</button>';
+  cats.slice(0,14).forEach(([id,c])=>{
+    const b = document.createElement('button');
+    b.className = 'cat-tab';
+    b.dataset.cat = id;
+    b.textContent = c.name||c.nameAr;
+    b.onclick = function(){ filterCat(id, this); };
+    row.appendChild(b);
+  });
+}
+
+function filterCat(catId, btn) {
+  _activeCat = catId;
+  document.querySelectorAll('.cat-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.getElementById('menuSearch').value = '';
+  renderMenu(catId, '');
+}
+
+let _searchTimer = null;
+function handleSearch(q) {
+  clearTimeout(_searchTimer);
+  _searchTimer = setTimeout(() => {
+    _activeCat = null;
+    document.querySelectorAll('.cat-tab').forEach(b=>b.classList.remove('active'));
+    document.querySelector('.cat-tab[data-cat="all"]').classList.add('active');
+    renderMenu(null, q.trim().toLowerCase());
+  }, 200);
+}
+
+function renderMenu(catId, search) {
+  const cont = document.getElementById('menuContainer');
+  cont.innerHTML = '';
+
+  const cats = Object.entries(menuData.categories||{})
+    .filter(([,c])=>c.active!==false)
+    .sort((a,b)=>(a[1].order||0)-(b[1].order||0));
+
+  // Build sections list
+  const sections = [];
+  cats.forEach(([cid,cat])=>{
+    if (catId && cid!==catId) return;
+    const items = Object.entries(menuData.items||{}).filter(([,i])=>{
+      if (i.active===false || i.categoryId!==cid) return false;
+      if (!search) return true;
+      return (i.name||'').toLowerCase().includes(search)||
+             (i.nameAr||'').toLowerCase().includes(search)||
+             (i.description||'').toLowerCase().includes(search);
+    });
+    if (items.length) sections.push({cat, cid, items});
+  });
+
+  if (!sections.length) {
+    cont.innerHTML = '<div class="empty-menu"><p style="font-size:14px;color:var(--mute)">مفيش نتائج</p></div>';
+    return;
+  }
+
+  // Render sections one-by-one using requestAnimationFrame (no freezing)
+  let idx = 0;
+  function renderNext() {
+    if (idx >= sections.length) { updateUI(); return; }
+    const {cat, items} = sections[idx++];
+    const sec = document.createElement('div');
+    sec.innerHTML =
+      `<div class="cat-section-title">${cat.name||cat.nameAr}</div>` +
+      `<div class="items-grid">${items.map(([iid,item])=>buildFoodCard(iid,item)).join('')}</div>`;
+    cont.appendChild(sec);
+    requestAnimationFrame(renderNext);
+  }
+  requestAnimationFrame(renderNext);
+}
+
+function buildFoodCard(iid, item) {
+  const hasSizes = item.sizes && Object.keys(item.sizes).length>0;
+  const minP = hasSizes ? Math.min(...Object.values(item.sizes).map(s=>s.price)) : (item.singlePrice||0);
+  const priceStr = hasSizes ? 'من '+minP : minP;
+  const cal = item.sizes?.M?.calories||item.calories||'';
+  const ci = cart.find(x=>x.iid===iid && !x.size);
+  const qty = ci ? ci.qty : 0;
+  const icon = '🥗';
+  return `<div class="food-card${qty>0?' in-cart':''}" data-iid="${iid}" data-size="">
+    <div class="food-card-img">${icon}
+      ${item.isNew?'<div class="new-tag">جديد</div>':''}
+    </div>
+    <div class="food-card-body">
+      <div class="food-card-name">${item.name||item.nameAr}</div>
+      ${item.nameAr&&item.name!==item.nameAr?`<div style="font-size:10px;color:var(--mute);margin-bottom:3px">${item.nameAr}</div>`:''}
+      ${item.description?`<div class="food-card-desc">${item.description}</div>`:''}
+      ${hasSizes ? `<div class="size-row">${Object.entries(item.sizes).map(([s,d])=>`<button class="size-pill" onclick="event.stopPropagation();addItem('${iid}','${item.name} ${s}',${d.price},'${s}',${d.calories||0})">${s}: ${d.price}ج</button>`).join('')}</div>` : ''}
+      <div class="food-card-foot" style="margin-top:8px">
+        <div>
+          <div class="food-card-price">${priceStr} ج</div>
+          ${cal?`<div class="food-card-cal">${cal} ك</div>`:''}
+        </div>
+        ${hasSizes ? '' : `
+          <button class="add-btn" onclick="addItem('${iid}','${item.name||item.nameAr}',${item.singlePrice||0},null,${item.calories||0})" style="${qty>0?'display:none':''}">+</button>
+          <div class="qty-ctrl" style="${qty>0?'display:flex':'display:none'}">
+            <button class="qty-btn minus" onclick="changeQty('${iid}',null,-1)">−</button>
+            <span class="qty-n">${qty}</span>
+            <button class="qty-btn plus" onclick="changeQty('${iid}',null,1)">+</button>
+          </div>`}
+      </div>
+    </div>
+  </div>`;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toastMsg');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2000);
+}
+// Init
+quickSetType('delivery');
+updateUI();
+</script>
+</body>
+</html>

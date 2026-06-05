@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F2F6F2">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="TuComida KDS">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://tucomida-pos-default-rtdb.firebaseio.com" crossorigin>
+  <link rel="dns-prefetch" href="https://tucomida-pos-default-rtdb.firebaseio.com">
+  <link rel="dns-prefetch" href="https://identitytoolkit.googleapis.com">
+  <link rel="dns-prefetch" href="https://securetoken.googleapis.com">
+  <title>TuComida KDS</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    :root{
+      --bg:#F2F6F2;--surface:#FFFFFF;--surface2:#F8FAF8;--border:#DFE8DF;
+      --border2:#C8D8C8;--text:#0D1A0D;--muted:#5A7A5A;
+      --green:#1E8A3E;--green-dim:#D4EFDD;
+      --yellow:#D4900A;--orange:#E67B20;--red:#D32F2F;
+      --blue:#1565C0;--gold:#E67B20;--purple:#7B1FA2;
+      --font-ar:'Cairo',sans-serif;--font-en:'Inter',sans-serif;
+    }
+    html,body{height:100%;background:var(--bg);color:var(--text);
+      font-family:var(--font-ar);overflow:hidden;user-select:none}
+
+    /* ── TOP BAR ─────────────────────────────── */
+    .topbar{
+      height:56px;background:var(--surface);
+      border-bottom:1.5px solid var(--border);
+      display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0;
+      box-shadow:0 1px 4px rgba(0,0,0,.06);
+    }
+    .logo{font-size:19px;font-weight:900;color:var(--text);letter-spacing:-.3px}
+    .logo span{color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.5px;margin-right:4px}
+    .vdiv{width:1px;height:24px;background:var(--border2)}
+    .top-clock{font-size:20px;font-weight:700;color:var(--text);font-family:var(--font-en);
+      font-variant-numeric:tabular-nums;letter-spacing:1.5px}
+    .conn{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);font-family:var(--font-ar)}
+    .cdot{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0;transition:background .3s}
+    .cdot.ok{background:var(--green);box-shadow:0 0 6px rgba(45,213,91,.5);animation:cpulse 2.5s infinite}
+    @keyframes cpulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .ocounter{background:var(--orange);color:#fff;border-radius:8px;padding:4px 12px;
+      font-size:13px;font-weight:800;letter-spacing:.3px}
+    .spacer{flex:1}
+    .ibtn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border2);
+      background:var(--surface2);color:var(--muted);font-size:16px;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;transition:all .15s}
+    .ibtn:hover{border-color:var(--orange);color:var(--orange)}
+    .ibtn.on{border-color:var(--orange);color:var(--orange);background:rgba(232,123,32,.08)}
+    .tbtn{padding:7px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--surface2);
+      color:var(--muted);font-size:12px;cursor:pointer;font-family:var(--font-ar);
+      transition:all .15s}
+    .tbtn:hover{border-color:var(--border);color:var(--text)}
+
+    /* ── ALARM BANNER ─────────────────────────── */
+    .alarm-banner{
+      background:rgba(240,68,56,.1);
+      border-bottom:1px solid rgba(240,68,56,.4);
+      padding:10px 16px;
+      display:flex;align-items:center;justify-content:space-between;
+      flex-shrink:0;
+      animation:ablink 1.2s ease-in-out infinite;
+    }
+    .alarm-banner.hidden{display:none}
+    @keyframes ablink{0%,100%{background:rgba(240,68,56,.1)}50%{background:rgba(240,68,56,.16)}}
+    .alarm-text{font-size:14px;font-weight:800;color:var(--red);display:flex;align-items:center;gap:8px}
+    .alarm-count{background:var(--red);color:#fff;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:900}
+    .btn-mute{padding:6px 14px;background:rgba(240,68,56,.15);border:1px solid rgba(240,68,56,.4);
+      color:var(--red);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;
+      font-family:var(--font-ar);transition:background .15s}
+    .btn-mute:hover{background:rgba(240,68,56,.25)}
+
+    /* ── SPLIT LAYOUT ─────────────────────────── */
+    .split-area{height:calc(100vh - 56px);display:flex;overflow:hidden}
+    .split-area.has-alarm{height:calc(100vh - 56px - 45px)}
+
+    .kds-col{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+    .kds-col.pending-col{border-left:1px solid var(--border)}
+
+    .col-header{
+      padding:10px 14px;display:flex;align-items:center;gap:10px;
+      flex-shrink:0;border-bottom:1px solid var(--border);
+    }
+    .col-header.pending-hdr{background:rgba(240,68,56,.04)}
+    .col-header.preparing-hdr{background:rgba(45,213,91,.04)}
+    .col-hicon{font-size:18px}
+    .col-htitle{font-size:13px;font-weight:800;color:var(--text);letter-spacing:.2px}
+    .col-hcnt{background:var(--border2);color:var(--muted);border-radius:20px;padding:2px 10px;
+      font-size:12px;font-weight:700;font-family:var(--font-en);transition:all .2s}
+    .col-hcnt.alert{background:var(--red);color:#fff;animation:cntpulse .9s infinite}
+    @keyframes cntpulse{0%,100%{opacity:1}50%{opacity:.55}}
+    .col-hcnt.active{background:var(--green-dim);color:var(--green)}
+    .col-spacer{flex:1}
+
+    .col-body{flex:1;overflow-y:auto;padding:10px;background:var(--bg);
+      scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+    .col-body::-webkit-scrollbar{width:4px}
+    .col-body::-webkit-scrollbar-track{background:transparent}
+    .col-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+
+    /* ── TICKET ───────────────────────────────── */
+    .ticket{background:var(--surface);border:1px solid var(--border);border-radius:16px;
+      overflow:hidden;position:relative;transition:border-color .25s,box-shadow .25s;
+      margin-bottom:10px}
+    .ticket.t-pending{border-color:rgba(240,68,56,.5);
+      animation:tpglow 1.8s ease-in-out infinite}
+    @keyframes tpglow{
+      0%,100%{box-shadow:0 0 0 rgba(240,68,56,0)}
+      50%{box-shadow:0 0 24px rgba(240,68,56,.2)}
+    }
+    .ticket.t-preparing{border-color:rgba(45,213,91,.35)}
+    .ticket.warn{border-color:rgba(240,180,41,.6)}
+    .ticket.late{border-color:rgba(232,123,32,.8)}
+    .ticket.urgent{border-color:var(--red);animation:uglow .9s ease-in-out infinite}
+    @keyframes uglow{0%,100%{box-shadow:none}50%{box-shadow:0 0 20px rgba(240,68,56,.3)}}
+    .ticket.src-online{border-right:3px solid var(--orange)}
+    .ticket.src-takeaway{border-right:3px solid var(--purple)}
+    .ticket.flash{animation:tkflash .5s ease 3}
+    @keyframes tkflash{0%,100%{border-color:var(--border)}50%{border-color:var(--gold);box-shadow:0 0 20px rgba(232,123,32,.4)}}
+
+    /* ── TICKET HEADER ────────────────────────── */
+    .tkh{padding:12px 14px 10px;border-bottom:1px solid var(--border)}
+    .tkh-r1{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+    .tk-num{font-size:30px;font-weight:900;color:var(--gold);line-height:1;font-family:var(--font-en)}
+    .ticket.src-online .tk-num{color:var(--orange)}
+    .ticket.src-takeaway .tk-num{color:var(--purple)}
+    .tk-tblock{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+    .tk-timer{font-size:28px;font-weight:800;font-family:var(--font-en);
+      font-variant-numeric:tabular-nums;letter-spacing:1px;line-height:1;transition:color .4s}
+    .tk-timer.ok{color:var(--green)}.tk-timer.warn{color:var(--yellow)}
+    .tk-timer.late{color:var(--orange)}
+    .tk-timer.urgent{color:var(--red);animation:tblink .8s infinite}
+    @keyframes tblink{0%,100%{opacity:1}50%{opacity:.4}}
+    .tc-ctrl{display:flex;align-items:center;gap:4px}
+    .tcbtn{width:22px;height:22px;border-radius:5px;border:1px solid var(--border2);
+      background:var(--surface2);color:var(--muted);font-size:13px;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;transition:all .1s}
+    .tcbtn:hover{color:var(--text);background:var(--border2)}
+    .tc-mins{font-size:10px;color:var(--muted);min-width:28px;text-align:center;font-family:var(--font-en)}
+    .tkh-r2{display:flex;align-items:center;justify-content:space-between}
+    .tk-src{font-size:14px;font-weight:700;color:var(--text)}
+    .tk-meta{display:flex;align-items:center;gap:6px}
+    .tk-chip{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;
+      text-transform:uppercase;letter-spacing:.4px}
+    .chip-dine{background:rgba(77,168,255,.12);color:var(--blue)}
+    .chip-tko{background:rgba(167,139,250,.12);color:var(--purple)}
+    .chip-onl{background:rgba(232,123,32,.12);color:var(--orange)}
+    .tk-time{font-size:11px;color:var(--muted);font-family:var(--font-en)}
+
+    /* ── TICKET ITEMS ─────────────────────────── */
+    .tk-items{padding:6px 14px}
+    .irow{display:flex;align-items:flex-start;gap:10px;padding:8px 4px;
+      border-bottom:1px solid var(--border);cursor:pointer;
+      border-radius:6px;transition:background .1s;margin:0 -4px}
+    .irow:last-child{border-bottom:none}
+    .irow:active{background:var(--surface2)}
+    .irow.done .itext{opacity:.22;text-decoration:line-through}
+    .ichk{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border2);flex-shrink:0;
+      margin-top:4px;display:flex;align-items:center;justify-content:center;
+      font-size:11px;font-weight:900;color:transparent;transition:all .15s}
+    .irow.done .ichk{background:var(--green);border-color:var(--green);color:#000}
+    .iqty{font-size:24px;font-weight:900;color:var(--gold);min-width:36px;line-height:1.15;
+      flex-shrink:0;font-family:var(--font-en)}
+    .ticket.src-online .iqty{color:var(--orange)}
+    .itext{flex:1}
+    .iname{font-size:18px;font-weight:700;color:var(--text);line-height:1.25}
+    .isize{font-size:11px;color:var(--gold);font-weight:700;margin-top:2px;font-family:var(--font-en)}
+    .inote{font-size:12px;color:#FFAB40;margin-top:5px;padding:4px 9px;
+      border-right:2px solid #FF8F00;background:rgba(255,143,0,.07);
+      border-radius:4px;display:inline-block;line-height:1.4}
+    .tk-onote{margin:4px 14px 8px;padding:10px 14px;background:rgba(255,143,0,.13);border:2px solid rgba(255,143,0,.5);
+      border:1px solid rgba(255,143,0,.2);border-radius:8px;font-size:12px;color:#FFAB40;line-height:1.5}
+
+    /* ── TICKET FOOTER ────────────────────────── */
+    .tkf{padding:10px 14px;border-top:1px solid var(--border)}
+
+    .btn-accept{width:100%;padding:16px;
+      background:rgba(240,68,56,.15);
+      border:1px solid rgba(240,68,56,.5);border-radius:12px;color:var(--red);
+      font-size:16px;font-weight:800;cursor:pointer;font-family:var(--font-ar);
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      animation:acceptpulse 1.4s ease-in-out infinite;transition:all .15s}
+    @keyframes acceptpulse{
+      0%,100%{background:rgba(240,68,56,.12);border-color:rgba(240,68,56,.45)}
+      50%{background:rgba(240,68,56,.2);border-color:rgba(240,68,56,.7)}
+    }
+    .btn-accept:active{transform:scale(.99)}
+
+    .btn-bump{width:100%;padding:14px;background:rgba(45,213,91,.1);
+      border:1px solid rgba(45,213,91,.35);border-radius:12px;color:var(--green);
+      font-size:16px;font-weight:800;cursor:pointer;font-family:var(--font-ar);
+      display:flex;align-items:center;justify-content:center;gap:10px;transition:all .15s}
+    .btn-bump:hover{background:rgba(45,213,91,.18);border-color:rgba(45,213,91,.6)}
+    .btn-bump:active{transform:scale(.99)}
+    .btn-bump:disabled{opacity:.35;cursor:not-allowed;transform:none}
+
+    /* ── EMPTY STATES ─────────────────────────── */
+    .empty-kds{text-align:center;padding:60px 20px;color:var(--muted)}
+    .empty-kds .ei{font-size:44px;margin-bottom:14px;opacity:.6}
+    .empty-kds h3{font-size:15px;font-weight:700;color:var(--muted);margin-bottom:5px}
+    .empty-kds p{font-size:13px;opacity:.6}
+
+    /* ── SOUND OVERLAY ────────────────────────── */
+    .soverlay{position:fixed;inset:0;z-index:999;background:rgba(10,22,10,.72);
+      backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center}
+    .soverlay.hidden{display:none}
+    .sbox{background:#fff;border-radius:28px;
+      padding:48px 40px;text-align:center;max-width:380px;width:92%;
+      box-shadow:0 24px 64px rgba(0,0,0,.2)}
+    .sbox .si{font-size:60px;margin-bottom:18px;display:block}
+    .sbox h2{font-size:22px;font-weight:900;color:#0D1A0D;margin-bottom:10px}
+    .sbox p{font-size:14px;color:#5A7A5A;margin-bottom:32px;line-height:1.8}
+    .btn-unlock{
+      width:100%;padding:18px;
+      background:linear-gradient(135deg,#2E7D32,#1B5E20);
+      color:#fff;border:none;border-radius:14px;
+      font-size:17px;font-weight:800;cursor:pointer;
+      font-family:var(--font-ar);
+      box-shadow:0 6px 20px rgba(27,94,32,.35);
+      transition:all .18s;
+    }
+    .btn-unlock:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(27,94,32,.45)}
+    .btn-unlock:active{transform:scale(.98)}
+
+    /* ── PREP TIME MODAL ──────────────────────── */
+    .modal-bg{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.5);
+      display:none;align-items:center;justify-content:center}
+    .modal-bg.show{display:flex}
+    .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;
+      padding:28px 24px;max-width:380px;width:90%;text-align:center;
+      box-shadow:0 12px 40px rgba(0,0,0,.12)}
+    .modal-icon{font-size:44px;margin-bottom:12px}
+    .modal-title{font-size:19px;font-weight:800;color:var(--text);margin-bottom:5px}
+    .modal-sub{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.6}
+    .prep-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+    .prep-btn{padding:16px 8px;border-radius:12px;border:1px solid var(--border2);
+      background:var(--surface2);color:var(--text);font-size:20px;font-weight:800;
+      cursor:pointer;transition:all .15s;font-family:var(--font-en)}
+    .prep-btn:hover{border-color:var(--orange);color:var(--orange);background:rgba(232,123,32,.06)}
+    .prep-btn:active{transform:scale(.96)}
+    .prep-btn span{display:block;font-size:10px;font-weight:600;color:var(--muted);margin-top:2px;font-family:var(--font-ar)}
+    .wa-section{background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.2);
+      border-radius:12px;padding:14px;margin-bottom:16px;display:none}
+    .wa-section.show{display:block}
+    .wa-section p{font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.6}
+    .btn-wa-send{width:100%;padding:12px;background:#25D366;color:#fff;border:none;border-radius:10px;
+      font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-ar);
+      display:flex;align-items:center;justify-content:center;gap:8px}
+    .btn-wa-skip{width:100%;padding:9px;background:transparent;color:var(--muted);
+      border:none;font-size:12px;cursor:pointer;margin-top:5px;font-family:var(--font-ar)}
+    .btn-wa-skip:hover{color:var(--text)}
+
+    /* ── DELIVERY INFO BOX ───────────────────── */
+    .delivery-box{
+      margin:0 14px 4px;padding:12px 14px;
+      background:rgba(232,123,32,.07);
+      border:1px solid rgba(232,123,32,.25);
+      border-radius:12px;
+    }
+    .delivery-box-title{
+      font-size:10px;font-weight:800;color:var(--orange);
+      text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;
+      display:flex;align-items:center;gap:6px;
+    }
+    .delivery-row{
+      display:flex;align-items:center;gap:10px;
+      padding:6px 0;border-bottom:1px solid rgba(232,123,32,.1);
+      font-size:13px;
+    }
+    .delivery-row:last-child{border-bottom:none;padding-bottom:0}
+    .delivery-ico{font-size:15px;flex-shrink:0;width:20px;text-align:center}
+    .delivery-label{font-size:10px;color:var(--muted);font-weight:600;min-width:46px}
+    .delivery-val{color:var(--text);font-weight:700;flex:1;font-size:13px}
+    .delivery-actions{display:flex;gap:5px;flex-shrink:0}
+    .del-btn{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:800;
+      cursor:pointer;border:none;display:flex;align-items:center;gap:4px;
+      text-decoration:none;font-family:var(--font-ar)}
+    .del-btn-call{background:rgba(77,168,255,.15);color:var(--blue)}
+    .del-btn-wa{background:rgba(37,211,102,.15);color:#25D366}
+    .del-btn-call:hover{background:rgba(77,168,255,.28)}
+    .del-btn-wa:hover{background:rgba(37,211,102,.28)}
+    .delivery-addr{
+      margin-top:8px;padding:8px 10px;
+      background:rgba(0,0,0,.04);border-radius:8px;border:1px solid var(--border);
+      font-size:12px;color:var(--text);line-height:1.55;
+      display:flex;align-items:flex-start;gap:7px;
+    }
+    .delivery-addr-ico{font-size:14px;flex-shrink:0;margin-top:1px}
+
+    /* ── READY MODAL ──────────────────────────── */
+    .rmbg{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);
+      display:none;align-items:center;justify-content:center}
+    .rmbg.show{display:flex}
+    .rmbox{background:var(--surface);border:1px solid var(--border);border-radius:20px;
+      padding:32px 28px;max-width:400px;width:90%;text-align:center;
+      box-shadow:0 12px 40px rgba(0,0,0,.12)}
+    .rm-icon{font-size:50px;margin-bottom:14px}
+    .rm-title{font-size:21px;font-weight:800;color:var(--text);margin-bottom:6px}
+    .rm-sub{font-size:13.5px;color:var(--muted);margin-bottom:22px;line-height:1.65}
+    .rm-btns{display:flex;flex-direction:column;gap:10px}
+    .btn-wa{padding:14px;background:#25D366;color:#fff;border:none;border-radius:12px;
+      font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font-ar);
+      display:flex;align-items:center;justify-content:center;gap:8px}
+    .btn-skip{padding:12px;background:var(--surface2);color:var(--muted);
+      border:1px solid var(--border2);border-radius:12px;font-size:13px;cursor:pointer;
+      font-family:var(--font-ar)}
+    .btn-skip:hover{color:var(--text)}
+
+    /* ── MOBILE RESPONSIVE ─────────────────────── */
+    /* Mobile tab bar — hidden on desktop */
+    .mob-tabs{display:none}
+
+    @media(max-width:767px){
+      /* Topbar compact */
+      .topbar{padding:0 8px;gap:6px;
+        padding-top:env(safe-area-inset-top,0);
+        height:calc(52px + env(safe-area-inset-top,0px))}
+      .logo{font-size:15px}
+      .logo span{font-size:10px}
+      .top-clock{font-size:16px;letter-spacing:.5px}
+      .ocounter{font-size:11px;padding:3px 8px}
+      .vdiv{display:none}
+
+      /* Mobile tab bar */
+      .mob-tabs{
+        display:flex;flex-shrink:0;
+        background:var(--surface);
+        border-bottom:1px solid var(--border);
+        box-shadow:0 2px 8px rgba(0,0,0,.06);
+      }
+      .mob-tab{
+        flex:1;padding:13px 8px;font-size:13px;font-weight:800;
+        cursor:pointer;border:none;background:none;
+        color:var(--muted);border-bottom:3px solid transparent;
+        font-family:var(--font-ar);transition:all .18s;
+        display:flex;align-items:center;justify-content:center;gap:6px;
+      }
+      .mob-tab.active{color:var(--text);border-bottom-color:var(--orange)}
+      .mob-tab-cnt{
+        background:var(--border2);color:var(--muted);
+        border-radius:12px;padding:1px 7px;font-size:11px;font-weight:800;
+        font-family:var(--font-en);
+      }
+      .mob-tab.active .mob-tab-cnt{background:var(--orange);color:#fff}
+
+      /* Split area: stack vertically, show only active column */
+      .split-area{
+        flex-direction:column;
+        height:calc(100vh - 52px - 46px - env(safe-area-inset-top,0px));
+      }
+      .split-area.has-alarm{
+        height:calc(100vh - 52px - 46px - 45px - env(safe-area-inset-top,0px));
+      }
+      .kds-col{display:none;height:100%}
+      .kds-col.mob-active{display:flex}
+      .kds-col.pending-col{border-left:none}
+
+      /* Ticket sizes on mobile */
+      .tk-num{font-size:24px}
+      .tk-timer{font-size:22px}
+      .iname{font-size:16px}
+      .iqty{font-size:20px;min-width:30px}
+      .btn-accept{font-size:15px;padding:14px}
+      .btn-bump{font-size:15px;padding:13px}
+
+      /* Prep modal on mobile */
+      .prep-grid{grid-template-columns:repeat(3,1fr);gap:6px}
+      .prep-btn{padding:14px 6px;font-size:18px}
+
+      /* Ready modal */
+      .rmbox{padding:24px 20px;max-width:95vw}
+    }
+
+    /* Safe-area padding for content on iPhone */
+    .split-area{
+      padding-bottom:env(safe-area-inset-bottom,0);
+    }
+
+    /* ══ MOBILE UX OPTIMIZATION ══════════════════ */
+
+    /* Item rows — comfortable tap targets for kitchen staff */
+    .irow { min-height: 48px; padding: 10px 6px; }
+
+    /* Checkboxes — bigger tap area */
+    .ichk { width: 24px; height: 24px; border-radius: 6px; }
+
+    /* Timer control buttons — bigger touch targets */
+    .tcbtn { width: 28px; height: 28px; border-radius: 7px; }
+
+    /* Prep time buttons — very comfortable for kitchen use */
+    .prep-btn { min-height: 64px; touch-action: manipulation; }
+
+    /* Sound/unlock button */
+    .btn-unlock { min-height: 54px; touch-action: manipulation; }
+    .ibtn { width: 40px; height: 40px; }
+    .tbtn { min-height: 36px; padding: 8px 16px; }
+
+    /* Accept / Bump buttons — maximum tap comfort */
+    .btn-accept { min-height: 54px; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    .btn-bump   { min-height: 50px; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+
+    /* Mute alarm button */
+    .btn-mute { min-height: 36px; padding: 8px 16px; }
+
+    @media (max-width: 767px) {
+      /* Topbar — tighter but readable */
+      .ibtn { width: 36px; height: 36px; }
+
+      /* Mobile tabs — very large tap area for quick switching */
+      .mob-tab { min-height: 50px; font-size: 14px; }
+
+      /* Ticket header — easier to scan */
+      .tk-num  { font-size: 28px; }
+      .tk-timer{ font-size: 24px; }
+
+      /* Item names — easier to read quickly */
+      .iname { font-size: 17px; line-height: 1.3; }
+      .iqty  { font-size: 22px; }
+
+      /* Accept/Bump — full width large buttons */
+      .btn-accept { padding: 16px; font-size: 16px; }
+      .btn-bump   { padding: 14px; font-size: 15px; }
+
+      /* Prep grid — 3 columns, tap-friendly */
+      .prep-btn { min-height: 70px; font-size: 22px; border-radius: 14px; }
+      .prep-btn span { font-size: 11px; }
+
+      /* Sound overlay — comfortable on small screens */
+      .sbox { padding: 36px 24px; margin: 16px; border-radius: 22px; max-width: calc(100vw - 32px); }
+      .btn-unlock { font-size: 16px; }
+
+      /* Ready modal */
+      .rmbg .rmbox { padding: 28px 20px; }
+      .btn-wa, .btn-skip { min-height: 48px; }
+
+      /* Delivery info box */
+      .delivery-box { margin: 0 10px 6px; padding: 10px 12px; }
+      .del-btn { min-height: 36px; padding: 6px 12px; font-size: 12px; }
+
+      /* Prevent iOS font auto-zoom */
+      input, textarea { font-size: 16px !important; }
+    }
+
+    @media (max-width: 390px) {
+      .tk-num  { font-size: 24px; }
+      .tkh     { padding: 10px 12px 8px; }
+      .tk-items{ padding: 4px 12px; }
+      .tkf     { padding: 8px 12px; }
+      .iname   { font-size: 15px; }
+      .prep-btn{ min-height: 60px; font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SOUND UNLOCK -->
+<div class="soverlay" id="soverlay">
+  <div class="sbox">
+    <div class="si">🔔</div>
+    <h2>تفعيل التنبيهات الصوتية</h2>
+    <p>المتصفح محتاج إذنك لتشغيل الصوت.<br>اضغط ابدأ عشان تسمع صوت الأوردرات الجديدة.</p>
+    <button class="btn-unlock" onclick="unlockAudio()">🚀 ابدأ شاشة المطبخ</button>
+  </div>
+</div>
+
+<!-- ALARM BANNER -->
+<div class="alarm-banner hidden" id="alarmBanner">
+  <div class="alarm-text">
+    🔴 <span>أوردرات تنتظر الاستلام!</span>
+    <span class="alarm-count" id="alarmCount">0</span>
+  </div>
+  <button class="btn-mute" onclick="muteAlarm()">🔇 إسكات مؤقت</button>
+</div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">Tu<span>Comida</span> <span style="font-size:12px;font-weight:600;color:var(--muted);margin-right:4px">KDS</span></div>
+  <div class="vdiv"></div>
+  <div class="conn"><span class="cdot" id="cdot"></span><span id="ctext">جاري الاتصال...</span></div>
+  <div class="top-clock" id="topClock">00:00:00</div>
+  <div class="ocounter" id="ocounter">0 أوردر</div>
+  <div class="spacer"></div>
+  <button class="ibtn on" id="soundBtn" onclick="toggleSound()" title="تشغيل/إيقاف الصوت" aria-label="تشغيل أو إيقاف صوت التنبيه">🔔</button>
+  <button class="tbtn" onclick="doLogout()" aria-label="تسجيل الخروج">خروج</button>
+</div>
+
+<!-- MOBILE TABS (shown only on small screens) -->
+<div class="mob-tabs" id="mobTabs">
+  <button class="mob-tab active" id="mobTabPending" onclick="switchMobileTab('pending')">
+    🔴 انتظار <span class="mob-tab-cnt" id="mob-cnt-pending">0</span>
+  </button>
+  <button class="mob-tab" id="mobTabPreparing" onclick="switchMobileTab('preparing')">
+    👨‍🍳 تحضير <span class="mob-tab-cnt" id="mob-cnt-preparing">0</span>
+  </button>
+</div>
+
+<!-- SPLIT LAYOUT -->
+<div class="split-area" id="splitArea">
+
+  <!-- LEFT: PENDING (waiting for acceptance) -->
+  <div class="kds-col pending-col mob-active" id="colPending">
+    <div class="col-header pending-hdr">
+      <span class="col-hicon">🔴</span>
+      <span class="col-htitle">بانتظار الاستلام</span>
+      <span class="col-hcnt" id="cnt-pending">0</span>
+      <div class="col-spacer"></div>
+    </div>
+    <div class="col-body" id="pendingGrid">
+      <div class="empty-kds" id="emptyPending">
+        <div class="ei">✅</div><h3>لا أوردرات جديدة</h3><p>الأوردرات الجديدة هتظهر هنا</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: PREPARING -->
+  <div class="kds-col preparing-col" id="colPreparing">
+    <div class="col-header preparing-hdr">
+      <span class="col-hicon">👨‍🍳</span>
+      <span class="col-htitle">قيد التحضير</span>
+      <span class="col-hcnt" id="cnt-preparing">0</span>
+      <div class="col-spacer"></div>
+    </div>
+    <div class="col-body" id="preparingGrid">
+      <div class="empty-kds" id="emptyPreparing">
+        <div class="ei">🍳</div><h3>لا أوردرات قيد التحضير</h3><p>استلم أوردر لتبدأ تحضيره</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PREP TIME MODAL -->
+<div class="modal-bg" id="prepModal">
+  <div class="modal-box">
+    <div class="modal-icon">⏱</div>
+    <div class="modal-title" id="prepModalTitle">استلام الأوردر</div>
+    <div class="modal-sub">اختار وقت التحضير المتوقع</div>
+
+    <!-- WA section (for online orders with phone) -->
+    <div class="wa-section" id="waSectionModal">
+      <p>💬 إبعت رسالة واتساب للعميل إن أوردره اتستلم وبيتحضر؟</p>
+      <button class="btn-wa-send" id="waModalBtn">📲 إبعت واتساب</button>
+      <button class="btn-wa-skip" onclick="skipWA()">تخطي — بدون رسالة</button>
+    </div>
+
+    <div class="prep-grid" id="prepGrid">
+      <button class="prep-btn" onclick="confirmAccept(5)">5<span>دقايق</span></button>
+      <button class="prep-btn" onclick="confirmAccept(10)">10<span>دقايق</span></button>
+      <button class="prep-btn" onclick="confirmAccept(15)">15<span>دقايق</span></button>
+      <button class="prep-btn" onclick="confirmAccept(20)">20<span>دقايق</span></button>
+      <button class="prep-btn" onclick="confirmAccept(30)">30<span>دقايق</span></button>
+      <button class="prep-btn" onclick="confirmAccept(45)">45<span>دقايق</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- READY MODAL -->
+<div class="rmbg" id="readyModal">
+  <div class="rmbox">
+    <div class="rm-icon">✅</div>
+    <div class="rm-title" id="rmTitle">الأوردر جاهز!</div>
+    <div class="rm-sub" id="rmSub"></div>
+    <div class="rm-btns" id="rmBtns"></div>
+  </div>
+</div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  <script src="/shared/firebase-config.js"></script>
+<script>
+// ── STATE ──────────────────────────────────────────
+let currentUser = null, currentRole = null;
+let audioCtx = null, soundEnabled = true;
+let dineOrders = {};        // from 'orders'
+let onlineOrdersMap = {};   // from 'online_orders'
+let orderPrepMins = {};     // per-order prep time (minutes)
+let pendingAlarmIds = new Set(); // orders with no accepted yet (alarm rings)
+let alarmMuted = false;         // temporary mute flag
+let alarmInterval = null;       // setInterval ID for looping alarm
+let initialDineIds = null;
+let initialOnlineIds = null;
+
+// For prep-time modal
+let acceptingId = null, acceptingIsOnline = false;
+let acceptingPhone = '', acceptingOrderNum = '', acceptingOrderType = '';
+let waWasSent = false;
+
+// ── AUDIO ──────────────────────────────────────────
+function unlockAudio() {
+  // إخفاء الـ overlay فوراً بعد الضغطة
+  document.getElementById('soverlay').classList.add('hidden');
+
+  // إنشاء AudioContext داخل user gesture مباشرة
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  } catch(e) {
+    console.warn('[Audio] AudioContext not supported:', e);
+    return;
+  }
+
+  // Safari/iOS: يحتاج resume() بعد الإنشاء مباشرة
+  const doInit = () => {
+    // اعزف beep تجريبي قصير لتأكيد الصوت شغّال
+    _doPlayBeep();
+    // أضف listeners لإيقاظ الـ context لو نام
+    ['click','touchstart','touchend'].forEach(ev =>
+      document.addEventListener(ev, _keepAudioAlive, { passive: true })
+    );
+    // لو في أوردرات معلّقة ابدأ الإنذار
+    if (pendingAlarmIds.size > 0 && soundEnabled) startAlarmLoop();
+  };
+
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume().then(doInit).catch(() => doInit());
+  } else {
+    // running مباشرة
+    setTimeout(doInit, 50);
+  }
+
+  // مراقبة تغيير الحالة
+  audioCtx.addEventListener('statechange', () => {
+    if (audioCtx.state === 'running' && pendingAlarmIds.size > 0 && soundEnabled && !alarmMuted) {
+      if (!alarmInterval) startAlarmLoop();
+    }
+  });
+}
+
+function _keepAudioAlive() {
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume().catch(() => {});
+  }
+}
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  const b = document.getElementById('soundBtn');
+  b.textContent = soundEnabled ? '🔔' : '🔕';
+  b.className = soundEnabled ? 'ibtn on' : 'ibtn';
+  if (!soundEnabled) stopAlarmLoop();
+  else if (pendingAlarmIds.size > 0 && !alarmMuted) startAlarmLoop();
+}
+
+function _doPlayBeep() {
+  if (!audioCtx) return;
+  // Auto-resume if suspended
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume().then(() => { if(audioCtx.state==='running') _doActualBeep(); }).catch(()=>{});
+    return;
+  }
+  if (audioCtx.state !== 'running') return;
+  _doActualBeep();
+}
+
+function _doVibrate() {
+  if (navigator.vibrate) navigator.vibrate([200, 80, 200, 80, 200]);
+}
+
+function _doActualBeep() {
+  const t = audioCtx.currentTime;
+  // Mobile-optimized beeps: mix of frequencies for better speaker response
+  // 880Hz (A5) + 1100Hz + 660Hz — more audible on phone speakers than pure 1400Hz
+  const freqs = [880, 1100, 660];
+  [0, 0.13, 0.26, 0.39, 0.52].forEach((delay, idx) => {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.type = idx % 2 === 0 ? 'square' : 'sawtooth';
+    o.frequency.value = freqs[idx % freqs.length];
+    const s = t + delay;
+    g.gain.setValueAtTime(0.0, s);
+    g.gain.linearRampToValueAtTime(0.9, s + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, s + 0.11);
+    o.start(s);
+    o.stop(s + 0.12);
+  });
+}
+
+function playBeep(force) {
+  if (!force && !soundEnabled) return;
+  _doVibrate(); // اهتزاز مع كل تنبيه
+  if (!audioCtx) return;
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume().then(() => {
+      if (audioCtx.state === 'running') _doPlayBeep();
+    }).catch(() => {});
+    return;
+  }
+  _doPlayBeep();
+}
+
+// ── ALARM LOOP ─────────────────────────────────────
+// يفضل يعزف بدون توقف لحد ما الشيف يستلم الأوردر
+function startAlarmLoop() {
+  if (alarmInterval) return;
+  playBeep(true);
+  // كل 600ms → 5 بيبات سريعة = ~8 بيبة/ثانية شبه مستمرة
+  alarmInterval = setInterval(() => {
+    if (pendingAlarmIds.size === 0 || alarmMuted || !soundEnabled) {
+      stopAlarmLoop();
+      return;
+    }
+    playBeep(true);
+  }, 600);
+}
+
+function stopAlarmLoop() {
+  if (alarmInterval) { clearInterval(alarmInterval); alarmInterval = null; }
+}
+
+// ── VISIBILITY: resume sound when tab becomes active ──
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().then(() => {
+        if (pendingAlarmIds.size > 0 && soundEnabled && !alarmMuted) {
+          startAlarmLoop();
+        }
+      }).catch(() => {});
+    } else if (pendingAlarmIds.size > 0 && soundEnabled && !alarmMuted && !alarmInterval) {
+      startAlarmLoop();
+    }
+  }
+});
+
+function muteAlarm() {
+  alarmMuted = true;
+  stopAlarmLoop();
+  document.getElementById('alarmBanner').querySelector('.btn-mute').textContent = '⏱ إسكات لدقيقة';
+  // إسكات مؤقت 60 ثانية فقط — بعدين يرجع الصوت لو في أوردرات
+  setTimeout(() => {
+    alarmMuted = false;
+    if (pendingAlarmIds.size > 0 && soundEnabled) startAlarmLoop();
+  }, 60000);
+}
+
+function updateAlarmBanner() {
+  const banner = document.getElementById('alarmBanner');
+  const muteBtn = banner.querySelector('.btn-mute');
+  const count = pendingAlarmIds.size;
+  if (count > 0) {
+    banner.classList.remove('hidden');
+    document.getElementById('alarmCount').textContent = count;
+    document.getElementById('splitArea').classList.add('has-alarm');
+    if (muteBtn) muteBtn.textContent = '🔇 إسكات مؤقت';
+    if (!alarmMuted && soundEnabled) startAlarmLoop();
+    // عنوان التاب بيظهر عدد الأوردرات المعلقة
+    document.title = `(${count}) أوردر جديد! — TuComida KDS`;
+  } else {
+    banner.classList.add('hidden');
+    document.getElementById('splitArea').classList.remove('has-alarm');
+    stopAlarmLoop();
+    alarmMuted = false;
+    document.title = 'TuComida KDS';
+  }
+}
+
+// ── CLOCK ──────────────────────────────────────────
+setInterval(() => {
+  const n = new Date();
+  document.getElementById('topClock').textContent =
+    [n.getHours(),n.getMinutes(),n.getSeconds()].map(v=>String(v).padStart(2,'0')).join(':');
+}, 1000);
+
+// ── TIMER LOGIC ────────────────────────────────────
+function ageClass(startTs, prep) {
+  const mins = (Date.now() - startTs) / 60000;
+  const rem = (prep || 15) - mins;
+  if (rem > (prep || 15) * 0.5) return 'ok';
+  if (rem > 2) return 'warn';
+  if (rem > -5) return 'late';
+  return 'urgent';
+}
+function fmtTimer(startTs, prep) {
+  const elapsed = Math.floor((Date.now() - startTs) / 1000);
+  const target = (prep || 15) * 60;
+  const rem = target - elapsed;
+  const abs = Math.abs(rem);
+  return `${rem < 0 ? '−' : ''}${String(Math.floor(abs/60)).padStart(2,'0')}:${String(abs%60).padStart(2,'0')}`;
+}
+function changePrepTime(id, delta) {
+  orderPrepMins[id] = Math.max(1, Math.min(90, (orderPrepMins[id] || 15) + delta));
+  const el = document.getElementById(`tc-mins-${id}`);
+  if (el) el.textContent = `${orderPrepMins[id]}د`;
+}
+setInterval(() => {
+  document.querySelectorAll('.tk-timer[data-start]').forEach(el => {
+    const start = parseInt(el.dataset.start), id = el.dataset.id;
+    const prep = orderPrepMins[id] || 15;
+    const cls = ageClass(start, prep);
+    el.textContent = fmtTimer(start, prep);
+    el.className = `tk-timer ${cls}`;
+    const tk = document.getElementById(`tk-${id}`);
+    if (tk) { tk.classList.remove('warn','late','urgent'); if (cls !== 'ok') tk.classList.add(cls); }
+  });
+}, 1000);
+
+// ── COUNTS ────────────────────────────────────────
+function updateCounts() {
+  const all = {...dineOrders, ...onlineOrdersMap};
+  const entries = Object.entries(all);
+  const pending = entries.filter(([,o]) => o.status === 'pending').length;
+  const preparing = entries.filter(([,o]) => o.status === 'preparing').length;
+
+  document.getElementById('cnt-pending').textContent = pending;
+  document.getElementById('cnt-preparing').textContent = preparing;
+  document.getElementById('ocounter').textContent = `${entries.length} أوردر`;
+
+  const pCnt = document.getElementById('cnt-pending');
+  pCnt.className = 'col-hcnt' + (pending > 0 ? ' alert' : '');
+  document.getElementById('cnt-preparing').className = 'col-hcnt' + (preparing > 0 ? ' active' : '');
+
+  // Mobile tab badge counts
+  const mc1 = document.getElementById('mob-cnt-pending');
+  const mc2 = document.getElementById('mob-cnt-preparing');
+  if (mc1) mc1.textContent = pending;
+  if (mc2) mc2.textContent = preparing;
+  if (pending > 0 && window.innerWidth < 768) _mobAutoSwitch();
+}
+
+// ── RENDER BOTH GRIDS ─────────────────────────────
+function renderAll() {
+  updateCounts();
+  const all = {...dineOrders, ...onlineOrdersMap};
+  const entries = Object.entries(all).sort((a,b) => a[1].createdAt - b[1].createdAt);
+
+  const pendingEntries  = entries.filter(([,o]) => o.status === 'pending');
+  const preparingEntries = entries.filter(([,o]) => o.status === 'preparing');
+
+  renderGrid('pendingGrid',   'emptyPending',   pendingEntries,   '✅', 'لا أوردرات جديدة',        'الأوردرات الجديدة هتظهر هنا');
+  renderGrid('preparingGrid', 'emptyPreparing', preparingEntries, '🍳', 'لا أوردرات قيد التحضير', 'استلم أوردر لتبدأ تحضيره');
+}
+
+function renderGrid(gridId, emptyId, entries, emIcon, emTitle, emMsg) {
+  const grid = document.getElementById(gridId);
+  const activeIds = new Set(entries.map(([id]) => id));
+
+  // Remove stale tickets from this grid
+  grid.querySelectorAll('.ticket').forEach(t => { if (!activeIds.has(t.dataset.id)) t.remove(); });
+
+  // Insert new tickets (existing ones stay in place to preserve timer state)
+  entries.forEach(([id, o]) => {
+    if (!document.getElementById(`tk-${id}`)) {
+      grid.appendChild(buildTicket(id, o));
+    }
+  });
+
+  // Empty state
+  const hasTickets = !!grid.querySelector('.ticket');
+  let emEl = document.getElementById(emptyId);
+  if (!hasTickets) {
+    if (!emEl) {
+      const em = document.createElement('div');
+      em.className = 'empty-kds'; em.id = emptyId;
+      em.innerHTML = `<div class="ei">${emIcon}</div><h3>${emTitle}</h3><p>${emMsg}</p>`;
+      grid.appendChild(em);
+    }
+  } else if (emEl) {
+    emEl.remove();
+  }
+}
+
+function buildTicket(id, o) {
+  const isOnline = o._src === 'online';
+  const isPending = o.status === 'pending';
+  if (!orderPrepMins[id]) orderPrepMins[id] = 15;
+  const prep = orderPrepMins[id];
+  const ac = isPending ? 'ok' : ageClass(o.acceptedAt || o.createdAt, prep);
+
+  let srcLabel, chipClass, typeClass;
+  if (isOnline) {
+    typeClass = 'src-online'; chipClass = 'chip-onl';
+    const cname = o.customerName ? ` — ${escapeHtml(o.customerName)}` : '';
+    srcLabel = o.type === 'delivery' ? `🛵 توصيل${cname}` : `🏪 استلام${cname}`;
+  } else if (o.type === 'takeaway') {
+    typeClass = 'src-takeaway'; chipClass = 'chip-tko'; srcLabel = '📦 تيك أواي';
+  } else {
+    typeClass = ''; chipClass = 'chip-dine'; srcLabel = `🪑 طاولة ${escapeHtml(String(o.tableNumber||''))}`;
+  }
+  const chipLbl = isOnline ? 'أونلاين' : (o.type==='takeaway' ? 'تيك أواي' : 'داخلي');
+  const stateClass = isPending ? 't-pending' : 't-preparing';
+
+  const itemsHtml = (o.items||[]).map(item => `
+    <div class="irow" onclick="toggleItem(this)">
+      <div class="ichk">✓</div>
+      <div class="iqty">${Number(item.quantity||0)}×</div>
+      <div class="itext">
+        <div class="iname">${escapeHtml(item.name||'')}${item.size?` <span class="isize">(${escapeHtml(item.size)})</span>`:''}</div>
+        ${item.notes?`<div class="inote">📝 ${escapeHtml(item.notes)}</div>`:''}
+      </div>
+    </div>`).join('');
+
+  // Footer button
+  let footerHtml;
+  if (isPending) {
+    footerHtml = `<button class="btn-accept" onclick="openPrepModal('${id}',${isOnline},'${o.customerPhone||''}','${o.orderNumber}','${o.type||''}')">
+      🍳 &nbsp; استلام الأوردر — حدد وقت التحضير
+    </button>`;
+  } else {
+    footerHtml = `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <div class="tc-ctrl" style="flex:1;justify-content:center">
+          <button class="tcbtn" onclick="changePrepTime('${id}',-5);event.stopPropagation()">−</button>
+          <span class="tc-mins" id="tc-mins-${id}" style="font-size:13px;min-width:38px">${prep}د</span>
+          <button class="tcbtn" onclick="changePrepTime('${id}',5);event.stopPropagation()">+</button>
+        </div>
+      </div>
+      <button class="btn-bump" onclick="bumpOrder('${id}',${isOnline},'${o.customerPhone||''}','${o.orderNumber}','${o.type||''}')">
+        ✅ &nbsp; جاهز — إخطار الويتر
+      </button>`;
+  }
+
+  const t = document.createElement('div');
+  t.className = `ticket${typeClass?' '+typeClass:''} ${stateClass} ${!isPending && ac!=='ok'?ac:''}`.trim();
+  t.id = `tk-${id}`; t.dataset.id = id;
+  t.innerHTML = `
+    <div class="tkh">
+      <div class="tkh-r1">
+        <div class="tk-num">#${o.orderNumber}</div>
+        <div class="tk-tblock">
+          ${isPending
+            ? `<div style="font-size:13px;color:var(--red);font-weight:700">⏰ ${formatTime(o.createdAt)}</div>`
+            : `<div class="tk-timer ${ac}" data-start="${o.acceptedAt||o.createdAt}" data-id="${id}">${fmtTimer(o.acceptedAt||o.createdAt,prep)}</div>`
+          }
+        </div>
+      </div>
+      <div class="tkh-r2">
+        <span class="tk-src">${srcLabel}</span>
+        <div class="tk-meta">
+          <span class="tk-chip ${chipClass}">${chipLbl}</span>
+          <span class="tk-time">${formatTime(o.createdAt)}</span>
+        </div>
+      </div>
+    </div>
+    ${isOnline && o.type === 'delivery' ? buildDeliveryBox(o) : ''}
+    <div class="tk-items">
+      ${itemsHtml}
+      ${o.notes?`
+      <div style="margin-top:8px;padding:10px 12px;background:rgba(255,152,0,.15);border:2px solid rgba(255,152,0,.6);border-radius:10px;display:flex;align-items:flex-start;gap:8px">
+        <span style="font-size:18px;flex-shrink:0">📝</span>
+        <div>
+          <div style="font-size:10px;font-weight:800;color:var(--orange);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">ملاحظات الطلب</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text);line-height:1.5">${escapeHtml(o.notes)}</div>
+        </div>
+      </div>`:''}
+    </div>
+    <div class="tkf">${footerHtml}</div>`;
+  return t;
+}
+
+// ── DELIVERY INFO BOX ──────────────────────────────
+function buildDeliveryBox(o) {
+  const phone = o.customerPhone || '';
+  const name  = o.customerName  || '';
+  const addr  = o.customerAddress || '';
+  const cp    = phone.replace(/\D/g,'').replace(/^0/,'20');
+
+  const phoneRow = phone ? `
+    <div class="delivery-row">
+      <span class="delivery-ico">📞</span>
+      <span class="delivery-label">الموبايل</span>
+      <span class="delivery-val">${phone}</span>
+      <div class="delivery-actions">
+        <a href="tel:${phone}" class="del-btn del-btn-call">📞 اتصال</a>
+        <a href="https://wa.me/${cp}" target="_blank" class="del-btn del-btn-wa">💬 واتساب</a>
+      </div>
+    </div>` : '';
+
+  const nameRow = name ? `
+    <div class="delivery-row">
+      <span class="delivery-ico">👤</span>
+      <span class="delivery-label">الاسم</span>
+      <span class="delivery-val">${name}</span>
+    </div>` : '';
+
+  const addrRow = addr ? `
+    <div class="delivery-addr">
+      <span class="delivery-addr-ico">📍</span>
+      <span>${addr}</span>
+    </div>` : '';
+
+  return `
+    <div class="delivery-box">
+      <div class="delivery-box-title">🛵 تفاصيل التوصيل</div>
+      ${nameRow}
+      ${phoneRow}
+      ${addr ? addrRow : '<div style="font-size:12px;color:var(--muted);padding-top:4px">⚠️ العميل لم يدخل عنواناً</div>'}
+    </div>`;
+}
+
+function toggleItem(row) { row.classList.toggle('done'); }
+function formatTime(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+// ── PREP TIME MODAL ─────────────────────────────────
+function openPrepModal(id, isOnline, phone, orderNum, orderType) {
+  acceptingId = id;
+  acceptingIsOnline = isOnline;
+  acceptingPhone = phone || '';
+  acceptingOrderNum = orderNum;
+  acceptingOrderType = orderType;
+  waWasSent = false;
+
+  document.getElementById('prepModalTitle').textContent = `استلام الأوردر #${orderNum}`;
+
+  // Show WA section for online orders with phone
+  const waSection = document.getElementById('waSectionModal');
+  const cp = phone ? phone.replace(/\D/g,'').replace(/^0/,'20') : '';
+  if (isOnline && cp) {
+    waSection.classList.add('show');
+    const prep_preview = 15; // default estimate shown in WA message
+    const msgType = orderType === 'delivery' ? 'للتوصيل' : 'للاستلام';
+    const waMsg = encodeURIComponent(`أهلاً! 🍽\nطلبك #${orderNum} من TuComida اتستلم وبدأ تحضيره دلوقتي.\nالوقت المتوقع ${msgType}: حوالي 15-30 دقيقة. شكراً لثقتك! ✅`);
+    document.getElementById('waModalBtn').onclick = () => {
+      window.open(`https://wa.me/${cp}?text=${waMsg}`, '_blank');
+      waWasSent = true;
+      waSection.classList.remove('show');
+    };
+  } else {
+    waSection.classList.remove('show');
+  }
+
+  document.getElementById('prepModal').classList.add('show');
+}
+
+function skipWA() {
+  waWasSent = false;
+  document.getElementById('waSectionModal').classList.remove('show');
+}
+
+async function confirmAccept(mins) {
+  if (!acceptingId) return;
+  document.getElementById('prepModal').classList.remove('show');
+
+  const id = acceptingId, isOnline = acceptingIsOnline;
+  const now = Date.now();
+  orderPrepMins[id] = mins;
+  pendingAlarmIds.delete(id);
+  updateAlarmBanner();
+  acceptingId = null;
+
+  // حرّك الأوردر فوراً في الـ UI
+  const orderMap = isOnline ? onlineOrdersMap : dineOrders;
+  if (orderMap[id]) {
+    orderMap[id] = { ...orderMap[id], status:'preparing', prepMins:mins, acceptedAt:now };
+    renderAll();
+  }
+
+  // اكتب لـ Firebase في الخلفية (بدون await)
+  const ref = isOnline ? db.ref(`online_orders/${id}`) : db.ref(`orders/${id}`);
+  ref.update({ status:'preparing', prepMins:mins, acceptedAt:now, updatedAt:now })
+    .catch(e => console.error('[Accept] Firebase error:', e));
+  if (currentUser) logActivity(currentUser.uid, currentRole||'kitchen', 'order_accepted',
+    {orderId:id, orderNum:acceptingOrderNum, prepMins:mins});
+}
+
+// ── BUMP ORDER ─────────────────────────────────────
+async function bumpOrder(id, isOnline, phone, orderNum, orderType) {
+  const tk = document.getElementById(`tk-${id}`);
+  const btn = tk?.querySelector('.btn-bump');
+  if (!btn || btn.disabled) return;
+  btn.disabled = true;
+  btn.innerHTML = '⏳ &nbsp; جاري التحديث...';
+  try {
+    const ref = isOnline ? db.ref(`online_orders/${id}`) : db.ref(`orders/${id}`);
+    await ref.update({ status:'ready', readyAt:Date.now(), updatedAt:Date.now() });
+    if (currentUser) logActivity(currentUser.uid, currentRole||'kitchen', 'order_ready', {orderId:id, orderNum});
+    showReadyModal(isOnline, phone, orderNum, orderType);
+  } catch(e) {
+    console.error(e);
+    if (btn) { btn.disabled=false; btn.innerHTML='✅ &nbsp; جاهز — إخطار الويتر'; }
+  }
+}
+
+function showReadyModal(isOnline, phone, num, type) {
+  const cp = phone ? phone.replace(/\D/g,'').replace(/^0/,'20') : '';
+  const title = document.getElementById('rmTitle'), sub = document.getElementById('rmSub'), btns = document.getElementById('rmBtns');
+  if (isOnline && cp && type === 'delivery') {
+    title.textContent = `الأوردر #${num} جاهز 🛵`;
+    sub.textContent = 'أخطر العميل إن طلبه جاهز للتوصيل دلوقتي';
+    const msg = encodeURIComponent(`طلبك #${num} من TuComida جاهز وبيتجهزله التوصيل 🍽✅`);
+    btns.innerHTML = `<button class="btn-wa" onclick="window.open('https://wa.me/${cp}?text=${msg}','_blank');closeRM()">💬 إبعت واتساب للعميل</button><button class="btn-skip" onclick="closeRM()">تخطي</button>`;
+  } else if (isOnline && cp && type === 'pickup') {
+    title.textContent = `الأوردر #${num} جاهز 🏪`;
+    sub.textContent = 'أخطر العميل إن طلبه جاهز للاستلام';
+    const msg = encodeURIComponent(`طلبك #${num} من TuComida جاهز! تعالى استلم 🍽✅`);
+    btns.innerHTML = `<button class="btn-wa" onclick="window.open('https://wa.me/${cp}?text=${msg}','_blank');closeRM()">💬 إبعت واتساب</button><button class="btn-skip" onclick="closeRM()">تخطي</button>`;
+  } else {
+    title.textContent = `الأوردر #${num} جاهز ✅`;
+    sub.textContent = 'الويتر شايف "جاهز" على شاشته دلوقتي';
+    btns.innerHTML = `<button class="btn-skip" style="background:var(--green);color:#000;font-weight:800;font-size:16px;padding:14px" onclick="closeRM()">تمام 👍</button>`;
+  }
+  document.getElementById('readyModal').classList.add('show');
+  setTimeout(closeRM, 12000);
+}
+function closeRM() { document.getElementById('readyModal').classList.remove('show'); }
+
+// ── FIREBASE LISTENERS ─────────────────────────────
+async function listenOrders() {
+  db.ref('.info/connected').on('value', snap => {
+    const ok = snap.val() === true;
+    document.getElementById('cdot').className = 'cdot' + (ok?' ok':'');
+    document.getElementById('ctext').textContent = ok ? 'متصل' : 'جاري الاتصال...';
+  });
+
+  // Scope all queries to today — prevents loading full order history on startup
+  const _today = getDayId();
+
+  // Pre-load silently (no alarm for existing orders)
+  const [snapDine, snapOnl] = await Promise.all([
+    db.ref('orders').orderByChild('dayId').equalTo(_today).once('value'),
+    db.ref('online_orders').orderByChild('dayId').equalTo(_today).once('value')
+  ]);
+
+  initialDineIds = new Set();
+  Object.entries(snapDine.val() || {}).forEach(([id, o]) => {
+    initialDineIds.add(id);
+    if (['pending','preparing'].includes(o.status)) dineOrders[id] = {...o, _src:'dine'};
+  });
+
+  initialOnlineIds = new Set();
+  Object.entries(snapOnl.val() || {}).forEach(([id, o]) => {
+    initialOnlineIds.add(id);
+    if (['pending','preparing'].includes(o.status)) onlineOrdersMap[id] = {...o, _src:'online'};
+  });
+
+  renderAll();
+
+  // Incremental listeners — scoped to today
+  db.ref('orders').orderByChild('dayId').equalTo(_today).on('child_added', snap => {
+    if (initialDineIds.has(snap.key)) return;
+    const o = snap.val();
+    if (['pending','preparing'].includes(o.status)) {
+      dineOrders[snap.key] = {...o, _src:'dine'};
+      if (o.status === 'pending') {
+        pendingAlarmIds.add(snap.key);
+        updateAlarmBanner();
+      }
+      renderAll(); flashTicket(snap.key);
+    }
+  });
+  db.ref('orders').orderByChild('dayId').equalTo(_today).on('child_changed', snap => {
+    const o = snap.val();
+    if (['pending','preparing'].includes(o.status)) {
+      if (dineOrders[snap.key]) {
+        // Status changed from pending to preparing — remove from alarm
+        if (o.status === 'preparing' && dineOrders[snap.key].status === 'pending') {
+          pendingAlarmIds.delete(snap.key);
+          updateAlarmBanner();
+        }
+      }
+      dineOrders[snap.key] = {...o, _src:'dine'}; renderAll();
+    } else if (dineOrders[snap.key]) {
+      // Only remove if status is truly completed/cancelled — not on transient changes
+      const finalStatus = snap.val()?.status;
+      if (finalStatus === 'ready' || finalStatus === 'completed' || finalStatus === 'cancelled') {
+        pendingAlarmIds.delete(snap.key);
+        updateAlarmBanner();
+        delete dineOrders[snap.key]; fadeRemove(snap.key);
+      }
+    }
+  });
+  db.ref('orders').orderByChild('dayId').equalTo(_today).on('child_removed', snap => {
+    if (dineOrders[snap.key]) {
+      pendingAlarmIds.delete(snap.key);
+      updateAlarmBanner();
+      delete dineOrders[snap.key]; fadeRemove(snap.key);
+    }
+  });
+
+  db.ref('online_orders').orderByChild('dayId').equalTo(_today).on('child_added', snap => {
+    if (initialOnlineIds.has(snap.key)) return;
+    const o = snap.val();
+    if (['pending','preparing'].includes(o.status)) {
+      onlineOrdersMap[snap.key] = {...o, _src:'online'};
+      if (o.status === 'pending') {
+        pendingAlarmIds.add(snap.key);
+        updateAlarmBanner();
+      }
+      renderAll(); flashTicket(snap.key);
+    }
+  });
+  db.ref('online_orders').orderByChild('dayId').equalTo(_today).on('child_changed', snap => {
+    const o = snap.val();
+    if (['pending','preparing'].includes(o.status)) {
+      if (onlineOrdersMap[snap.key]?.status === 'pending' && o.status === 'preparing') {
+        pendingAlarmIds.delete(snap.key);
+        updateAlarmBanner();
+      }
+      onlineOrdersMap[snap.key] = {...o, _src:'online'}; renderAll();
+    } else if (onlineOrdersMap[snap.key]) {
+      // فقط شيل لو بقى ready/completed/cancelled — مش على أي تغيير
+      const s = o.status;
+      if (s === 'ready' || s === 'completed' || s === 'cancelled') {
+        pendingAlarmIds.delete(snap.key);
+        updateAlarmBanner();
+        delete onlineOrdersMap[snap.key]; fadeRemove(snap.key);
+      }
+    }
+  });
+  db.ref('online_orders').orderByChild('dayId').equalTo(_today).on('child_removed', snap => {
+    if (onlineOrdersMap[snap.key]) {
+      pendingAlarmIds.delete(snap.key);
+      updateAlarmBanner();
+      delete onlineOrdersMap[snap.key]; fadeRemove(snap.key);
+    }
+  });
+}
+
+function flashTicket(id) {
+  setTimeout(() => {
+    const t = document.getElementById(`tk-${id}`);
+    if (t) { t.classList.add('flash'); setTimeout(() => t.classList.remove('flash'), 1800); }
+  }, 80);
+}
+function fadeRemove(id) {
+  const t = document.getElementById(`tk-${id}`);
+  if (t) {
+    t.style.transition = 'opacity .3s,transform .3s';
+    t.style.opacity = '0'; t.style.transform = 'scale(.95)';
+    setTimeout(() => { t.remove(); renderAll(); }, 320);
+  } else renderAll();
+}
+
+// ── AUTH ───────────────────────────────────────────
+// الـ routing بيتحكم فيه sessionStorage (مستقل لكل تاب) مش Firebase المشترك
+(function initAuth() {
+  const s = JSON.parse(sessionStorage.getItem('tc_pos_session') || 'null');
+  if (!s || !['kitchen','owner','cashier'].includes(s.role)) {
+    window.location.href = '/login/'; return;
+  }
+  currentRole = s.role;
+  let _listenersUp = false;
+  auth.onAuthStateChanged(async user => {
+    if (!user) {
+      // لو مفيش user خالص — logout حقيقي
+      if (_listenersUp) { sessionStorage.removeItem('tc_pos_session'); window.location.href = '/login/'; }
+      return;
+    }
+    if (_listenersUp) return; // منع duplicate listeners
+    _listenersUp = true;
+    // Server-side role verification (MED-01) — 5s timeout safety
+    try {
+      const _timeout = new Promise(res => setTimeout(() => res(null), 5000));
+      const _roleSnap = await Promise.race([db.ref(`users/${user.uid}/role`).once('value'), _timeout]);
+      const _role = _roleSnap && typeof _roleSnap.val === 'function' ? _roleSnap.val() : currentRole;
+      if (!['kitchen','owner','cashier'].includes(_role)) {
+        sessionStorage.removeItem('tc_pos_session');
+        await auth.signOut(); window.location.href = '/login/'; return;
+      }
+    } catch(e) { /* DB unreachable — fall through using session role */ }
+    currentUser = user;
+    setupPresence(user, currentRole);
+    // Auto-logout on inactivity (45 min)
+    if (typeof TC_CONFIG !== "undefined" && TC_CONFIG.FEATURES.AUTO_LOGOUT) {
+      setupInactivityTimer(TC_CONFIG.INACTIVITY_TIMEOUT_MS, doLogout);
+    }
+    listenOrders();
+  });
+})();
+function doLogout() {
+  if (currentUser) logActivity(currentUser.uid, currentRole||'kitchen', 'logout', {});
+  sessionStorage.removeItem('tc_pos_session');
+  auth.signOut().then(() => window.location.href = '/login/');
+}
+
+// ── MOBILE TABS ─────────────────────────────────
+let _mobCurrentTab = 'pending';
+function switchMobileTab(which) {
+  _mobCurrentTab = which;
+  const colP = document.getElementById('colPending');
+  const colR = document.getElementById('colPreparing');
+  const tabP = document.getElementById('mobTabPending');
+  const tabR = document.getElementById('mobTabPreparing');
+  if (which === 'pending') {
+    colP.classList.add('mob-active');   colR.classList.remove('mob-active');
+    tabP.classList.add('active');       tabR.classList.remove('active');
+  } else {
+    colR.classList.add('mob-active');   colP.classList.remove('mob-active');
+    tabR.classList.add('active');       tabP.classList.remove('active');
+  }
+}
+// Auto-switch to pending tab on mobile when new order arrives
+function _mobAutoSwitch() {
+  if (window.innerWidth < 768 && pendingAlarmIds.size > 0) {
+    switchMobileTab('pending');
+  }
+}
+// Mobile tab counts are now handled inside updateCounts() above
+</script>
+</body>
+</html>

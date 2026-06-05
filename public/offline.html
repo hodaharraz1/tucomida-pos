@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>غير متصل — TuComida</title>
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --green: #2A6041;
+      --green-mid: #357A52;
+      --gold: #E67B20;
+      --bg: #F4FBF4;
+      --text: #1A1A1A;
+      --muted: #666;
+    }
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .icon {
+      font-size: 80px;
+      margin-bottom: 24px;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+    .logo {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+    .logo span { color: var(--gold); }
+    h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--green);
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 340px;
+      margin-bottom: 32px;
+    }
+    .btn-retry {
+      display: inline-block;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: 24px;
+      padding: 14px 36px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s, transform 0.1s;
+      text-decoration: none;
+    }
+    .btn-retry:hover  { background: var(--green-mid); }
+    .btn-retry:active { transform: scale(0.97); }
+
+    .tips {
+      margin-top: 40px;
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px 24px;
+      border: 1.5px solid #C8E6C8;
+      max-width: 360px;
+      width: 100%;
+    }
+    .tips-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+    .tip {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      padding: 6px 0;
+      border-bottom: 1px solid #F0F0F0;
+      text-align: right;
+    }
+    .tip:last-child { border-bottom: none; }
+    .tip-icon { flex-shrink: 0; font-size: 16px; }
+
+    .footer-note {
+      margin-top: 32px;
+      font-size: 12px;
+      color: #B0B0B0;
+    }
+
+    @media (max-width: 400px) {
+      .icon { font-size: 60px; }
+      h1    { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="icon">📡</div>
+    <div class="logo">Tu<span>Comida</span></div>
+    <h1>لا يوجد اتصال بالإنترنت</h1>
+    <p>
+      يبدو إن اتصالك بالإنترنت منقطع.<br>
+      تحقق من الشبكة وحاول مرة ثانية.
+    </p>
+
+    <button class="btn-retry" onclick="retryConnection()">
+      🔄 &nbsp; إعادة المحاولة
+    </button>
+
+    <div class="tips">
+      <div class="tips-title">✅ جرب الآتي</div>
+      <div class="tip">
+        <span class="tip-icon">📶</span>
+        <span>تأكد من اتصالك بالـ Wi-Fi أو البيانات</span>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">✈️</span>
+        <span>تأكد إن وضع الطيران مش مفعّل</span>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">🔃</span>
+        <span>أعد تحميل الصفحة بعد الاتصال</span>
+      </div>
+    </div>
+
+    <div class="footer-note">TuComida POS — النظام سيعمل تلقائياً عند الاتصال</div>
+  </div>
+
+  <script>
+    function retryConnection() {
+      const btn = document.querySelector('.btn-retry');
+      btn.textContent = '⏳ جاري التحقق...';
+      btn.disabled = true;
+      setTimeout(() => window.location.reload(), 800);
+    }
+
+    /* Auto-retry when connection is restored */
+    window.addEventListener('online', () => {
+      document.querySelector('.icon').textContent = '✅';
+      document.querySelector('h1').textContent = 'تم الاتصال!';
+      setTimeout(() => window.location.reload(), 1000);
+    });
+  </script>
+</body>
+</html>
