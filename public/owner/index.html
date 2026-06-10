@@ -609,8 +609,8 @@
     .o-size-confirm{flex:2;padding:13px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-ar)}
 
     @media(max-width:767px){
-      .owner-order-layout{grid-template-columns:1fr;height:auto}
-      .owner-cart-col{max-height:55vh;min-height:200px}
+      .owner-order-layout{display:flex;flex-direction:column;height:auto}
+      .owner-cart-col{order:-1;max-height:55vh;min-height:180px}
       .o-cart-ftr{position:sticky;bottom:0;background:var(--card);z-index:2}
       .o-menu-grid{grid-template-columns:repeat(2,1fr)}
     }
