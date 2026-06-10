@@ -191,8 +191,10 @@
           && newData.child('action').val().length >= 1
           && newData.child('action').val().length <= 50
           && newData.child('role').val().matches(/^(waiter|cashier|owner|kitchen)$/)
+          && newData.child('role').val() === root.child('users').child(auth.uid).child('role').val()
           && newData.child('timestamp').isNumber()
-          && newData.child('userId').isString()"
+          && newData.child('userId').isString()
+          && newData.child('userId').val() === auth.uid"
       }
     },
 
@@ -208,7 +210,10 @@
           && newData.child('role').val().matches(/^(owner|cashier|waiter|kitchen)$/)
           && newData.child('email').isString()
           && newData.child('email').val().length >= 5
-          && newData.child('email').val().length <= 200"
+          && newData.child('email').val().length <= 200",
+        "role": {
+          ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'owner'"
+        }
       }
     },
 

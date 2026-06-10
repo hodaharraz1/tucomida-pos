@@ -51,14 +51,14 @@
     .ocounter{background:var(--orange);color:#fff;border-radius:8px;padding:4px 12px;
       font-size:13px;font-weight:800;letter-spacing:.3px}
     .spacer{flex:1}
-    .ibtn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border2);
+    .ibtn{width:44px;height:44px;border-radius:8px;border:1px solid var(--border2);
       background:var(--surface2);color:var(--muted);font-size:16px;cursor:pointer;
       display:flex;align-items:center;justify-content:center;transition:all .15s}
     .ibtn:hover{border-color:var(--orange);color:var(--orange)}
     .ibtn.on{border-color:var(--orange);color:var(--orange);background:rgba(232,123,32,.08)}
-    .tbtn{padding:7px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--surface2);
+    .tbtn{padding:10px 16px;min-height:44px;border-radius:8px;border:1px solid var(--border2);background:var(--surface2);
       color:var(--muted);font-size:12px;cursor:pointer;font-family:var(--font-ar);
-      transition:all .15s}
+      transition:all .15s;display:inline-flex;align-items:center;}
     .tbtn:hover{border-color:var(--border);color:var(--text)}
 
     /* ── ALARM BANNER ─────────────────────────── */
@@ -74,9 +74,9 @@
     @keyframes ablink{0%,100%{background:rgba(240,68,56,.1)}50%{background:rgba(240,68,56,.16)}}
     .alarm-text{font-size:14px;font-weight:800;color:var(--red);display:flex;align-items:center;gap:8px}
     .alarm-count{background:var(--red);color:#fff;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:900}
-    .btn-mute{padding:6px 14px;background:rgba(240,68,56,.15);border:1px solid rgba(240,68,56,.4);
+    .btn-mute{padding:10px 16px;min-height:44px;background:rgba(240,68,56,.15);border:1px solid rgba(240,68,56,.4);
       color:var(--red);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;
-      font-family:var(--font-ar);transition:background .15s}
+      font-family:var(--font-ar);transition:background .15s;display:inline-flex;align-items:center;}
     .btn-mute:hover{background:rgba(240,68,56,.25)}
 
     /* ── SPLIT LAYOUT ─────────────────────────── */
@@ -141,8 +141,8 @@
     .tk-timer.urgent{color:var(--red);animation:tblink .8s infinite}
     @keyframes tblink{0%,100%{opacity:1}50%{opacity:.4}}
     .tc-ctrl{display:flex;align-items:center;gap:4px}
-    .tcbtn{width:22px;height:22px;border-radius:5px;border:1px solid var(--border2);
-      background:var(--surface2);color:var(--muted);font-size:13px;cursor:pointer;
+    .tcbtn{width:44px;height:44px;border-radius:8px;border:1px solid var(--border2);
+      background:var(--surface2);color:var(--muted);font-size:18px;cursor:pointer;
       display:flex;align-items:center;justify-content:center;transition:all .1s}
     .tcbtn:hover{color:var(--text);background:var(--border2)}
     .tc-mins{font-size:10px;color:var(--muted);min-width:28px;text-align:center;font-family:var(--font-en)}
@@ -237,7 +237,7 @@
     .modal-bg.show{display:flex}
     .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;
       padding:28px 24px;max-width:380px;width:90%;text-align:center;
-      box-shadow:0 12px 40px rgba(0,0,0,.12)}
+      box-shadow:0 12px 40px rgba(0,0,0,.12);max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
     .modal-icon{font-size:44px;margin-bottom:12px}
     .modal-title{font-size:19px;font-weight:800;color:var(--text);margin-bottom:5px}
     .modal-sub{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.6}
@@ -380,9 +380,10 @@
       .rmbox{padding:24px 20px;max-width:95vw}
     }
 
-    /* Safe-area padding for content on iPhone */
-    .split-area{
-      padding-bottom:env(safe-area-inset-bottom,0);
+    /* Safe-area padding for content on iPhone — apply to scrollable col-body, not overflow:hidden container */
+    .split-area{ padding-bottom:0; }
+    @media (max-width: 767px) {
+      .col-body { padding-bottom:calc(10px + env(safe-area-inset-bottom,0px)); -webkit-overflow-scrolling:touch; }
     }
 
     /* ══ MOBILE UX OPTIMIZATION ══════════════════ */
@@ -393,8 +394,8 @@
     /* Checkboxes — bigger tap area */
     .ichk { width: 24px; height: 24px; border-radius: 6px; }
 
-    /* Timer control buttons — bigger touch targets */
-    .tcbtn { width: 28px; height: 28px; border-radius: 7px; }
+    /* Timer control buttons — proper touch targets */
+    .tcbtn { width: 44px; height: 44px; border-radius: 8px; }
 
     /* Prep time buttons — very comfortable for kitchen use */
     .prep-btn { min-height: 64px; touch-action: manipulation; }
@@ -412,8 +413,8 @@
     .btn-mute { min-height: 36px; padding: 8px 16px; }
 
     @media (max-width: 767px) {
-      /* Topbar — tighter but readable */
-      .ibtn { width: 36px; height: 36px; }
+      /* Topbar — keep 44px minimum */
+      .ibtn { width: 44px; height: 44px; }
 
       /* Mobile tabs — very large tap area for quick switching */
       .mob-tab { min-height: 50px; font-size: 14px; }
@@ -444,7 +445,9 @@
 
       /* Delivery info box */
       .delivery-box { margin: 0 10px 6px; padding: 10px 12px; }
-      .del-btn { min-height: 36px; padding: 6px 12px; font-size: 12px; }
+      .del-btn { min-height: 44px; padding: 8px 12px; font-size: 12px; }
+      .delivery-row { flex-wrap: wrap; }
+      .delivery-actions { width: 100%; justify-content: flex-end; margin-top: 4px; }
 
       /* Prevent iOS font auto-zoom */
       input, textarea { font-size: 16px !important; }
@@ -963,15 +966,17 @@ function buildDeliveryBox(o) {
   const name  = o.customerName  || '';
   const addr  = o.customerAddress || '';
   const cp    = phone.replace(/\D/g,'').replace(/^0/,'20');
+  const safePhone = escapeHtml(phone.replace(/[^0-9+\-\s()]/g,''));
+  const safeCp    = cp.replace(/\D/g,'');
 
   const phoneRow = phone ? `
     <div class="delivery-row">
       <span class="delivery-ico">📞</span>
       <span class="delivery-label">الموبايل</span>
-      <span class="delivery-val">${phone}</span>
+      <span class="delivery-val">${safePhone}</span>
       <div class="delivery-actions">
-        <a href="tel:${phone}" class="del-btn del-btn-call">📞 اتصال</a>
-        <a href="https://wa.me/${cp}" target="_blank" class="del-btn del-btn-wa">💬 واتساب</a>
+        <a href="tel:${safePhone}" class="del-btn del-btn-call">📞 اتصال</a>
+        <a href="https://wa.me/${safeCp}" target="_blank" class="del-btn del-btn-wa">💬 واتساب</a>
       </div>
     </div>` : '';
 
@@ -979,13 +984,13 @@ function buildDeliveryBox(o) {
     <div class="delivery-row">
       <span class="delivery-ico">👤</span>
       <span class="delivery-label">الاسم</span>
-      <span class="delivery-val">${name}</span>
+      <span class="delivery-val">${escapeHtml(name)}</span>
     </div>` : '';
 
   const addrRow = addr ? `
     <div class="delivery-addr">
       <span class="delivery-addr-ico">📍</span>
-      <span>${addr}</span>
+      <span>${escapeHtml(addr)}</span>
     </div>` : '';
 
   return `

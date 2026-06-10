@@ -7,7 +7,7 @@ redirects = []
 [functions."*"]
 
 [build]
-publish = "/Users/applecare/Desktop/tocomida web"
+publish = "netlify-site"
 publishOrigin = "default"
 
 [build.environment]
