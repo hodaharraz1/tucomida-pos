@@ -610,8 +610,15 @@
 
     @media(max-width:767px){
       .owner-order-layout{display:flex;flex-direction:column;height:auto}
+      /* Cart column sits above the menu on mobile */
       .owner-cart-col{order:-1;max-height:55vh;min-height:180px}
-      .o-cart-ftr{position:sticky;bottom:0;background:var(--card);z-index:2}
+      /* KEY FIX: allow o-cart-body to shrink below its content height so
+         the footer is never pushed out of the max-height container.
+         Without min-height:0, flex items default to min-height:auto which
+         prevents shrinking and causes overflow:hidden to clip the footer. */
+      .o-cart-body{min-height:0}
+      /* Keep footer always fully visible – never compress it */
+      .o-cart-ftr{flex-shrink:0}
       .o-menu-grid{grid-template-columns:repeat(2,1fr)}
     }
 
