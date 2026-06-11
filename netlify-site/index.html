@@ -144,6 +144,40 @@ body{font-family:'Nunito',sans-serif;background:#e8e8e8;min-height:100vh;display
 .tpill.active{background:#2d6a2d;color:#fff;border-color:#2d6a2d}
 .tpill-drinks{background:#e8f5ff;border-color:#b0d4f0;color:#1a6a9a}
 .tpill-drinks.active{background:#1a6a9a;color:#fff;border-color:#1a6a9a}
+/* ── PLANS PAGE ── */
+.plans-tab{display:none;padding:20px 16px 40px;width:100%}
+.plans-tab.active{display:block}
+.plan-card{background:#fff;border-radius:18px;padding:24px 20px;margin-bottom:16px;border:1.5px solid rgba(45,106,45,0.15);box-shadow:0 2px 12px rgba(45,106,45,0.07);position:relative;overflow:hidden}
+.plan-card.plan-featured{background:#2d6a2d;border-color:#2d6a2d;color:#fff}
+.plan-card.marinade-card{border-color:rgba(123,40,0,0.2)}
+.plan-card.marinade-featured{background:#7B2800;border-color:#7B2800;color:#fff}
+.plan-badge{position:absolute;top:16px;left:16px;background:#E67B20;color:#fff;font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px;letter-spacing:.5px}
+.plan-name{font-size:18px;font-weight:800;color:#1a3d1a;margin-bottom:16px}
+.plan-card.plan-featured .plan-name,.plan-card.marinade-featured .plan-name{color:#fff}
+.plan-features{list-style:none;margin-bottom:20px}
+.plan-features li{font-size:13px;color:#444;padding:4px 0;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.plan-features li::before{content:"✓";color:#2d6a2d;font-weight:800;flex-shrink:0;margin-top:1px}
+.plan-card.plan-featured .plan-features li,.plan-card.marinade-featured .plan-features li{color:rgba(255,255,255,0.9)}
+.plan-card.plan-featured .plan-features li::before,.plan-card.marinade-featured .plan-features li::before{color:rgba(255,255,255,0.7)}
+.plan-card.marinade-card:not(.marinade-featured) .plan-features li::before{color:#7B2800}
+.plan-divider{height:1px;background:rgba(45,106,45,0.1);margin:16px 0}
+.plan-card.plan-featured .plan-divider,.plan-card.marinade-featured .plan-divider{background:rgba(255,255,255,0.2)}
+.plan-price-row{display:flex;align-items:baseline;gap:6px;margin-bottom:16px}
+.plan-price-val{font-size:44px;font-weight:900;color:#2d6a2d;line-height:1;font-family:'Nunito',sans-serif}
+.plan-card.plan-featured .plan-price-val{color:#fff}
+.plan-card.marinade-card:not(.marinade-featured) .plan-price-val{color:#7B2800}
+.plan-card.marinade-featured .plan-price-val{color:#fff}
+.plan-price-cur{font-size:14px;font-weight:700;color:#888;align-self:flex-end;padding-bottom:6px}
+.plan-card.plan-featured .plan-price-cur,.plan-card.marinade-featured .plan-price-cur{color:rgba(255,255,255,0.7)}
+.plan-price-period{font-size:13px;color:#888;align-self:flex-end;padding-bottom:6px}
+.plan-card.plan-featured .plan-price-period,.plan-card.marinade-featured .plan-price-period{color:rgba(255,255,255,0.7)}
+.plan-cta{display:block;width:100%;padding:14px;text-align:center;border-radius:12px;font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;text-decoration:none;transition:opacity .15s;border:none}
+.plan-card:not(.plan-featured):not(.marinade-featured) .plan-cta{background:#2d6a2d;color:#fff}
+.plan-card.marinade-card:not(.marinade-featured) .plan-cta{background:#7B2800;color:#fff}
+.plan-card.plan-featured .plan-cta{background:#fff;color:#2d6a2d}
+.plan-card.marinade-featured .plan-cta{background:#fff;color:#7B2800}
+.plan-cta:active{opacity:.8}
+.plans-note{background:#fffbf0;border:1px solid rgba(200,133,10,0.3);border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:#7a4f00;font-weight:600;text-align:center;direction:rtl}
 </style>
 <style>
 /* ── IMPROVEMENTS: added styles only, nothing overridden destructively ── */
@@ -372,7 +406,173 @@ body{font-family:'Nunito',sans-serif;background:#e8e8e8;min-height:100vh;display
 
   </div>
 
+    <button class="link-btn" onclick="showPlans()" aria-label="Subscription Plans" style="background:linear-gradient(135deg,#e8f5e8,#fff);border:1.5px solid rgba(45,106,45,0.2)">
+      <span class="link-icon-wrap" style="background:#2d6a2d;color:#fff;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📦</span>
+      <span class="link-btn-text">Subscription Plans — اشتراكاتنا</span>
+      <span class="link-dots" aria-hidden="true">⋮</span>
+    </button>
+
   <div class="footer" role="contentinfo"><strong>Tucomida</strong> &nbsp;·&nbsp; fresh &amp; healthy &nbsp;·&nbsp; 2026</div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE 3 — PLANS
+══════════════════════════════════════ -->
+<div class="page" id="page-plans">
+<div class="card" style="padding-bottom:60px">
+
+  <div class="menu-header">
+    <div class="menu-header-inner">
+      <div class="menu-logo">
+        <img src="https://lh3.googleusercontent.com/pw/AP1GczPcYrOJk7QkzHHhViRMDRO8K4OJHqWGgGh3JFDB3L-PNtJe5A5bMHBWJ3bOmpjvBkG4yl3Bxhu9rNp4v6w7TkqcZnPH9S5oZ3ZHhf_I5FzW-mCKBw=w200" alt="TuComida" onerror="this.style.display='none'">
+        <div><div class="menu-logo-text">TuComida</div><div class="menu-logo-sub">Subscription Plans</div></div>
+      </div>
+      <button class="back-btn" onclick="backFromPlans()">← Back</button>
+    </div>
+    <div class="cat-nav">
+      <button class="cat-btn active" id="planTab-meals" onclick="showPlanTab('meals',this)">🥗 Meal Plans</button>
+      <button class="cat-btn" id="planTab-marinade" onclick="showPlanTab('marinade',this)">🔥 Marinade Plans</button>
+    </div>
+  </div>
+
+  <!-- ── MEAL PLANS ── -->
+  <div class="plans-tab active" id="plans-tab-meals">
+    <div style="text-align:center;padding:20px 0 8px">
+      <div style="font-size:20px;font-weight:800;color:#2d6a2d">🥗 Meal Subscription Plans</div>
+      <div style="font-size:12px;color:#888;margin-top:4px">Fresh · Healthy · Calculated Calories</div>
+    </div>
+
+    <!-- Weekly -->
+    <div class="plan-card" data-plan-id="weekly">
+      <div class="plan-name">Weekly Plan</div>
+      <ul class="plan-features">
+        <li>7 days of varied meals</li>
+        <li>Precisely calculated calories</li>
+        <li>2 side dishes of your choice (rice - salad - fries)</li>
+        <li>5 chicken meals (150g)</li>
+        <li>2 meat meals (150g)</li>
+      </ul>
+      <div class="plan-divider"></div>
+      <div class="plan-price-row">
+        <span class="plan-price-val" id="price-weekly">—</span>
+        <span class="plan-price-cur">EGP</span>
+        <span class="plan-price-period">/ week</span>
+      </div>
+      <a href="https://wa.me/201102708550?text=أريد%20الاشتراك%20في%20Weekly%20Plan" target="_blank" class="plan-cta">Subscribe Now</a>
+    </div>
+
+    <!-- Half Monthly (featured) -->
+    <div class="plan-card plan-featured" data-plan-id="monthly">
+      <div class="plan-badge">⭐ Most Popular</div>
+      <div class="plan-name" style="margin-top:10px">Half Monthly Plan</div>
+      <ul class="plan-features">
+        <li>15 days of varied meals</li>
+        <li>Precisely calculated calories</li>
+        <li>2 side dishes of your choice (rice - salad - fries)</li>
+        <li>11 chicken meals (150g)</li>
+        <li>4 meat meals (150g)</li>
+        <li>Can swap for any wrap, casdia or pasta</li>
+      </ul>
+      <div class="plan-divider"></div>
+      <div class="plan-price-row">
+        <span class="plan-price-val" id="price-monthly">—</span>
+        <span class="plan-price-cur">EGP</span>
+        <span class="plan-price-period">/ 15 days</span>
+      </div>
+      <a href="https://wa.me/201102708550?text=أريد%20الاشتراك%20في%20Half%20Monthly%20Plan" target="_blank" class="plan-cta">Start Subscribing</a>
+    </div>
+
+    <!-- Monthly -->
+    <div class="plan-card" data-plan-id="fitness">
+      <div class="plan-name">Monthly Plan</div>
+      <ul class="plan-features">
+        <li>30 days of varied meals</li>
+        <li>Precisely calculated calories</li>
+        <li>2 side dishes of your choice (rice - salad - fries)</li>
+        <li>22 chicken meals (150g)</li>
+        <li>8 meat meals (150g)</li>
+        <li>Can swap for any wrap, casdia or pasta</li>
+      </ul>
+      <div class="plan-divider"></div>
+      <div class="plan-price-row">
+        <span class="plan-price-val" id="price-fitness">—</span>
+        <span class="plan-price-cur">EGP</span>
+        <span class="plan-price-period">/ month</span>
+      </div>
+      <a href="https://wa.me/201102708550?text=أريد%20الاشتراك%20في%20Monthly%20Plan" target="_blank" class="plan-cta">Start Today</a>
+    </div>
+    <div class="plans-note">📞 للاستفسار والاشتراك تواصل معنا عبر واتساب</div>
+  </div>
+
+  <!-- ── MARINADE PLANS ── -->
+  <div class="plans-tab" id="plans-tab-marinade">
+    <div style="text-align:center;padding:20px 0 8px">
+      <div style="font-size:20px;font-weight:800;color:#7B2800">🔥 Marinade Plans</div>
+      <div style="font-size:12px;color:#888;margin-top:4px">Choose your meat — marinated with our secret blend</div>
+    </div>
+
+    <!-- Weekly Marinade -->
+    <div class="plan-card marinade-card" data-plan-id="tatbela-week">
+      <div class="plan-name" style="color:#7B2800">Weekly Marinade</div>
+      <ul class="plan-features">
+        <li>½ kg shish tawook</li>
+        <li>½ kg Hati kofta</li>
+        <li>1 kg Chicken Thighs for Grilling</li>
+      </ul>
+      <div class="plan-divider"></div>
+      <div class="plan-price-row">
+        <span class="plan-price-val" id="price-tatbela-week">—</span>
+        <span class="plan-price-cur">EGP</span>
+        <span class="plan-price-period">/ week</span>
+      </div>
+      <a href="https://wa.me/201102708550?text=أريد%20الاشتراك%20في%20Weekly%20Marinade" target="_blank" class="plan-cta">Ask on WhatsApp</a>
+    </div>
+
+    <!-- Half Monthly Marinade (featured) -->
+    <div class="plan-card marinade-card marinade-featured" data-plan-id="tatbela-2weeks">
+      <div class="plan-badge" style="background:#E67B20">💎 Best Value</div>
+      <div class="plan-name" style="margin-top:10px">Half Monthly Marinade</div>
+      <ul class="plan-features">
+        <li>1 kg Chicken Thighs for Grilling</li>
+        <li>½ kg shish tawook</li>
+        <li>½ kg Hati kofta</li>
+        <li>½ kg meat burger</li>
+        <li>½ kg fahita</li>
+      </ul>
+      <div class="plan-divider"></div>
+      <div class="plan-price-row">
+        <span class="plan-price-val" id="price-tatbela-2weeks">—</span>
+        <span class="plan-price-cur">EGP</span>
+        <span class="plan-price-period">/ half month</span>
+      </div>
+      <a href="https://wa.me/201102708550?text=أريد%20الاشتراك%20في%20Half%20Monthly%20Marinade" target="_blank" class="plan-cta">Ask on WhatsApp</a>
+    </div>
+
+    <!-- Monthly Marinade -->
+    <div class="plan-card marinade-card" data-plan-id="tatbela-month">
+      <div class="plan-name" style="color:#7B2800">Monthly Marinade</div>
+      <ul class="plan-features">
+        <li>1 kg special fillet</li>
+        <li>Turkish kofta (chicken)</li>
+        <li>1 kg chicken wings</li>
+        <li>½ kg shish tawook</li>
+        <li>½ kg Hati kofta</li>
+        <li>½ kg meat burger</li>
+        <li>½ kg fahita</li>
+        <li>½ kg meatballs</li>
+      </ul>
+      <div class="plan-divider"></div>
+      <div class="plan-price-row">
+        <span class="plan-price-val" id="price-tatbela-month">—</span>
+        <span class="plan-price-cur">EGP</span>
+        <span class="plan-price-period">/ month</span>
+      </div>
+      <a href="https://wa.me/201102708550?text=أريد%20الاشتراك%20في%20Monthly%20Marinade" target="_blank" class="plan-cta">Ask on WhatsApp</a>
+    </div>
+    <div class="plans-note">🥩 ready to grill at home anytime</div>
+  </div>
 
 </div>
 </div>
@@ -746,6 +946,22 @@ function showLinks(){
   document.getElementById('page-links').classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
 }
+function showPlans() {
+  document.getElementById('page-links').classList.remove('active');
+  document.getElementById('page-plans').classList.add('active');
+  window.scrollTo(0,0);
+}
+function backFromPlans() {
+  document.getElementById('page-plans').classList.remove('active');
+  document.getElementById('page-links').classList.add('active');
+  window.scrollTo(0,0);
+}
+function showPlanTab(tab, btn) {
+  document.querySelectorAll('.plans-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.cat-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('plans-tab-' + tab).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
 var currentCat = 'healthy';
 function showCat(cat){
   currentCat = cat;
@@ -852,6 +1068,18 @@ function showCopied(){
     try {
       if (!firebase.apps.length) firebase.initializeApp(CFG);
       var db = firebase.database();
+
+      /* ── Sync plan prices from settings/plans ── */
+      db.ref('settings/plans').on('value', function(snap) {
+        var plans = snap.val();
+        if (!plans) return;
+        Object.keys(plans).forEach(function(planId) {
+          var el = document.getElementById('price-' + planId);
+          if (el && plans[planId].price != null) {
+            el.textContent = Number(plans[planId].price).toLocaleString();
+          }
+        });
+      });
 
       db.ref('menu/items').on('value', function (snap) {
         var items = snap.val();
