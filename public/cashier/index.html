@@ -54,6 +54,8 @@
     .topbar { background:var(--surface); border-bottom:1px solid var(--border); padding:0 24px; height:56px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
     .topbar-title { font-size:17px; font-weight:700; color:var(--text); }
     .topbar-time { font-size:15px; color:var(--muted); font-variant-numeric:tabular-nums; font-family:var(--font-en); }
+    .cdot{width:7px;height:7px;border-radius:50%;background:#e74c3c;display:inline-block;vertical-align:middle;transition:background .3s}
+    .cdot.ok{background:#27ae60;box-shadow:0 0 5px rgba(39,174,96,.5)}
     .content { flex:1; overflow-y:auto; padding:20px 24px; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
 
     .screen { display:none; } .screen.active { display:block; }
@@ -486,7 +488,10 @@
 <div class="main">
   <div class="topbar">
     <div class="topbar-title" id="screenTitle">الأوردرات الحالية</div>
-    <div class="topbar-time" id="mainClock">--:--</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span id="connText" style="font-size:11px;color:var(--muted)"><span id="cdot" class="cdot"></span> <span id="connLabel">...</span></span>
+      <div class="topbar-time" id="mainClock">--:--</div>
+    </div>
   </div>
   <div class="content">
 
@@ -813,6 +818,7 @@ setInterval(() => {
     listenOnlineOrders();
     loadMenu();
     loadTables();
+    watchConnection('cdot', 'connLabel');
   });
 })();
 
@@ -1149,7 +1155,7 @@ function calcChange() {
 
 async function confirmPayment() {
   if (!payOrderId || !payOrderData) return;
-  const btn = document.querySelector('.btn-modal-confirm');
+  const btn = document.querySelector('#payModal .btn-modal-confirm');
   btn.disabled = true; btn.textContent = 'جاري الحفظ...';
 
   const discountVal  = parseFloat(document.getElementById('discountVal').value) || 0;
@@ -1644,8 +1650,12 @@ function closeCustomItemModal() {
 }
 function addCustomItem() {
   const name = document.getElementById('customItemName').value.trim();
-  const price = parseFloat(document.getElementById('customItemPrice').value) || 0;
+  const priceRaw = document.getElementById('customItemPrice').value.trim();
+  const price = parseFloat(priceRaw);
   if (!name) { document.getElementById('customItemName').focus(); return; }
+  if (priceRaw === '' || isNaN(price) || price < 0) {
+    showToast('أدخل سعراً صحيحاً'); document.getElementById('customItemPrice').focus(); return;
+  }
   cashierCart.push({ itemId: null, name, size: null, price, quantity: 1, notes: '' });
   renderCashierCart();
   closeCustomItemModal();

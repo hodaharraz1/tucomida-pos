@@ -1064,6 +1064,10 @@ function showCopied(){
     document.head.appendChild(s);
   }
 
+  function cleanName(s) {
+    return s.replace(/[\u{1F300}-\u{1FAFF}]|[\u{2600}-\u{27BF}]|[\u{FE00}-\u{FEFF}]|[️️]/gu, '').trim().toLowerCase();
+  }
+
   function syncPrices() {
     try {
       if (!firebase.apps.length) firebase.initializeApp(CFG);
@@ -1109,7 +1113,6 @@ function showCopied(){
         Object.keys(items).forEach(function (id) {
           var it = items[id];
           if (it.active === false) return;           // تجاهل الأصناف المعطّلة فقط
-          var cleanName = function(s){ return s.replace(/[\u{1F300}-\u{1FAFF}]|[\u{2600}-\u{27BF}]|[\u{FE00}-\u{FEFF}]|[️]/gu,'').trim().toLowerCase(); };
           if (it.name)   MAP[cleanName(it.name)]   = it;
           if (it.nameAr) MAP[cleanName(it.nameAr)] = it;
         });
@@ -1124,7 +1127,7 @@ function showCopied(){
           nameEl.childNodes.forEach(function (n) {
             if (n.nodeType === 3) raw += n.textContent;
           });
-          var key = raw.replace(/[\u{1F300}-\u{1FAFF}]|[\u{2600}-\u{27BF}]|[\u{FE00}-\u{FEFF}]|[️]/gu, '').trim().toLowerCase();
+          var key = cleanName(raw);
           var fb  = MAP[key];
           if (!fb) return;
 

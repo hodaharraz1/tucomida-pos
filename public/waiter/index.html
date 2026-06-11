@@ -1048,8 +1048,12 @@ function closeCustomItemModal() {
 }
 function addCustomItem() {
   const name = document.getElementById('customItemName').value.trim();
-  const price = parseFloat(document.getElementById('customItemPrice').value) || 0;
+  const priceRaw = document.getElementById('customItemPrice').value.trim();
+  const price = parseFloat(priceRaw);
   if (!name) { document.getElementById('customItemName').focus(); return; }
+  if (priceRaw === '' || isNaN(price) || price < 0) {
+    showToast('أدخل سعراً صحيحاً'); document.getElementById('customItemPrice').focus(); return;
+  }
   cart.push({ itemId: null, name, size: null, price, quantity: 1, notes: '' });
   renderCart();
   closeCustomItemModal();
