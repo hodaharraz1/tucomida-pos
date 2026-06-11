@@ -523,7 +523,10 @@
         <div class="cart-section">
           <div class="cart-header-c">
             <span>الأوردر</span>
-            <span id="cashierCartCount" style="background:#E8F5E9;color:var(--green-dark);padding:3px 10px;border-radius:20px;font-size:13px;">0</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <button onclick="openCustomItemModal()" style="padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-ar);color:var(--text)">+ مخصص</button>
+              <span id="cashierCartCount" style="background:#E8F5E9;color:var(--green-dark);padding:3px 10px;border-radius:20px;font-size:13px;">0</span>
+            </div>
           </div>
           <div class="cart-body-c" id="cashierCartBody"></div>
           <div class="cart-footer-c">
@@ -625,110 +628,25 @@
   </div>
 </div>
 
-<!-- ADD/EDIT ITEM MODAL -->
-<div class="menu-modal-bg" id="itemModal" onclick="if(event.target===this)closeItemModal()">
-  <div class="modal-sheet-menu">
-    <div class="modal-handle-menu"></div>
-    <div class="modal-title-menu" id="itemModalTitle">إضافة أيتم</div>
-    <div class="form-group-menu">
-      <label for="itemNameEn">الاسم بالإنجليزي</label>
-      <input type="text" class="form-input-menu" id="itemNameEn" placeholder="Crunchy Wrap">
+<!-- CUSTOM ITEM MODAL -->
+<div class="modal-bg" id="customItemModal" onclick="if(event.target===this)closeCustomItemModal()" style="display:none;align-items:center;justify-content:center;">
+  <div class="modal-box" style="max-width:340px;width:90%">
+    <div class="modal-title">➕ إضافة صنف مخصص</div>
+    <div style="margin-bottom:12px">
+      <label style="display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">اسم الصنف</label>
+      <input type="text" id="customItemName" placeholder="مثال: بروتين 200g..." maxlength="80"
+        style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:16px;outline:none;font-family:var(--font-ar);background:var(--surface2);box-sizing:border-box"
+        onkeydown="if(event.key==='Enter')document.getElementById('customItemPrice').focus()">
     </div>
-    <div class="form-group-menu">
-      <label for="itemNameAr">الاسم بالعربي</label>
-      <input type="text" class="form-input-menu" id="itemNameAr" placeholder="كرانشي راب">
+    <div style="margin-bottom:16px">
+      <label style="display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">السعر (ج)</label>
+      <input type="number" id="customItemPrice" placeholder="0" min="0" inputmode="decimal"
+        style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:16px;outline:none;font-family:var(--font-en);background:var(--surface2);box-sizing:border-box"
+        onkeydown="if(event.key==='Enter')addCustomItem()">
     </div>
-    <div class="form-group-menu">
-      <label for="itemDesc">الوصف (اختياري)</label>
-      <textarea class="form-input-menu" id="itemDesc" rows="2" placeholder="وصف الأيتم..."></textarea>
-    </div>
-    <div class="form-group-menu">
-      <label for="itemPriceType">نوع السعر</label>
-      <select class="form-input-menu" id="itemPriceType" onchange="togglePriceType()">
-        <option value="single">سعر واحد</option>
-        <option value="sizes">M / L</option>
-      </select>
-    </div>
-    <!-- Single price + nutrition -->
-    <div id="singlePriceDiv" class="form-group-menu">
-      <label for="itemSinglePrice">السعر (جنيه)</label>
-      <input type="number" class="form-input-menu" id="itemSinglePrice" placeholder="0" inputmode="numeric">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
-        <div>
-          <label for="itemCalories" style="font-size:11px">🔥 سعرات حرارية</label>
-          <input type="number" class="form-input-menu" id="itemCalories" placeholder="مثال: 450" inputmode="numeric" style="margin-top:4px">
-        </div>
-        <div>
-          <label for="itemProtein" style="font-size:11px">💪 بروتين (g)</label>
-          <input type="number" class="form-input-menu" id="itemProtein" placeholder="مثال: 35" inputmode="numeric" style="margin-top:4px">
-        </div>
-      </div>
-    </div>
-    <!-- M/L sizes + nutrition per size -->
-    <div id="sizesPriceDiv" style="display:none">
-      <div style="background:var(--surface2);border-radius:10px;padding:12px;margin-bottom:10px;border:1px solid var(--border)">
-        <div style="font-size:12px;font-weight:800;color:var(--primary-light);margin-bottom:8px;letter-spacing:.5px">⬤ حجم M</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-          <div>
-            <label for="itemPriceM" style="font-size:11px">💰 السعر</label>
-            <input type="number" class="form-input-menu" id="itemPriceM" placeholder="0" inputmode="numeric" style="margin-top:4px">
-          </div>
-          <div>
-            <label for="itemCalM" style="font-size:11px">🔥 سعرات</label>
-            <input type="number" class="form-input-menu" id="itemCalM" placeholder="0" inputmode="numeric" style="margin-top:4px">
-          </div>
-          <div>
-            <label for="itemProM" style="font-size:11px">💪 بروتين (g)</label>
-            <input type="number" class="form-input-menu" id="itemProM" placeholder="0" inputmode="numeric" style="margin-top:4px">
-          </div>
-        </div>
-      </div>
-      <div style="background:var(--surface2);border-radius:10px;padding:12px;margin-bottom:14px;border:1px solid var(--border)">
-        <div style="font-size:12px;font-weight:800;color:var(--primary);margin-bottom:8px;letter-spacing:.5px">⬤ حجم L</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-          <div>
-            <label for="itemPriceL" style="font-size:11px">💰 السعر</label>
-            <input type="number" class="form-input-menu" id="itemPriceL" placeholder="0" inputmode="numeric" style="margin-top:4px">
-          </div>
-          <div>
-            <label for="itemCalL" style="font-size:11px">🔥 سعرات</label>
-            <input type="number" class="form-input-menu" id="itemCalL" placeholder="0" inputmode="numeric" style="margin-top:4px">
-          </div>
-          <div>
-            <label for="itemProL" style="font-size:11px">💪 بروتين (g)</label>
-            <input type="number" class="form-input-menu" id="itemProL" placeholder="0" inputmode="numeric" style="margin-top:4px">
-          </div>
-        </div>
-      </div>
-      <input type="hidden" id="itemCalories_hidden">
-    </div>
-    <div class="form-group-menu">
-      <label for="itemCategory">الكاتيجوري</label>
-      <select class="form-input-menu" id="itemCategory"></select>
-    </div>
-    <div class="modal-btns-menu">
-      <button class="btn-menu-cancel" onclick="closeItemModal()">إلغاء</button>
-      <button class="btn-menu-save" onclick="saveItem()">حفظ ✓</button>
-    </div>
-  </div>
-</div>
-
-<!-- ADD CAT MODAL -->
-<div class="menu-modal-bg" id="catModal" onclick="if(event.target===this)closeCatModal()">
-  <div class="modal-sheet-menu">
-    <div class="modal-handle-menu"></div>
-    <div class="modal-title-menu">إضافة كاتيجوري</div>
-    <div class="form-group-menu">
-      <label for="catNameEn">الاسم بالإنجليزي</label>
-      <input type="text" class="form-input-menu" id="catNameEn" placeholder="Big Wrap">
-    </div>
-    <div class="form-group-menu">
-      <label for="catNameAr">الاسم بالعربي</label>
-      <input type="text" class="form-input-menu" id="catNameAr" placeholder="بيج راب">
-    </div>
-    <div class="modal-btns-menu">
-      <button class="btn-menu-cancel" onclick="closeCatModal()">إلغاء</button>
-      <button class="btn-menu-save" onclick="saveCat()">حفظ ✓</button>
+    <div class="modal-btn-row">
+      <button class="btn-modal-cancel" onclick="closeCustomItemModal()">إلغاء</button>
+      <button class="btn-modal-confirm" onclick="addCustomItem()">إضافة للأوردر ✓</button>
     </div>
   </div>
 </div>
@@ -756,10 +674,6 @@
     أونلاين
     <span class="nav-badge" id="mbn-online-badge" style="display:none">0</span>
   </button>
-  <button onclick="switchScreen('menu')" id="mbn-menu">
-    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M8.1 13.34l2.83-2.83L3.91 3.5c-1.56 1.56-1.56 4.09 0 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.2-1.1-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z"/></svg>
-    المنيو
-  </button>
 </nav>
 
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -773,7 +687,6 @@
 let currentUser = null;
 let currentRole = null;
 let menuData = { categories:{}, items:{} };
-let editingItemId = null;
 
 // Active orders (pending / preparing / ready only)
 let allOrders = {};         // dine-in + takeaway
@@ -1708,7 +1621,6 @@ function switchScreen(name) {
   document.getElementById('screenTitle').textContent = titles[name] || '';
   if (name === 'reports') loadReports();
   if (name === 'neworder') { cashierCart = []; renderCashierCart(); setCType('dine-in'); }
-  if (name === 'menu') { renderMenuManage(); listenPlans(); }
 }
 
 function showToast(msg) {
@@ -1721,313 +1633,23 @@ function showToast(msg) {
 // Set initial table-select visibility
 document.getElementById('cashierTableSelect').style.display = 'block';
 
-/* ═══════════════════════════════════════════════
-   MENU MANAGEMENT
-═══════════════════════════════════════════════ */
-function renderMenuManage() {
-  const container = document.getElementById('menuManageContainer');
-  const cats = Object.entries(menuData.categories||{}).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
-  if (!cats.length) {
-    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)"><span style="font-size:40px">🍽</span><p style="margin-top:8px">لا توجد كاتيجوريز — أضف كاتيجوري للبدء</p></div>';
-    return;
-  }
-  container.innerHTML = cats.map(([catId, cat]) => {
-    const catItems = Object.entries(menuData.items||{}).filter(([,i])=>i.categoryId===catId);
-    const activeItems = catItems.filter(([,i])=>i.active!==false).length;
-    const itemsHtml = catItems.map(([itemId, item]) => {
-      const priceText = item.sizes
-        ? Object.entries(item.sizes).map(([s,d])=>`${s}:${d.price}ج`).join(' / ')
-        : `${item.singlePrice||0} ج`;
-      const isActive = item.active !== false;
-      return `<div class="item-row-menu">
-        <div>
-          <div class="irm-name">${item.name||item.nameAr}${!isActive?' <span style="color:var(--red);font-size:11px;">(مخفي)</span>':''}</div>
-          <div class="irm-price">${priceText}</div>
-        </div>
-        <div class="irm-right">
-          <button class="btn-edit-item" onclick="openEditItem('${itemId}')">✏️</button>
-          <button class="btn-edit-item" onclick="toggleItem('${itemId}',${isActive})" style="${isActive?'color:var(--primary-light)':'color:var(--red)'}">
-            ${isActive?'إخفاء':'إظهار'}
-          </button>
-        </div>
-      </div>`;
-    }).join('');
-    return `<div class="cat-section">
-      <div class="cat-row-owner">
-        <div>
-          <div class="cat-row-name">${cat.name||cat.nameAr}</div>
-          <div style="font-size:12px;color:var(--muted);">${activeItems}/${catItems.length} أيتم نشط</div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <button class="btn-add-small" style="font-size:11px;padding:6px 10px;" onclick="openAddItem('${catId}')">+ أيتم</button>
-          <button class="cat-toggle ${cat.active!==false?'on':'off'}" onclick="toggleCat('${catId}',${cat.active!==false})">
-            ${cat.active!==false?'نشط':'موقوف'}
-          </button>
-        </div>
-      </div>
-      ${itemsHtml || '<div style="padding:12px 16px;font-size:13px;color:var(--muted);">لا توجد أيتمز — اضغط + أيتم</div>'}
-    </div>`;
-  }).join('');
+function openCustomItemModal() {
+  document.getElementById('customItemName').value = '';
+  document.getElementById('customItemPrice').value = '';
+  document.getElementById('customItemModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('customItemName').focus(), 100);
 }
-
-async function toggleCat(catId, isActive) {
-  await db.ref(`menu/categories/${catId}`).update({ active: !isActive });
-  showToast(isActive ? 'تم إيقاف الكاتيجوري' : 'تم تفعيل الكاتيجوري ✓');
+function closeCustomItemModal() {
+  document.getElementById('customItemModal').style.display = 'none';
 }
-
-async function toggleItem(itemId, isActive) {
-  await db.ref(`menu/items/${itemId}`).update({ active: !isActive });
-  showToast(isActive ? '🔴 مش متاح' : '🟢 متاح دلوقتي ✓');
-}
-
-/* ── PLANS MANAGEMENT ── */
-const PLAN_DEFS = [
-  { id:'weekly',        nameAr:'الاشتراك الأسبوعي',       nameEn:'Weekly Plan',           period:'/ أسبوع',    color:'var(--primary-light)' },
-  { id:'monthly',       nameAr:'الاشتراك نصف الشهري',     nameEn:'Half Monthly Plan',     period:'/ 15 يوم',   color:'var(--primary-light)' },
-  { id:'fitness',       nameAr:'الاشتراك الشهري',          nameEn:'Monthly Plan',          period:'/ شهر',      color:'var(--primary-light)' },
-  { id:'tatbela-week',  nameAr:'تتبيلة الأسبوع',           nameEn:'Weekly Marinade',        period:'/ أسبوع',    color:'#E67B20' },
-  { id:'tatbela-2weeks',nameAr:'تتبيلة نصف الشهري',       nameEn:'Half Monthly Marinade',  period:'/ نصف شهر',  color:'#7B2800' },
-  { id:'tatbela-month', nameAr:'تتبيلة الشهري',            nameEn:'Monthly Marinade',       period:'/ شهر',      color:'#7B2800' },
-];
-let plansData = {};
-let _plansListening = false;
-
-function listenPlans() {
-  if (_plansListening) return;
-  _plansListening = true;
-  db.ref('settings/plans').on('value', snap => {
-    plansData = snap.val() || {};
-    renderPlansManage();
-  });
-}
-
-function renderPlansManage() {
-  const grid = document.getElementById('plansManageGrid');
-  if (!grid) return;
-  grid.innerHTML = PLAN_DEFS.map(p => {
-    const current = plansData[p.id]?.price ?? '—';
-    return `
-    <div style="background:var(--surface);border-radius:12px;border:1px solid var(--border);padding:16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-      <div>
-        <div style="font-size:15px;font-weight:700;color:var(--text)">${p.nameAr}</div>
-        <div style="font-size:12px;color:var(--muted)">${p.nameEn} · ${p.period}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <div style="font-size:22px;font-weight:900;color:${p.color};font-family:var(--font-en);min-width:60px;text-align:left">${Number(current) >= 1000 ? Number(current).toLocaleString() : current} <span style="font-size:12px">ج</span></div>
-        <input type="number" id="plan-inp-${p.id}" value="${plansData[p.id]?.price ?? ''}" placeholder="السعر..."
-          style="width:100px;padding:9px 10px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;outline:none;font-family:var(--font-en);background:var(--surface2);min-height:42px"
-          min="0" inputmode="numeric"
-          onkeydown="if(event.key==='Enter')savePlanPrice('${p.id}')">
-        <button onclick="savePlanPrice('${p.id}')" style="padding:9px 16px;background:var(--primary);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:42px">حفظ</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-async function savePlanPrice(planId) {
-  const inp = document.getElementById(`plan-inp-${planId}`);
-  const price = parseFloat(inp?.value) || 0;
-  if (price < 0) { showToast('السعر يجب أن يكون أكبر من صفر'); return; }
-  try {
-    await db.ref(`settings/plans/${planId}`).update({ price, updatedAt: Date.now(), updatedBy: currentUser.uid });
-    showToast(`✅ تم تحديث سعر الباقة — ${price.toLocaleString()} ج`);
-  } catch(e) { showToast('خطأ في الحفظ'); }
-}
-
-function switchMenuTab(tab) {
-  document.getElementById('menuTab-edit').classList.toggle('active', tab==='edit');
-  document.getElementById('menuTab-avail').classList.toggle('active', tab==='avail');
-  document.getElementById('menuTab-plans').classList.toggle('active', tab==='plans');
-  document.getElementById('menuPane-edit').style.display  = tab==='edit'  ? '' : 'none';
-  document.getElementById('menuPane-avail').style.display = tab==='avail' ? '' : 'none';
-  document.getElementById('menuPane-plans').style.display = tab==='plans' ? '' : 'none';
-  if (tab==='avail') renderAvailabilityScreen();
-}
-
-function renderAvailabilityScreen() {
-  const cats = Object.entries(menuData.categories||{})
-    .filter(([,c])=>c.active!==false)
-    .sort((a,b)=>(a[1].order||0)-(b[1].order||0));
-  const allItems = Object.entries(menuData.items||{});
-  const totalActive = allItems.filter(([,i])=>i.active!==false).length;
-  const totalUnavail = allItems.filter(([,i])=>i.active===false).length;
-  document.getElementById('availSummary').innerHTML = `
-    <div class="avail-badge ok">✅ ${totalActive} صنف متاح</div>
-    ${totalUnavail > 0 ? `<div class="avail-badge warn">🔴 ${totalUnavail} غير متاح</div>` : ''}
-    <button style="margin-right:auto;padding:8px 14px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"
-      onclick="markAllAvailable()">✅ كل حاجة متاحة</button>`;
-  const container = document.getElementById('availContainer');
-  if (!cats.length) {
-    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)"><span style="font-size:40px">🍽</span><p style="margin-top:8px">لا توجد أصناف في المنيو</p></div>';
-    return;
-  }
-  container.innerHTML = cats.map(([catId, cat]) => {
-    const catItems = allItems.filter(([,i])=>i.categoryId===catId);
-    if (!catItems.length) return '';
-    const itemsHtml = catItems.map(([itemId, item]) => {
-      const isAvail = item.active !== false;
-      const priceText = item.sizes
-        ? 'من ' + Math.min(...Object.values(item.sizes).map(s=>s.price)) + ' ج'
-        : (item.singlePrice||0) + ' ج';
-      return `
-        <div class="avail-item ${isAvail?'':'unavailable'}" id="avail-item-${itemId}">
-          <span class="avail-item-icon">🍽</span>
-          <div class="avail-item-info">
-            <div class="avail-item-name">
-              ${item.name||item.nameAr}
-              ${!isAvail ? '<span class="avail-item-tag">مش متاح</span>' : ''}
-            </div>
-            <div class="avail-item-price">${priceText}</div>
-          </div>
-          <label class="toggle-wrap" title="${isAvail?'اضغط للإخفاء':'اضغط للإظهار'}">
-            <input type="checkbox" class="toggle-inp" ${isAvail?'checked':''}
-              onchange="toggleAvailItem('${itemId}', this.checked)">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>`;
-    }).join('');
-    const catAvail = catItems.filter(([,i])=>i.active!==false).length;
-    return `
-      <div class="avail-cat-title">
-        ${cat.name||cat.nameAr}
-        <span style="font-weight:600;color:${catAvail===catItems.length?'var(--primary-light)':'#EF5350'}">
-          ${catAvail}/${catItems.length}
-        </span>
-      </div>
-      ${itemsHtml}`;
-  }).join('');
-}
-
-async function toggleAvailItem(itemId, isAvail) {
-  await db.ref(`menu/items/${itemId}`).update({ active: isAvail });
-  showToast(isAvail ? '🟢 متاح دلوقتي' : '🔴 اتشال من المنيو');
-  const card = document.getElementById(`avail-item-${itemId}`);
-  if (card) card.classList.toggle('unavailable', !isAvail);
-}
-
-async function markAllAvailable() {
-  const updates = {};
-  Object.entries(menuData.items||{}).forEach(([id]) => { updates[`menu/items/${id}/active`] = true; });
-  await db.ref().update(updates);
-  showToast('✅ كل الأصناف متاحة دلوقتي');
-}
-
-function openAddItem(catId) {
-  editingItemId = null;
-  document.getElementById('itemModalTitle').textContent = 'إضافة أيتم';
-  document.getElementById('itemNameEn').value = '';
-  document.getElementById('itemNameAr').value = '';
-  document.getElementById('itemDesc').value = '';
-  ['itemSinglePrice','itemPriceM','itemPriceL','itemCalories','itemProtein',
-   'itemCalM','itemProM','itemCalL','itemProL'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.value = '';
-  });
-  document.getElementById('itemPriceType').value = 'single';
-  togglePriceType();
-  populateCatSelect(catId);
-  document.getElementById('itemModal').classList.add('open');
-}
-
-function openEditItem(itemId) {
-  const item = menuData.items[itemId];
-  if (!item) return;
-  editingItemId = itemId;
-  document.getElementById('itemModalTitle').textContent = 'تعديل أيتم';
-  document.getElementById('itemNameEn').value   = item.name || '';
-  document.getElementById('itemNameAr').value   = item.nameAr || '';
-  document.getElementById('itemDesc').value     = item.description || '';
-  if (item.sizes) {
-    document.getElementById('itemPriceType').value = 'sizes';
-    document.getElementById('itemPriceM').value = item.sizes.M?.price    || '';
-    document.getElementById('itemCalM').value   = item.sizes.M?.calories || '';
-    document.getElementById('itemProM').value   = item.sizes.M?.protein  || '';
-    document.getElementById('itemPriceL').value = item.sizes.L?.price    || '';
-    document.getElementById('itemCalL').value   = item.sizes.L?.calories || '';
-    document.getElementById('itemProL').value   = item.sizes.L?.protein  || '';
-  } else {
-    document.getElementById('itemPriceType').value   = 'single';
-    document.getElementById('itemSinglePrice').value = item.singlePrice || '';
-    const calEl = document.getElementById('itemCalories'); if (calEl) calEl.value = item.calories || '';
-    const proEl = document.getElementById('itemProtein');  if (proEl) proEl.value = item.protein  || '';
-  }
-  togglePriceType();
-  populateCatSelect(item.categoryId);
-  document.getElementById('itemModal').classList.add('open');
-}
-
-function populateCatSelect(selectedCatId) {
-  const sel = document.getElementById('itemCategory');
-  sel.innerHTML = '';
-  Object.entries(menuData.categories||{}).forEach(([id,c]) => {
-    const opt = document.createElement('option');
-    opt.value = id; opt.textContent = c.name || c.nameAr;
-    if (id === selectedCatId) opt.selected = true;
-    sel.appendChild(opt);
-  });
-}
-
-function togglePriceType() {
-  const t = document.getElementById('itemPriceType').value;
-  document.getElementById('singlePriceDiv').style.display = t==='single' ? 'block' : 'none';
-  document.getElementById('sizesPriceDiv').style.display  = t==='sizes'  ? 'block' : 'none';
-}
-
-async function saveItem() {
-  const name      = document.getElementById('itemNameEn').value.trim();
-  const nameAr    = document.getElementById('itemNameAr').value.trim();
-  const desc      = document.getElementById('itemDesc').value.trim();
-  const priceType = document.getElementById('itemPriceType').value;
-  const catId     = document.getElementById('itemCategory').value;
-  if (!name || !catId) { showToast('⚠️ الاسم والكاتيجوري مطلوبان'); return; }
-  const itemData = { name, nameAr, description:desc, categoryId:catId, active:true };
-  if (priceType === 'single') {
-    itemData.singlePrice = parseFloat(document.getElementById('itemSinglePrice').value) || 0;
-    const calEl = document.getElementById('itemCalories');
-    const proEl = document.getElementById('itemProtein');
-    itemData.calories = calEl ? (parseInt(calEl.value) || null) : null;
-    itemData.protein  = proEl ? (parseFloat(proEl.value) || null) : null;
-    itemData.sizes    = null;
-  } else {
-    itemData.singlePrice = null;
-    itemData.calories    = null;
-    itemData.sizes = {
-      M:{ price:    parseFloat(document.getElementById('itemPriceM').value)||0,
-          calories: parseInt(document.getElementById('itemCalM').value)||null,
-          protein:  parseFloat(document.getElementById('itemProM').value)||null },
-      L:{ price:    parseFloat(document.getElementById('itemPriceL').value)||0,
-          calories: parseInt(document.getElementById('itemCalL').value)||null,
-          protein:  parseFloat(document.getElementById('itemProL').value)||null }
-    };
-  }
-  try {
-    if (editingItemId) {
-      await db.ref(`menu/items/${editingItemId}`).update(itemData);
-      showToast('✅ تم تحديث الأيتم');
-    } else {
-      await db.ref('menu/items').push(itemData);
-      showToast('✅ تم إضافة الأيتم');
-    }
-    closeItemModal();
-  } catch(e) { showToast('خطأ في الحفظ'); }
-}
-
-function closeItemModal() { document.getElementById('itemModal').classList.remove('open'); }
-function closeCatModal()  { document.getElementById('catModal').classList.remove('open'); }
-
-function openAddCatModal() {
-  document.getElementById('catNameEn').value = '';
-  document.getElementById('catNameAr').value = '';
-  document.getElementById('catModal').classList.add('open');
-}
-
-async function saveCat() {
-  const name   = document.getElementById('catNameEn').value.trim();
-  const nameAr = document.getElementById('catNameAr').value.trim();
-  if (!name) { showToast('⚠️ أدخل اسم الكاتيجوري'); return; }
-  const order = Object.keys(menuData.categories||{}).length;
-  await db.ref('menu/categories').push({ name, nameAr, order, active:true });
-  showToast('✅ تم إضافة الكاتيجوري');
-  closeCatModal();
+function addCustomItem() {
+  const name = document.getElementById('customItemName').value.trim();
+  const price = parseFloat(document.getElementById('customItemPrice').value) || 0;
+  if (!name) { document.getElementById('customItemName').focus(); return; }
+  cashierCart.push({ itemId: null, name, size: null, price, quantity: 1, notes: '' });
+  renderCashierCart();
+  closeCustomItemModal();
+  showToast(`تمت إضافة "${name}" ✓`);
 }
 </script>
 </body>
