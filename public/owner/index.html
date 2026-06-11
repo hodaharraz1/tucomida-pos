@@ -2244,9 +2244,25 @@ const PLAN_DEFS = [
 
 let plansData = {};
 
+const PLAN_DEFAULT_COMPONENTS = {
+  'weekly':        ['7 days of varied meals','Precisely calculated calories','2 side dishes of your choice (rice - salad - fries)','5 chicken meals (150g)','2 meat meals (150g)'],
+  'monthly':       ['15 days of varied meals','Precisely calculated calories','2 side dishes of your choice (rice - salad - fries)','11 chicken meals (150g)','4 meat meals (150g)','Can swap for any wrap, casdia or pasta'],
+  'fitness':       ['30 days of varied meals','Precisely calculated calories','2 side dishes of your choice (rice - salad - fries)','22 chicken meals (150g)','8 meat meals (150g)','Can swap for any wrap, casdia or pasta'],
+  'tatbela-week':  ['½ kg shish tawook','½ kg Hati kofta','1 kg Chicken Thighs for Grilling'],
+  'tatbela-2weeks':['1 kg Chicken Thighs for Grilling','½ kg shish tawook','½ kg Hati kofta','½ kg meat burger','½ kg fahita'],
+  'tatbela-month': ['1 kg special fillet','Turkish kofta (chicken)','1 kg chicken wings','½ kg shish tawook','½ kg Hati kofta','½ kg meat burger','½ kg fahita','½ kg meatballs'],
+};
+
 function listenPlans() {
   db.ref('settings/plans').on('value', snap => {
     plansData = snap.val() || {};
+    /* Seed default components for any plan that has none yet */
+    PLAN_DEFS.forEach(p => {
+      if (!Array.isArray(plansData[p.id]?.components) || plansData[p.id].components.length === 0) {
+        const defaults = PLAN_DEFAULT_COMPONENTS[p.id];
+        if (defaults) db.ref(`settings/plans/${p.id}/components`).set(defaults).catch(()=>{});
+      }
+    });
     renderPlansManage();
   });
 }
