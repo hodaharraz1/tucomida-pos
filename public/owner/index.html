@@ -609,15 +609,15 @@
     .o-size-confirm{flex:2;padding:13px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-ar)}
 
     @media(max-width:767px){
+      /* Extra bottom padding so content can scroll above the fixed bottom nav */
+      .main-content{padding-bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+      /* Stack columns vertically */
       .owner-order-layout{display:flex;flex-direction:column;height:auto}
-      /* Cart column sits above the menu on mobile */
-      .owner-cart-col{order:-1;max-height:55vh;min-height:180px}
-      /* KEY FIX: allow o-cart-body to shrink below its content height so
-         the footer is never pushed out of the max-height container.
-         Without min-height:0, flex items default to min-height:auto which
-         prevents shrinking and causes overflow:hidden to clip the footer. */
-      .o-cart-body{min-height:0}
-      /* Keep footer always fully visible – never compress it */
+      /* Cart column appears ABOVE menu on mobile */
+      .owner-cart-col{order:-1;overflow:visible;max-height:none}
+      /* Cart body scrolls internally — footer is never clipped */
+      .o-cart-body{max-height:35vh;overflow-y:auto}
+      /* Footer (with submit button) is never compressed or hidden */
       .o-cart-ftr{flex-shrink:0}
       .o-menu-grid{grid-template-columns:repeat(2,1fr)}
     }
