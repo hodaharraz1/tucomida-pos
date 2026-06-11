@@ -29,8 +29,6 @@
       --text:#0D1A0D; --text2:#374937; --muted:#6B7A6B; --muted2:#9AAA9A;
       --sidebar-bg:#0F2E15; --sidebar-border:rgba(255,255,255,.07);
       --font-ar:'Cairo',sans-serif; --font-en:'Inter',sans-serif;
-      --card:var(--surface); --card2:var(--surface2);
-      --green:var(--primary-light); --green-dark:var(--primary-mid); --green-light:var(--primary-light);
     }
     body { background:var(--bg); color:var(--text); font-family:var(--font-ar); display:flex; height:100vh; overflow:hidden; }
 
@@ -442,35 +440,6 @@
       .mic-price { font-size: 12px; }
     }
 
-    /* ── MENU MANAGEMENT ─────────────────────────── */
-    .menu-cat-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-    .sec-title-c{font-size:16px;font-weight:800;color:var(--text);margin-bottom:0}
-    .cat-section{background:var(--surface);border-radius:14px;margin-bottom:10px;border:1px solid var(--border);overflow:hidden}
-    .cat-row-owner{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid var(--border);background:var(--surface2)}
-    .cat-row-name{font-size:14px;font-weight:700}
-    .cat-toggle{font-size:12px;padding:8px 13px;min-height:36px;border-radius:20px;font-weight:700;border:none;font-family:var(--font-ar);display:inline-flex;align-items:center}
-    .cat-toggle.on{background:rgba(67,160,71,.15);color:var(--primary-light)}
-    .cat-toggle.off{background:rgba(229,57,53,.12);color:#EF5350}
-    .item-row-menu{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border)}
-    .item-row-menu:last-child{border-bottom:none}
-    .irm-name{font-size:13px;font-weight:600;color:var(--text)}
-    .irm-price{font-size:11px;color:var(--primary-light);font-weight:700;margin-top:2px;font-family:var(--font-en)}
-    .avail-tabs-m{display:flex;gap:0;margin-bottom:14px;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
-    .avail-tab-m{flex:1;padding:10px;font-size:12px;font-weight:700;text-align:center;cursor:pointer;background:var(--surface);color:var(--muted);border:none;font-family:var(--font-ar);transition:all .15s}
-    .avail-tab-m.active{background:var(--surface2);color:var(--primary);border-bottom:2px solid var(--primary)}
-    .avail-summary-m{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-    .avail-badge-m{padding:7px 13px;border-radius:10px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px}
-    .avail-badge-m.ok{background:rgba(67,160,71,.12);color:var(--primary-light)}
-    .avail-badge-m.warn{background:rgba(229,57,53,.1);color:#EF5350}
-    .avail-cat-title-m{font-size:11px;font-weight:800;color:var(--muted);padding:10px 0 6px;letter-spacing:.5px;text-transform:uppercase}
-    .avail-item-m{display:flex;align-items:center;gap:11px;padding:12px 14px;background:var(--surface);border-radius:10px;margin-bottom:7px;border:1px solid var(--border);transition:all .2s}
-    .avail-item-m.unavailable{opacity:.5;border-color:rgba(229,57,53,.25);background:rgba(229,57,53,.03)}
-    .toggle-wrap{position:relative;flex-shrink:0}
-    .toggle-inp{opacity:0;width:0;height:0;position:absolute}
-    .toggle-slider{display:block;width:46px;height:25px;background:var(--border2);border-radius:13px;cursor:pointer;transition:background .22s;position:relative}
-    .toggle-slider::after{content:'';position:absolute;width:19px;height:19px;border-radius:50%;background:#fff;top:3px;right:3px;transition:transform .22s;box-shadow:0 1px 4px rgba(0,0,0,.25)}
-    .toggle-inp:checked + .toggle-slider{background:var(--primary-light)}
-    .toggle-inp:checked + .toggle-slider::after{transform:translateX(-21px)}
   </style>
 </head>
 <body>
@@ -509,10 +478,6 @@
       <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg>
       أونلاين
       <span class="nav-badge" id="onlineBadge" style="display:none">0</span>
-    </div>
-    <div class="nav-item" id="nav-menu" onclick="switchScreen('menu')">
-      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M8.1 13.34l2.83-2.83L3.91 3.5c-1.56 1.56-1.56 4.09 0 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.2-1.1-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z"/></svg>
-      المنيو
     </div>
   </div>
   <div class="sidebar-bottom">
@@ -611,27 +576,6 @@
       <div class="orders-grid-pos" id="onlineOrdersGrid"></div>
     </div>
 
-    <!-- MENU SCREEN (read-only) -->
-    <div class="screen" id="screen-menu">
-      <div class="avail-tabs-m">
-        <button class="avail-tab-m active" id="menuTabC-edit" onclick="switchMenuTabC('edit')">📋 المنيو</button>
-        <button class="avail-tab-m" id="menuTabC-avail" onclick="switchMenuTabC('avail')">🟢 توفر الأيتمز</button>
-        <button class="avail-tab-m" id="menuTabC-plans" onclick="switchMenuTabC('plans')">📦 الباقات</button>
-      </div>
-      <div id="menuPaneC-edit">
-        <div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:12px">إدارة المنيو</div>
-        <div id="menuManageContainerC"></div>
-      </div>
-      <div id="menuPaneC-avail" style="display:none">
-        <div class="avail-summary-m" id="availSummaryC"></div>
-        <div id="availContainerC"></div>
-      </div>
-      <div id="menuPaneC-plans" style="display:none">
-        <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px">📦 الباقات والاشتراكات</div>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:16px">الأسعار والمكونات المحددة من الأونر</p>
-        <div id="plansManageGridC"></div>
-      </div>
-    </div>
 
   </div>
 </div>
@@ -735,10 +679,6 @@
     <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg>
     أونلاين
     <span class="nav-badge" id="mbn-online-badge" style="display:none">0</span>
-  </button>
-  <button onclick="switchScreen('menu')" id="mbn-menu">
-    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M8.1 13.34l2.83-2.83L3.91 3.5c-1.56 1.56-1.56 4.09 0 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.2-1.1-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z"/></svg>
-    المنيو
   </button>
 </nav>
 
@@ -878,6 +818,7 @@ setInterval(() => {
     listenDineOrders();
     listenOnlineOrders();
     loadMenu();
+    loadPlans();
     loadTables();
     watchConnection('cdot', 'connLabel');
   });
@@ -1404,6 +1345,12 @@ function renderCashierCats() {
     btn.onclick = function(){ selectCashierCat(id, this); };
     tabs.appendChild(btn);
   });
+  const plansBtn = document.createElement('button');
+  plansBtn.className = 'cat-tab';
+  plansBtn.id = 'cat-tab-plans';
+  plansBtn.textContent = '📦 الباقات';
+  plansBtn.onclick = function(){ selectCashierCat('__plans__', this); };
+  tabs.appendChild(plansBtn);
 }
 
 function selectCashierCat(catId, btn) {
@@ -1688,7 +1635,6 @@ function switchScreen(name) {
   document.getElementById('screenTitle').textContent = titles[name] || '';
   if (name === 'reports') loadReports();
   if (name === 'neworder') { cashierCart = []; renderCashierCart(); setCType('dine-in'); }
-  if (name === 'menu') { renderMenuManageC(); if (!plansListeningC) listenPlansC(); }
 }
 
 function showToast(msg) {
@@ -1725,166 +1671,30 @@ function addCustomItem() {
 }
 
 /* ═══════════════════════════════════════════════
-   MENU MANAGEMENT (READ-ONLY + AVAILABILITY)
+   PLANS (الباقات والتتبيلات) — ORDER MENU
 ═══════════════════════════════════════════════ */
-function renderMenuManageC() {
-  const container = document.getElementById('menuManageContainerC');
-  const cats = Object.entries(menuData.categories||{}).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
-  if (!cats.length) {
-    container.innerHTML = '<div style="text-align:center;padding:50px 20px;color:var(--muted)">🍽 لا توجد أصناف في المنيو</div>';
-    return;
-  }
-  container.innerHTML = cats.map(([catId, cat]) => {
-    const catItems = Object.entries(menuData.items||{}).filter(([,i])=>i.categoryId===catId);
-    const activeItems = catItems.filter(([,i])=>i.active!==false).length;
-    const itemsHtml = catItems.map(([, item]) => {
-      const priceText = item.sizes
-        ? Object.entries(item.sizes).map(([s,d])=>`${s}:${d.price}ج`).join(' / ')
-        : `${item.singlePrice||0} ج`;
-      const isActive = item.active !== false;
-      return `<div class="item-row-menu">
-        <div>
-          <div class="irm-name">${item.name||item.nameAr}${!isActive?' <span style="color:#EF5350;font-size:11px;">(مخفي)</span>':''}</div>
-          <div class="irm-price">${priceText}</div>
-        </div>
-      </div>`;
-    }).join('');
-    return `<div class="cat-section">
-      <div class="cat-row-owner">
-        <div>
-          <div class="cat-row-name">${cat.name||cat.nameAr}</div>
-          <div style="font-size:12px;color:var(--muted)">${activeItems}/${catItems.length} أيتم نشط</div>
-        </div>
-        <span class="cat-toggle ${cat.active!==false?'on':'off'}">${cat.active!==false?'نشط':'موقوف'}</span>
-      </div>
-      ${itemsHtml || '<div style="padding:12px 16px;font-size:13px;color:var(--muted)">لا توجد أيتمز</div>'}
-    </div>`;
-  }).join('');
-}
-
-function switchMenuTabC(tab) {
-  ['edit','avail','plans'].forEach(t => {
-    document.getElementById(`menuTabC-${t}`).classList.toggle('active', t===tab);
-    document.getElementById(`menuPaneC-${t}`).style.display = t===tab ? '' : 'none';
-  });
-  if (tab==='avail') renderAvailabilityScreenC();
-}
-
-function renderAvailabilityScreenC() {
-  const cats = Object.entries(menuData.categories||{})
-    .filter(([,c])=>c.active!==false)
-    .sort((a,b)=>(a[1].order||0)-(b[1].order||0));
-  const allItems = Object.entries(menuData.items||{});
-  const totalActive = allItems.filter(([,i])=>i.active!==false).length;
-  const totalUnavail = allItems.filter(([,i])=>i.active===false).length;
-  document.getElementById('availSummaryC').innerHTML = `
-    <div class="avail-badge-m ok">✅ ${totalActive} صنف متاح</div>
-    ${totalUnavail > 0 ? `<div class="avail-badge-m warn">🔴 ${totalUnavail} غير متاح</div>` : ''}
-    <button style="margin-right:auto;padding:8px 14px;background:var(--primary-mid);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"
-      onclick="markAllAvailableC()">✅ كل حاجة متاحة</button>`;
-  const container = document.getElementById('availContainerC');
-  if (!cats.length) { container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">🍽 لا توجد أصناف</div>'; return; }
-  container.innerHTML = cats.map(([catId, cat]) => {
-    const catItems = allItems.filter(([,i])=>i.categoryId===catId);
-    if (!catItems.length) return '';
-    const itemsHtml = catItems.map(([itemId, item]) => {
-      const isAvail = item.active !== false;
-      const priceText = item.sizes
-        ? 'من ' + Math.min(...Object.values(item.sizes).map(s=>s.price)) + ' ج'
-        : (item.singlePrice||0) + ' ج';
-      const icon = getCatIconC(item.name||item.nameAr||'');
-      return `<div class="avail-item-m ${isAvail?'':'unavailable'}" id="avail-item-c-${itemId}">
-        <span style="font-size:20px;flex-shrink:0">${icon}</span>
-        <div style="flex:1;min-width:0">
-          <div style="font-size:13px;font-weight:700;color:var(--text)">${item.name||item.nameAr}${!isAvail?'<span style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;background:rgba(229,57,53,.12);color:#EF5350;margin-right:6px"> مش متاح</span>':''}</div>
-          <div style="font-size:11px;color:var(--primary-light);font-weight:600;margin-top:2px;font-family:var(--font-en)">${priceText}</div>
-        </div>
-        <label class="toggle-wrap" title="${isAvail?'اضغط للإخفاء':'اضغط للإظهار'}">
-          <input type="checkbox" class="toggle-inp" ${isAvail?'checked':''}
-            onchange="toggleAvailItemC('${itemId}', this.checked)">
-          <span class="toggle-slider"></span>
-        </label>
-      </div>`;
-    }).join('');
-    const catAvail = catItems.filter(([,i])=>i.active!==false).length;
-    return `<div class="avail-cat-title-m">${cat.name||cat.nameAr} <span style="font-weight:600;color:${catAvail===catItems.length?'var(--primary-light)':'#EF5350'}">${catAvail}/${catItems.length}</span></div>${itemsHtml}`;
-  }).join('');
-}
-
-async function toggleAvailItemC(itemId, isAvail) {
-  await db.ref(`menu/items/${itemId}`).update({ active: isAvail });
-  showToast(isAvail ? '🟢 متاح دلوقتي' : '🔴 اتشال من المنيو');
-  const card = document.getElementById(`avail-item-c-${itemId}`);
-  if (card) card.classList.toggle('unavailable', !isAvail);
-}
-
-async function markAllAvailableC() {
-  const updates = {};
-  Object.entries(menuData.items||{}).forEach(([id]) => { updates[`menu/items/${id}/active`] = true; });
-  await db.ref().update(updates);
-  showToast('✅ كل الأصناف متاحة دلوقتي');
-}
-
-function getCatIconC(name) {
-  const n = (name||'').toLowerCase();
-  if (n.includes('راب') || n.includes('wrap')) return '🌯';
-  if (n.includes('سلط') || n.includes('salad')) return '🥗';
-  if (n.includes('سموثي') || n.includes('smooth') || n.includes('عصير')) return '🥤';
-  if (n.includes('برجر') || n.includes('burger')) return '🍔';
-  if (n.includes('بيتزا') || n.includes('pizza')) return '🍕';
-  if (n.includes('باستا') || n.includes('pasta')) return '🍝';
-  if (n.includes('دجاج') || n.includes('chicken')) return '🍗';
-  if (n.includes('بروتين') || n.includes('protein')) return '💪';
-  return '🍽';
-}
-
-const PLAN_DEFS_C = [
-  { id:'weekly',        nameAr:'الاشتراك الأسبوعي',       nameEn:'Weekly Plan',           period:'/ أسبوع',    color:'var(--primary-light)' },
-  { id:'monthly',       nameAr:'الاشتراك نصف الشهري',     nameEn:'Half Monthly Plan',     period:'/ 15 يوم',  color:'var(--primary-light)' },
-  { id:'fitness',       nameAr:'الاشتراك الشهري',          nameEn:'Monthly Plan',          period:'/ شهر',     color:'var(--primary-light)' },
-  { id:'tatbela-week',  nameAr:'تتبيلة الأسبوع',           nameEn:'Weekly Marinade',        period:'/ أسبوع',   color:'#E67B20' },
-  { id:'tatbela-2weeks',nameAr:'تتبيلة نصف الشهري',       nameEn:'Half Monthly Marinade',  period:'/ نصف شهر', color:'#7B2800' },
-  { id:'tatbela-month', nameAr:'تتبيلة الشهري',            nameEn:'Monthly Marinade',       period:'/ شهر',     color:'#7B2800' },
+const PLAN_DEFS = [
+  { id:'weekly',        nameAr:'الاشتراك الأسبوعي',       period:'/ أسبوع'    },
+  { id:'monthly',       nameAr:'الاشتراك نصف الشهري',     period:'/ 15 يوم'  },
+  { id:'fitness',       nameAr:'الاشتراك الشهري',          period:'/ شهر'     },
+  { id:'tatbela-week',  nameAr:'تتبيلة الأسبوع',           period:'/ أسبوع'   },
+  { id:'tatbela-2weeks',nameAr:'تتبيلة نصف الشهري',       period:'/ نصف شهر' },
+  { id:'tatbela-month', nameAr:'تتبيلة الشهري',            period:'/ شهر'     },
 ];
-let plansDataC = {};
-let plansListeningC = false;
+let plansData = {};
 
-function listenPlansC() {
-  plansListeningC = true;
-  db.ref('settings/plans').on('value', snap => {
-    plansDataC = snap.val() || {};
-    renderPlansManageC();
+function loadPlans() {
+  const _plansRef = db.ref('settings/plans');
+  registerCleanup(() => _plansRef.off());
+  _plansRef.on('value', snap => {
+    plansData = snap.val() || {};
+    renderCashierCats();
+    // Re-render if currently on plans tab
+    const plansTab = document.getElementById('cat-tab-plans');
+    if (plansTab && plansTab.classList.contains('active')) {
+      renderCashierMenu('__plans__', null, '');
+    }
   });
-}
-
-function renderPlansManageC() {
-  const grid = document.getElementById('plansManageGridC');
-  if (!grid) return;
-  grid.innerHTML = PLAN_DEFS_C.map(p => {
-    const pData = plansDataC[p.id] || {};
-    const current = pData.price ?? '—';
-    const active = pData.active !== false;
-    const components = Array.isArray(pData.components) ? pData.components : [];
-    const compsHtml = components.length
-      ? components.map(c => `<div style="padding:6px 10px;background:var(--surface2);border-radius:8px;margin-bottom:5px;font-size:13px;color:var(--text)">${c}</div>`).join('')
-      : `<div style="font-size:12px;color:var(--muted);padding:6px 0">لا توجد مكونات</div>`;
-    return `<div style="background:var(--surface);border-radius:14px;border:1.5px solid ${active?'var(--border)':'var(--muted)'};padding:16px;margin-bottom:12px;opacity:${active?1:0.7}">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px">
-        <div>
-          <div style="font-size:15px;font-weight:700;color:var(--text)">${p.nameAr}</div>
-          <div style="font-size:12px;color:var(--muted)">${p.nameEn} · ${p.period}</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <span style="padding:7px 13px;border:1.5px solid ${active?'var(--primary-light)':'var(--muted)'};border-radius:9px;background:${active?'rgba(67,160,71,0.1)':'var(--surface2)'};color:${active?'var(--primary-light)':'var(--muted)'};font-size:12px;font-weight:700">${active?'👁 ظاهر':'🚫 مخفي'}</span>
-          <div style="font-size:20px;font-weight:900;color:${p.color};font-family:var(--font-en)">${Number(current)>=1000?Number(current).toLocaleString():current} <span style="font-size:11px">ج</span></div>
-        </div>
-      </div>
-      <div style="border-top:1px solid var(--border);padding-top:12px">
-        <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:8px">📋 مكونات الباقة</div>
-        ${compsHtml}
-      </div>
-    </div>`;
-  }).join('');
 }
 </script>
 </body>
