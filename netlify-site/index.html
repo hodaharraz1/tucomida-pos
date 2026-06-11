@@ -1108,7 +1108,7 @@ function showCopied(){
         var MAP = {};
         Object.keys(items).forEach(function (id) {
           var it = items[id];
-          if (!it.active) return;                   // تجاهل الأصناف المعطّلة
+          if (it.active === false) return;           // تجاهل الأصناف المعطّلة فقط
           if (it.name)   MAP[it.name.trim().toLowerCase()]   = it;
           if (it.nameAr) MAP[it.nameAr.trim().toLowerCase()] = it;
         });
