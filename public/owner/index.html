@@ -2232,9 +2232,25 @@ const PLAN_DEFS = [
 
 let plansData = {};
 
+const PLAN_DEFAULT_COMPONENTS = {
+  'weekly':        ['7 days of varied meals','Precisely calculated calories','2 side dishes of your choice (rice - salad - fries)','5 chicken meals (150g)','2 meat meals (150g)'],
+  'monthly':       ['15 days of varied meals','Precisely calculated calories','2 side dishes of your choice (rice - salad - fries)','11 chicken meals (150g)','4 meat meals (150g)','Can swap for any wrap, casdia or pasta'],
+  'fitness':       ['30 days of varied meals','Precisely calculated calories','2 side dishes of your choice (rice - salad - fries)','22 chicken meals (150g)','8 meat meals (150g)','Can swap for any wrap, casdia or pasta'],
+  'tatbela-week':  ['½ kg shish tawook','½ kg Hati kofta','1 kg Chicken Thighs for Grilling'],
+  'tatbela-2weeks':['1 kg Chicken Thighs for Grilling','½ kg shish tawook','½ kg Hati kofta','½ kg meat burger','½ kg fahita'],
+  'tatbela-month': ['1 kg special fillet','Turkish kofta (chicken)','1 kg chicken wings','½ kg shish tawook','½ kg Hati kofta','½ kg meat burger','½ kg fahita','½ kg meatballs'],
+};
+
 function listenPlans() {
   db.ref('settings/plans').on('value', snap => {
     plansData = snap.val() || {};
+    /* Seed default components for plans that have none */
+    PLAN_DEFS.forEach(p => {
+      if (!Array.isArray(plansData[p.id]?.components) || plansData[p.id].components.length === 0) {
+        const defaults = PLAN_DEFAULT_COMPONENTS[p.id];
+        if (defaults) db.ref(`settings/plans/${p.id}/components`).set(defaults).catch(()=>{});
+      }
+    });
     renderPlansManage();
   });
 }
@@ -2243,23 +2259,72 @@ function renderPlansManage() {
   const grid = document.getElementById('plansManageGrid');
   if (!grid) return;
   grid.innerHTML = PLAN_DEFS.map(p => {
-    const current = plansData[p.id]?.price ?? '—';
+    const pData = plansData[p.id] || {};
+    const current = pData.price ?? '—';
+    const active = pData.active !== false;
+    const components = Array.isArray(pData.components) ? pData.components : [];
+    const compsHtml = components.map((c, i) => `
+      <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--card2);border-radius:8px;margin-bottom:5px">
+        <span style="font-size:13px;color:var(--text);flex:1">${escapeHtml(c)}</span>
+        <button onclick="removePlanComp('${p.id}',${i})" style="background:none;border:none;color:var(--red,#e74c3c);font-size:16px;cursor:pointer;padding:2px 6px;line-height:1;border-radius:6px" title="حذف">✕</button>
+      </div>`).join('') || `<div style="font-size:12px;color:var(--muted);padding:6px 0">لا توجد مكونات — اضغط + لإضافة</div>`;
     return `
-    <div style="background:var(--card);border-radius:12px;border:1px solid var(--border);padding:16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-      <div>
-        <div style="font-size:15px;font-weight:700;color:var(--text)">${p.nameAr}</div>
-        <div style="font-size:12px;color:var(--muted)">${p.nameEn} · ${p.period}</div>
+    <div style="background:var(--card);border-radius:14px;border:1.5px solid ${active?'var(--border)':'rgba(229,57,53,.3)'};padding:16px;margin-bottom:12px;opacity:${active?1:0.75}">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+        <div>
+          <div style="font-size:15px;font-weight:800;color:var(--text)">${p.nameAr}</div>
+          <div style="font-size:12px;color:var(--muted)">${p.nameEn} · ${p.period}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <button onclick="togglePlanActive('${p.id}')" style="padding:8px 14px;border:1.5px solid ${active?'var(--green)':'rgba(229,57,53,.5)'};border-radius:9px;background:${active?'rgba(46,204,113,.1)':'rgba(229,57,53,.08)'};color:${active?'var(--green)':'#EF5350'};font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:38px">${active?'👁 متاح':'🚫 مخفي'}</button>
+          <div style="font-size:22px;font-weight:900;color:${p.color};font-family:var(--font-en)">${Number(current)>=1000?Number(current).toLocaleString():current} <span style="font-size:12px">ج</span></div>
+          <input type="number" id="plan-inp-${p.id}" value="${pData.price??''}" placeholder="السعر..."
+            style="width:95px;padding:8px 10px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;outline:none;font-family:var(--font-en);background:var(--card2);min-height:38px"
+            min="0" inputmode="numeric" onkeydown="if(event.key==='Enter')savePlanPrice('${p.id}')">
+          <button onclick="savePlanPrice('${p.id}')" style="padding:8px 16px;background:var(--green);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:38px">حفظ</button>
+        </div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <div style="font-size:22px;font-weight:900;color:${p.color};font-family:var(--font-en);min-width:60px;text-align:left">${Number(current) >= 1000 ? Number(current).toLocaleString() : current} <span style="font-size:12px">ج</span></div>
-        <input type="number" id="plan-inp-${p.id}" value="${plansData[p.id]?.price ?? ''}" placeholder="السعر..."
-          style="width:100px;padding:9px 10px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;outline:none;font-family:var(--font-en);background:var(--card2);min-height:42px"
-          min="0" inputmode="numeric"
-          onkeydown="if(event.key==='Enter')savePlanPrice('${p.id}')">
-        <button onclick="savePlanPrice('${p.id}')" style="padding:9px 16px;background:var(--green);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:42px">حفظ</button>
+      <div style="border-top:1px solid var(--border);padding-top:12px">
+        <div style="font-size:12px;font-weight:800;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">📋 المكونات</div>
+        <div id="plan-comps-${p.id}">${compsHtml}</div>
+        <div style="display:flex;gap:7px;margin-top:8px">
+          <input type="text" id="comp-inp-${p.id}" placeholder="أضف مكون جديد..." maxlength="100"
+            style="flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;outline:none;font-family:var(--font-ar);background:var(--card2);min-height:38px"
+            onkeydown="if(event.key==='Enter')addPlanComp('${p.id}')">
+          <button onclick="addPlanComp('${p.id}')" style="padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:38px">+ إضافة</button>
+        </div>
       </div>
     </div>`;
   }).join('');
+}
+
+async function togglePlanActive(planId) {
+  const current = plansData[planId]?.active !== false;
+  try {
+    await db.ref(`settings/plans/${planId}`).update({ active: !current, updatedAt: Date.now(), updatedBy: currentUser.uid });
+    showToastO(current ? '🚫 تم إخفاء الباقة' : '👁 تم إظهار الباقة');
+  } catch(e) { showToastO('خطأ في الحفظ'); }
+}
+
+async function addPlanComp(planId) {
+  const inp = document.getElementById(`comp-inp-${planId}`);
+  const val = inp?.value?.trim();
+  if (!val) return;
+  const comps = [...(Array.isArray(plansData[planId]?.components) ? plansData[planId].components : []), val];
+  try {
+    await db.ref(`settings/plans/${planId}`).update({ components: comps, updatedAt: Date.now(), updatedBy: currentUser.uid });
+    inp.value = '';
+    showToastO('✅ تمت إضافة المكون');
+  } catch(e) { showToastO('خطأ في الحفظ'); }
+}
+
+async function removePlanComp(planId, index) {
+  const comps = [...(Array.isArray(plansData[planId]?.components) ? plansData[planId].components : [])];
+  comps.splice(index, 1);
+  try {
+    await db.ref(`settings/plans/${planId}`).update({ components: comps, updatedAt: Date.now(), updatedBy: currentUser.uid });
+    showToastO('تم حذف المكون');
+  } catch(e) { showToastO('خطأ في الحفظ'); }
 }
 
 async function savePlanPrice(planId) {
@@ -3477,6 +3542,13 @@ function oRenderCats() {
     b.onclick = function(){ oSelectCat(id, this); };
     row.appendChild(b);
   });
+  /* Plans tab */
+  const pb = document.createElement('button');
+  pb.className = 'o-cat-tab';
+  pb.dataset.cat = '__plans__';
+  pb.textContent = '📦 الباقات';
+  pb.onclick = function(){ oSelectCat('__plans__', this); };
+  row.appendChild(pb);
 }
 
 function oSelectCat(catId, btn) {
@@ -3493,6 +3565,29 @@ function oRenderMenu(q) {
   const grid = document.getElementById('oMenuGrid');
   if (!grid) return;
   grid.innerHTML = '';
+
+  /* Plans category */
+  if (oCatFilter === '__plans__') {
+    const activePlans = PLAN_DEFS.filter(p => plansData[p.id]?.active !== false);
+    if (!activePlans.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted)">لا توجد باقات متاحة</div>';
+      return;
+    }
+    activePlans.forEach(p => {
+      const pData = plansData[p.id] || {};
+      const price = pData.price;
+      const hasPrice = price !== undefined && price !== null && price > 0;
+      const div = document.createElement('div');
+      div.className = 'o-menu-item';
+      div.style.opacity = hasPrice ? '1' : '0.5';
+      div.innerHTML = `<div class="o-mi-name">${escapeHtml(p.nameAr)}</div>
+                       <div class="o-mi-price" style="color:${p.color}">${hasPrice ? Number(price).toLocaleString()+' ج' : '— (بدون سعر)'}</div>`;
+      if (hasPrice) div.onclick = () => oAddToCart('__plan__'+p.id, {name: p.nameAr+' '+p.period, singlePrice: price}, null, price);
+      grid.appendChild(div);
+    });
+    return;
+  }
+
   const items = Object.entries(menuData.items||{})
     .filter(([,i]) => {
       if (i.active === false) return false;
