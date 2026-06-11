@@ -330,6 +330,63 @@
     /* Desktop: hide mobile nav */
     .mob-bottom-nav { display:none; }
 
+    /* ══ MENU MANAGEMENT STYLES ══════════════════ */
+    .menu-cat-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+    .btn-add-small { padding:8px 14px; min-height:36px; background:var(--surface2); border:1px solid var(--border2); color:var(--text2); border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; font-family:var(--font-ar); transition:all .15s; }
+    .btn-add-small:hover { border-color:var(--primary-light); color:var(--primary); }
+    .cat-section { background:var(--surface); border-radius:14px; margin-bottom:10px; border:1px solid var(--border); overflow:hidden; }
+    .cat-row-owner { display:flex; justify-content:space-between; align-items:center; padding:13px 16px; border-bottom:1px solid var(--border); background:var(--surface2); }
+    .cat-row-name { font-size:14px; font-weight:700; }
+    .cat-toggle { font-size:12px; padding:10px 14px; min-height:44px; border-radius:20px; font-weight:700; cursor:pointer; border:none; font-family:var(--font-ar); transition:opacity .15s; display:inline-flex; align-items:center; }
+    .cat-toggle:hover { opacity:.8; }
+    .cat-toggle.on { background:rgba(67,160,71,.15); color:var(--primary-light); }
+    .cat-toggle.off { background:rgba(198,40,40,.12); color:var(--red); }
+    .item-row-menu { display:flex; justify-content:space-between; align-items:center; padding:11px 16px; border-bottom:1px solid var(--border); }
+    .item-row-menu:last-child { border-bottom:none; }
+    .irm-name { font-size:13px; font-weight:600; color:var(--text); }
+    .irm-price { font-size:11px; color:var(--primary-light); font-weight:700; margin-top:2px; font-family:var(--font-en); }
+    .irm-right { display:flex; align-items:center; gap:8px; }
+    .btn-edit-item { background:none; border:1px solid var(--border2); color:var(--muted); padding:10px 14px; min-height:44px; border-radius:8px; font-size:12px; cursor:pointer; font-family:var(--font-ar); transition:all .15s; display:inline-flex; align-items:center; }
+    .btn-edit-item:hover { border-color:var(--border2); color:var(--text2); }
+    .avail-tabs { display:flex; gap:0; margin-bottom:14px; border-radius:10px; overflow:hidden; border:1px solid var(--border); }
+    .avail-tab { flex:1; padding:10px; font-size:12px; font-weight:700; text-align:center; cursor:pointer; background:var(--surface); color:var(--muted); border:none; font-family:var(--font-ar); transition:all .15s; }
+    .avail-tab.active { background:var(--surface2); color:var(--primary); border-bottom:2px solid var(--primary); }
+    .avail-summary { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+    .avail-badge { padding:7px 13px; border-radius:10px; font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; }
+    .avail-badge.ok { background:rgba(67,160,71,.12); color:var(--primary-light); }
+    .avail-badge.warn { background:rgba(198,40,40,.1); color:var(--red); }
+    .avail-cat-title { font-size:11px; font-weight:800; color:var(--muted); padding:10px 0 6px; letter-spacing:.5px; text-transform:uppercase; }
+    .avail-item { display:flex; align-items:center; gap:11px; padding:12px 14px; background:var(--surface); border-radius:10px; margin-bottom:7px; border:1px solid var(--border); transition:all .2s; }
+    .avail-item.unavailable { opacity:.5; border-color:rgba(198,40,40,.25); background:rgba(198,40,40,.03); }
+    .avail-item-icon { font-size:20px; flex-shrink:0; }
+    .avail-item-info { flex:1; min-width:0; }
+    .avail-item-name { font-size:13px; font-weight:700; color:var(--text); }
+    .avail-item-price { font-size:11px; color:var(--primary-light); font-weight:600; margin-top:2px; font-family:var(--font-en); }
+    .avail-item-tag { font-size:11px; font-weight:700; padding:3px 8px; border-radius:10px; background:rgba(198,40,40,.12); color:var(--red); margin-right:6px; }
+    .toggle-wrap { position:relative; flex-shrink:0; }
+    .toggle-inp { position:absolute; opacity:0; width:0; height:0; }
+    .toggle-slider { display:block; width:48px; height:26px; background:var(--border2); border-radius:13px; cursor:pointer; transition:background .22s; position:relative; }
+    .toggle-slider::after { content:''; position:absolute; width:19px; height:19px; border-radius:50%; background:#fff; top:3px; right:3px; transition:transform .22s; box-shadow:0 1px 4px rgba(0,0,0,.25); }
+    .toggle-inp:checked + .toggle-slider { background:var(--primary-light); }
+    .toggle-inp:checked + .toggle-slider::after { transform:translateX(-21px); }
+    .sec-title-menu { font-size:17px; font-weight:800; margin-bottom:16px; color:var(--text); }
+    /* Item/Cat modal styles (reuse owner's modal-sheet style) */
+    .modal-sheet-menu { background:var(--surface); border-radius:20px 20px 0 0; padding:24px 20px max(24px,env(safe-area-inset-bottom,24px)); width:100%; max-width:520px; max-height:90vh; overflow-y:auto; border-top:1px solid var(--border); }
+    .modal-handle-menu { width:36px; height:3px; background:var(--border2); border-radius:2px; margin:0 auto 16px; }
+    .modal-title-menu { font-size:17px; font-weight:800; margin-bottom:14px; color:var(--text); }
+    .form-group-menu { margin-bottom:13px; }
+    .form-group-menu label { display:block; font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px; letter-spacing:1px; }
+    .form-input-menu { width:100%; padding:12px 14px; background:var(--surface2); border:1px solid var(--border2); border-radius:10px; color:var(--text); font-size:16px; outline:none; font-family:var(--font-ar); transition:border-color .15s; }
+    .form-input-menu:focus { border-color:var(--primary-light); }
+    .modal-btns-menu { display:flex; gap:10px; margin-top:16px; }
+    .btn-menu-cancel { flex:1; padding:13px; background:var(--surface2); border:1px solid var(--border2); border-radius:10px; color:var(--muted); font-size:13px; cursor:pointer; font-family:var(--font-ar); }
+    .btn-menu-cancel:hover { background:var(--border); }
+    .btn-menu-save { flex:2; padding:13px; background:var(--primary); border:none; border-radius:10px; color:white; font-size:14px; font-weight:700; cursor:pointer; font-family:var(--font-ar); transition:opacity .15s; }
+    .btn-menu-save:hover { opacity:.9; }
+    /* menu modal backdrop */
+    .menu-modal-bg { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:250; display:none; align-items:flex-end; justify-content:center; }
+    .menu-modal-bg.open { display:flex; }
+
     /* ══ MOBILE UX OPTIMIZATION ══════════════════ */
 
     /* Prevent iOS font zoom on inputs */
@@ -475,6 +532,10 @@
       أونلاين
       <span class="nav-badge" id="onlineBadge" style="display:none">0</span>
     </div>
+    <div class="nav-item" id="nav-menu" onclick="switchScreen('menu')">
+      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M8.1 13.34l2.83-2.83L3.91 3.5c-1.56 1.56-1.56 4.09 0 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.2-1.1-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z"/></svg>
+      المنيو
+    </div>
   </div>
   <div class="sidebar-bottom">
     <button class="btn-logout-side" onclick="doLogout()">تسجيل خروج</button>
@@ -566,6 +627,38 @@
       <div class="orders-grid-pos" id="onlineOrdersGrid"></div>
     </div>
 
+    <!-- MENU MANAGEMENT SCREEN -->
+    <div class="screen" id="screen-menu">
+      <!-- Tabs -->
+      <div class="avail-tabs">
+        <button class="avail-tab active" id="menuTab-edit" onclick="switchMenuTab('edit')">✏️ تعديل المنيو</button>
+        <button class="avail-tab" id="menuTab-avail" onclick="switchMenuTab('avail')">🟢 توفر الأيتمز</button>
+        <button class="avail-tab" id="menuTab-plans" onclick="switchMenuTab('plans')">📦 الباقات</button>
+      </div>
+
+      <!-- Edit Tab -->
+      <div id="menuPane-edit">
+        <div class="menu-cat-header">
+          <div class="sec-title-menu">إدارة المنيو</div>
+          <button class="btn-add-small" onclick="openAddCatModal()">+ كاتيجوري</button>
+        </div>
+        <div id="menuManageContainer"></div>
+      </div>
+
+      <!-- Availability Tab -->
+      <div id="menuPane-avail" style="display:none">
+        <div id="availSummary" class="avail-summary"></div>
+        <div id="availContainer"></div>
+      </div>
+
+      <!-- Plans Tab -->
+      <div id="menuPane-plans" style="display:none">
+        <div class="sec-title-menu" style="font-size:15px">📦 الباقات والاشتراكات</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px">أي تعديل في الأسعار هنا يظهر على الموقع فوراً</p>
+        <div id="plansManageGrid"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -619,6 +712,114 @@
     <div style="display:flex;gap:10px;margin-top:4px;">
       <button onclick="closeSizeC()" style="flex:1;padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:14px;cursor:pointer;font-family:var(--font-ar);color:var(--muted);">إلغاء</button>
       <button onclick="confirmSizeC()" style="flex:2;padding:12px;background:var(--primary);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-ar);">إضافة للأوردر ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD/EDIT ITEM MODAL -->
+<div class="menu-modal-bg" id="itemModal" onclick="if(event.target===this)closeItemModal()">
+  <div class="modal-sheet-menu">
+    <div class="modal-handle-menu"></div>
+    <div class="modal-title-menu" id="itemModalTitle">إضافة أيتم</div>
+    <div class="form-group-menu">
+      <label for="itemNameEn">الاسم بالإنجليزي</label>
+      <input type="text" class="form-input-menu" id="itemNameEn" placeholder="Crunchy Wrap">
+    </div>
+    <div class="form-group-menu">
+      <label for="itemNameAr">الاسم بالعربي</label>
+      <input type="text" class="form-input-menu" id="itemNameAr" placeholder="كرانشي راب">
+    </div>
+    <div class="form-group-menu">
+      <label for="itemDesc">الوصف (اختياري)</label>
+      <textarea class="form-input-menu" id="itemDesc" rows="2" placeholder="وصف الأيتم..."></textarea>
+    </div>
+    <div class="form-group-menu">
+      <label for="itemPriceType">نوع السعر</label>
+      <select class="form-input-menu" id="itemPriceType" onchange="togglePriceType()">
+        <option value="single">سعر واحد</option>
+        <option value="sizes">M / L</option>
+      </select>
+    </div>
+    <!-- Single price + nutrition -->
+    <div id="singlePriceDiv" class="form-group-menu">
+      <label for="itemSinglePrice">السعر (جنيه)</label>
+      <input type="number" class="form-input-menu" id="itemSinglePrice" placeholder="0" inputmode="numeric">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+        <div>
+          <label for="itemCalories" style="font-size:11px">🔥 سعرات حرارية</label>
+          <input type="number" class="form-input-menu" id="itemCalories" placeholder="مثال: 450" inputmode="numeric" style="margin-top:4px">
+        </div>
+        <div>
+          <label for="itemProtein" style="font-size:11px">💪 بروتين (g)</label>
+          <input type="number" class="form-input-menu" id="itemProtein" placeholder="مثال: 35" inputmode="numeric" style="margin-top:4px">
+        </div>
+      </div>
+    </div>
+    <!-- M/L sizes + nutrition per size -->
+    <div id="sizesPriceDiv" style="display:none">
+      <div style="background:var(--surface2);border-radius:10px;padding:12px;margin-bottom:10px;border:1px solid var(--border)">
+        <div style="font-size:12px;font-weight:800;color:var(--primary-light);margin-bottom:8px;letter-spacing:.5px">⬤ حجم M</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+          <div>
+            <label for="itemPriceM" style="font-size:11px">💰 السعر</label>
+            <input type="number" class="form-input-menu" id="itemPriceM" placeholder="0" inputmode="numeric" style="margin-top:4px">
+          </div>
+          <div>
+            <label for="itemCalM" style="font-size:11px">🔥 سعرات</label>
+            <input type="number" class="form-input-menu" id="itemCalM" placeholder="0" inputmode="numeric" style="margin-top:4px">
+          </div>
+          <div>
+            <label for="itemProM" style="font-size:11px">💪 بروتين (g)</label>
+            <input type="number" class="form-input-menu" id="itemProM" placeholder="0" inputmode="numeric" style="margin-top:4px">
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--surface2);border-radius:10px;padding:12px;margin-bottom:14px;border:1px solid var(--border)">
+        <div style="font-size:12px;font-weight:800;color:var(--primary);margin-bottom:8px;letter-spacing:.5px">⬤ حجم L</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+          <div>
+            <label for="itemPriceL" style="font-size:11px">💰 السعر</label>
+            <input type="number" class="form-input-menu" id="itemPriceL" placeholder="0" inputmode="numeric" style="margin-top:4px">
+          </div>
+          <div>
+            <label for="itemCalL" style="font-size:11px">🔥 سعرات</label>
+            <input type="number" class="form-input-menu" id="itemCalL" placeholder="0" inputmode="numeric" style="margin-top:4px">
+          </div>
+          <div>
+            <label for="itemProL" style="font-size:11px">💪 بروتين (g)</label>
+            <input type="number" class="form-input-menu" id="itemProL" placeholder="0" inputmode="numeric" style="margin-top:4px">
+          </div>
+        </div>
+      </div>
+      <input type="hidden" id="itemCalories_hidden">
+    </div>
+    <div class="form-group-menu">
+      <label for="itemCategory">الكاتيجوري</label>
+      <select class="form-input-menu" id="itemCategory"></select>
+    </div>
+    <div class="modal-btns-menu">
+      <button class="btn-menu-cancel" onclick="closeItemModal()">إلغاء</button>
+      <button class="btn-menu-save" onclick="saveItem()">حفظ ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD CAT MODAL -->
+<div class="menu-modal-bg" id="catModal" onclick="if(event.target===this)closeCatModal()">
+  <div class="modal-sheet-menu">
+    <div class="modal-handle-menu"></div>
+    <div class="modal-title-menu">إضافة كاتيجوري</div>
+    <div class="form-group-menu">
+      <label for="catNameEn">الاسم بالإنجليزي</label>
+      <input type="text" class="form-input-menu" id="catNameEn" placeholder="Big Wrap">
+    </div>
+    <div class="form-group-menu">
+      <label for="catNameAr">الاسم بالعربي</label>
+      <input type="text" class="form-input-menu" id="catNameAr" placeholder="بيج راب">
+    </div>
+    <div class="modal-btns-menu">
+      <button class="btn-menu-cancel" onclick="closeCatModal()">إلغاء</button>
+      <button class="btn-menu-save" onclick="saveCat()">حفظ ✓</button>
     </div>
   </div>
 </div>
