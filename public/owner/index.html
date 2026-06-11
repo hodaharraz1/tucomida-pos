@@ -609,16 +609,21 @@
     .o-size-confirm{flex:2;padding:13px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-ar)}
 
     @media(max-width:767px){
-      /* Extra bottom padding so content can scroll above the fixed bottom nav */
-      .main-content{padding-bottom:calc(80px + env(safe-area-inset-bottom,0px))}
-      /* Stack columns vertically */
+      .main-content{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
       .owner-order-layout{display:flex;flex-direction:column;height:auto}
-      /* Cart column appears ABOVE menu on mobile */
       .owner-cart-col{order:-1;overflow:visible;max-height:none}
-      /* Cart body scrolls internally — footer is never clipped */
-      .o-cart-body{max-height:35vh;overflow-y:auto}
-      /* Footer (with submit button) is never compressed or hidden */
-      .o-cart-ftr{flex-shrink:0}
+      .o-cart-body{max-height:30vh;overflow-y:auto}
+      /* FIXED submit button — glued above the bottom nav, never scrolls away */
+      #screen-neworder .o-cart-ftr{
+        position:fixed;
+        bottom:calc(60px + env(safe-area-inset-bottom,0px));
+        left:0;right:0;
+        background:var(--card);
+        border-top:1px solid var(--border);
+        z-index:50;
+        padding:10px 14px;
+        box-shadow:0 -2px 16px rgba(0,0,0,0.1);
+      }
       .o-menu-grid{grid-template-columns:repeat(2,1fr)}
     }
 
