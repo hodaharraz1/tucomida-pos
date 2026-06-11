@@ -2,12 +2,12 @@
   "rules": {
 
     /* ═══════════════════════════════════════════════════════════
-       MENU  — public read, owner-only write + field validation
+       MENU  — public read, owner/cashier/waiter write + field validation
        Logged separately in menu_changes (see below)
     ═══════════════════════════════════════════════════════════ */
     "menu": {
       ".read": true,
-      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'owner'",
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(owner|cashier|waiter)$/)",
 
       "categories": {
         "$catId": {
@@ -33,12 +33,12 @@
     },
 
     /* ═══════════════════════════════════════════════════════════
-       MENU CHANGES AUDIT LOG — owner write only, owner read only
+       MENU CHANGES AUDIT LOG — owner/cashier/waiter write, owner read only
        Tracks every menu modification for accountability
     ═══════════════════════════════════════════════════════════ */
     "menu_changes": {
       ".read":  "auth != null && root.child('users').child(auth.uid).child('role').val() === 'owner'",
-      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'owner'",
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(owner|cashier|waiter)$/)",
       "$changeId": {
         ".validate": "newData.hasChildren(['action','userId','timestamp'])
           && newData.child('action').isString()
@@ -171,7 +171,7 @@
       /* Plans — public read so website can display prices without auth */
       "plans": {
         ".read": true,
-        ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'owner'"
+        ".write": "auth != null && root.child('users').child(auth.uid).child('role').val().matches(/^(owner|cashier|waiter)$/)"
       },
 
       "currentSession": {
