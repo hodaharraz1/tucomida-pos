@@ -1069,14 +1069,33 @@ function showCopied(){
       if (!firebase.apps.length) firebase.initializeApp(CFG);
       var db = firebase.database();
 
-      /* ── Sync plan prices from settings/plans ── */
+      /* ── Sync plan prices, visibility, and components from settings/plans ── */
       db.ref('settings/plans').on('value', function(snap) {
         var plans = snap.val();
         if (!plans) return;
         Object.keys(plans).forEach(function(planId) {
-          var el = document.getElementById('price-' + planId);
-          if (el && plans[planId].price != null) {
-            el.textContent = Number(plans[planId].price).toLocaleString();
+          var card = document.querySelector('[data-plan-id="' + planId + '"]');
+          var pData = plans[planId];
+
+          /* Price */
+          var priceEl = document.getElementById('price-' + planId);
+          if (priceEl && pData.price != null) {
+            priceEl.textContent = Number(pData.price).toLocaleString();
+          }
+
+          /* Visibility */
+          if (card) {
+            card.style.display = pData.active === false ? 'none' : '';
+          }
+
+          /* Components — replace static list when Firebase has components */
+          if (card && Array.isArray(pData.components) && pData.components.length) {
+            var featuresEl = card.querySelector('.plan-features');
+            if (featuresEl) {
+              featuresEl.innerHTML = pData.components
+                .map(function(c) { return '<li>' + c + '</li>'; })
+                .join('');
+            }
           }
         });
       });

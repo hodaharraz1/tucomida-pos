@@ -2255,23 +2255,73 @@ function renderPlansManage() {
   const grid = document.getElementById('plansManageGrid');
   if (!grid) return;
   grid.innerHTML = PLAN_DEFS.map(p => {
-    const current = plansData[p.id]?.price ?? '—';
+    const pData = plansData[p.id] || {};
+    const current = pData.price ?? '—';
+    const active = pData.active !== false;
+    const components = Array.isArray(pData.components) ? pData.components : [];
+    const compsHtml = components.length ? components.map((c, i) => `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:6px 10px;background:var(--card2);border-radius:8px;margin-bottom:5px">
+        <span style="font-size:13px;color:var(--text);flex:1">${c}</span>
+        <button onclick="removePlanComp('${p.id}',${i})" style="background:none;border:none;color:var(--red,#e74c3c);font-size:16px;cursor:pointer;padding:2px 4px;line-height:1">✕</button>
+      </div>`).join('') : `<div style="font-size:12px;color:var(--muted);padding:6px 0">لا توجد مكونات بعد</div>`;
     return `
-    <div style="background:var(--card);border-radius:12px;border:1px solid var(--border);padding:16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-      <div>
-        <div style="font-size:15px;font-weight:700;color:var(--text)">${p.nameAr}</div>
-        <div style="font-size:12px;color:var(--muted)">${p.nameEn} · ${p.period}</div>
+    <div style="background:var(--card);border-radius:14px;border:1.5px solid ${active ? 'var(--border)' : 'var(--muted)'};padding:16px;margin-bottom:12px;opacity:${active ? 1 : 0.7}">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+        <div>
+          <div style="font-size:15px;font-weight:700;color:var(--text)">${p.nameAr}</div>
+          <div style="font-size:12px;color:var(--muted)">${p.nameEn} · ${p.period}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <button onclick="togglePlanActive('${p.id}')" style="padding:7px 13px;border:1.5px solid ${active ? 'var(--green)' : 'var(--muted)'};border-radius:9px;background:${active ? 'rgba(46,204,113,0.1)' : 'var(--card2)'};color:${active ? 'var(--green)' : 'var(--muted)'};font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:36px">${active ? '👁 ظاهر' : '🚫 مخفي'}</button>
+          <div style="font-size:20px;font-weight:900;color:${p.color};font-family:var(--font-en)">${Number(current) >= 1000 ? Number(current).toLocaleString() : current} <span style="font-size:11px">ج</span></div>
+          <input type="number" id="plan-inp-${p.id}" value="${pData.price ?? ''}" placeholder="السعر..."
+            style="width:90px;padding:7px 9px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;outline:none;font-family:var(--font-en);background:var(--card2);min-height:36px"
+            min="0" inputmode="numeric"
+            onkeydown="if(event.key==='Enter')savePlanPrice('${p.id}')">
+          <button onclick="savePlanPrice('${p.id}')" style="padding:7px 14px;background:var(--green);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:36px">حفظ</button>
+        </div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <div style="font-size:22px;font-weight:900;color:${p.color};font-family:var(--font-en);min-width:60px;text-align:left">${Number(current) >= 1000 ? Number(current).toLocaleString() : current} <span style="font-size:12px">ج</span></div>
-        <input type="number" id="plan-inp-${p.id}" value="${plansData[p.id]?.price ?? ''}" placeholder="السعر..."
-          style="width:100px;padding:9px 10px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;outline:none;font-family:var(--font-en);background:var(--card2);min-height:42px"
-          min="0" inputmode="numeric"
-          onkeydown="if(event.key==='Enter')savePlanPrice('${p.id}')">
-        <button onclick="savePlanPrice('${p.id}')" style="padding:9px 16px;background:var(--green);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:42px">حفظ</button>
+      <div style="border-top:1px solid var(--border);padding-top:12px">
+        <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:8px">📋 مكونات الباقة</div>
+        <div id="plan-comps-${p.id}">${compsHtml}</div>
+        <div style="display:flex;gap:7px;margin-top:9px">
+          <input type="text" id="comp-inp-${p.id}" placeholder="أضف مكون جديد..." maxlength="80"
+            style="flex:1;padding:8px 11px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;outline:none;font-family:var(--font-ar);background:var(--card2);min-height:38px"
+            onkeydown="if(event.key==='Enter')addPlanComp('${p.id}')">
+          <button onclick="addPlanComp('${p.id}')" style="padding:8px 14px;background:var(--accent,#3498db);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:38px">+ إضافة</button>
+        </div>
       </div>
     </div>`;
   }).join('');
+}
+
+async function togglePlanActive(planId) {
+  const current = plansData[planId]?.active !== false;
+  try {
+    await db.ref(`settings/plans/${planId}`).update({ active: !current, updatedAt: Date.now(), updatedBy: currentUser.uid });
+    showToastO(current ? '🚫 تم إخفاء الباقة' : '👁 تم إظهار الباقة');
+  } catch(e) { showToastO('خطأ في الحفظ'); }
+}
+
+async function addPlanComp(planId) {
+  const inp = document.getElementById(`comp-inp-${planId}`);
+  const val = inp?.value?.trim();
+  if (!val) return;
+  const comps = [...(Array.isArray(plansData[planId]?.components) ? plansData[planId].components : []), val];
+  try {
+    await db.ref(`settings/plans/${planId}`).update({ components: comps, updatedAt: Date.now(), updatedBy: currentUser.uid });
+    inp.value = '';
+    showToastO('✅ تمت إضافة المكون');
+  } catch(e) { showToastO('خطأ في الحفظ'); }
+}
+
+async function removePlanComp(planId, index) {
+  const comps = [...(Array.isArray(plansData[planId]?.components) ? plansData[planId].components : [])];
+  comps.splice(index, 1);
+  try {
+    await db.ref(`settings/plans/${planId}`).update({ components: comps, updatedAt: Date.now(), updatedBy: currentUser.uid });
+    showToastO('تم حذف المكون');
+  } catch(e) { showToastO('خطأ في الحفظ'); }
 }
 
 async function savePlanPrice(planId) {
