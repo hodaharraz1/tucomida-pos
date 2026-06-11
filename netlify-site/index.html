@@ -1109,8 +1109,9 @@ function showCopied(){
         Object.keys(items).forEach(function (id) {
           var it = items[id];
           if (it.active === false) return;           // تجاهل الأصناف المعطّلة فقط
-          if (it.name)   MAP[it.name.trim().toLowerCase()]   = it;
-          if (it.nameAr) MAP[it.nameAr.trim().toLowerCase()] = it;
+          var cleanName = function(s){ return s.replace(/[\u{1F300}-\u{1FAFF}]|[\u{2600}-\u{27BF}]|[\u{FE00}-\u{FEFF}]|[️]/gu,'').trim().toLowerCase(); };
+          if (it.name)   MAP[cleanName(it.name)]   = it;
+          if (it.nameAr) MAP[cleanName(it.nameAr)] = it;
         });
 
         /* ── تحديث أسعار الأصناف العادية (.item-price) ── */
@@ -1118,12 +1119,12 @@ function showCopied(){
           var nameEl = el.querySelector('.item-name');
           if (!nameEl) return;
 
-          /* استخراج النص بدون badges/stars */
+          /* استخراج النص بدون badges/stars وبدون إيموجي */
           var raw = '';
           nameEl.childNodes.forEach(function (n) {
             if (n.nodeType === 3) raw += n.textContent;
           });
-          var key = raw.trim().toLowerCase();
+          var key = raw.replace(/[\u{1F300}-\u{1FAFF}]|[\u{2600}-\u{27BF}]|[\u{FE00}-\u{FEFF}]|[️]/gu, '').trim().toLowerCase();
           var fb  = MAP[key];
           if (!fb) return;
 
