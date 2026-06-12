@@ -875,7 +875,157 @@ body.lang-en .wa{left:auto;right:24px}
 .pcard.ptf .p-btn{ background:#fff;color:#7B2800;border:1.5px solid transparent; }
 .pcard.ptf .p-btn:hover{ background:var(--o);color:#fff;transform:translateY(-2px);box-shadow:0 6px 22px rgba(230,123,32,.4);border-color:transparent; }
 .p-badge-fire{ position:absolute;top:18px;right:18px;background:var(--o);color:#fff;font-size:11px;font-weight:800;padding:5px 13px;border-radius:60px;letter-spacing:.3px;font-family:var(--fa); }
+@media(max-width:900px){.plans-gr-2{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.plans-gr-2{grid-template-columns:1fr;max-width:100%}}
+.plans-gr-3{grid-template-columns:repeat(3,1fr)!important;max-width:100%}
+@media(max-width:900px){.plans-gr-3{grid-template-columns:repeat(3,1fr)!important}}
+@media(max-width:600px){.plans-gr-3{grid-template-columns:1fr!important}}
+</style>
+
+<style>
+/* ════════════════════════════════════════
+   MOBILE & TABLET — GLOBAL FIXES
+════════════════════════════════════════ */
+
+/* ── 1. Section padding: 112px → 64px (tablet) / 48px (mobile) ── */
+@media(max-width:900px){
+  .sec,.showcase,.why,.bento,.reviews,.cats,.gallery,.about,.faq,.loc,.cta-sec,.plans{padding:72px 0}
+  .sec-hd{margin-bottom:48px}
+  .plans-hd{margin-bottom:48px}
+  .rev-hd{margin-bottom:40px}
+  .plans-divider{margin:48px auto 32px}
+}
+@media(max-width:600px){
+  .sec,.showcase,.why,.bento,.reviews,.cats,.gallery,.about,.faq,.loc,.cta-sec,.plans{padding:48px 0}
+  .sec-hd{margin-bottom:32px}
+  .plans-hd{margin-bottom:32px}
+  .rev-hd{margin-bottom:24px}
+  .plans-divider{margin:36px auto 24px;padding-top:36px}
+}
+
+/* ── 2. Hero — tighter on mobile ── */
+@media(max-width:600px){
+  .hero-H{font-size:clamp(38px,11vw,52px);letter-spacing:-1.5px}
+  .hero-p{font-size:15px}
+  .hero-L{padding:88px 20px 40px}
+  .hero-acts{gap:10px}
+  .btn-fill,.btn-amb{padding:13px 24px;font-size:14px}
+  .hthumb{width:58px;height:58px}
+  .hero-badges{gap:6px}
+  .hbadge{font-size:11px;padding:7px 13px}
+}
+@media(max-width:900px){
+  .hero-fb,.hero-meal-pill{display:none}  /* floating badges too cramped on tablet portrait */
+}
+
+/* ── 3. Trust bar — wrap nicely, no ugly overflow ── */
+@media(max-width:768px){
+  .trust-i{
+    gap:12px;
+    overflow-x:visible;
+    flex-wrap:wrap;
+    justify-content:center;
+    padding:12px 20px;
+  }
+  .ti{font-size:12px}
+}
+
+/* ── 4. Showcase — 2 cols on small tablet, not 1 col ── */
+@media(max-width:600px){
+  .dish-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .dish-body{padding:14px 14px 18px}
+  .dish-n{font-size:15px}
+  .dish-pr{font-size:22px}
+  .dish-d{font-size:12px;margin-bottom:12px}
+  .dish-btn{padding:8px 14px;font-size:11px}
+}
+@media(max-width:380px){
+  .dish-grid{grid-template-columns:1fr}
+}
+
+/* ── 5. Why section — better mobile cards ── */
+@media(max-width:768px){
+  .wc{padding:32px 28px}
+  .wc-t{font-size:17px}
+}
+
+/* ── 6. Plan cards — touch-friendly buttons, readable on tablet ── */
+@media(max-width:900px){
+  .plans-gr{grid-template-columns:repeat(2,1fr);gap:16px}
+  .pcard{padding:28px 22px 24px}
+  .p-pr{font-size:38px}
+  .p-btn{padding:13px 20px;font-size:14px;min-height:50px}
+  .p-ul{gap:10px}
+  .p-ul li{font-size:13px}
+}
+@media(max-width:600px){
+  .plans-gr{grid-template-columns:1fr}
+  .pcard{padding:26px 20px 22px}
+  .p-pr{font-size:44px}
+  .p-btn{min-height:52px;font-size:15px}
+}
+
+/* ── 7. Reviews — readable on tablet ── */
+@media(max-width:900px){
+  .rr-big{font-size:48px}
+  .rc{padding:26px 22px}
+  .rc-txt{font-size:14px}
+}
+
+/* ── 8. FAQ — better layout on tablet ── */
+@media(max-width:900px){
+  .faq-aside{position:static;top:auto;margin-top:32px}
+  .faq-q{font-size:14px;padding:16px 20px}
+}
+
+/* ── 9. CTA box ── */
+@media(max-width:600px){
+  .cta-box{padding:48px 20px}
+  .cta-acts{flex-direction:column;align-items:center}
+  .cta-acts .btn{width:100%;max-width:340px;justify-content:center}
+}
+
+/* ── 10. Footer ── */
+@media(max-width:600px){
+  .ft-g{padding-bottom:32px}
+  footer{padding:44px 0 0}
+}
+
+/* ── 11. Bento — bigger rows on mobile ── */
+@media(max-width:768px){
+  .bg{grid-auto-rows:90px}
+  .bc-t{font-size:16px}
+  .bc-pr{display:none}
+  .bn-sn{font-size:36px}
+}
+
+/* ── 12. Gallery ── */
+@media(max-width:600px){
+  .gal-grid{grid-auto-rows:130px}
+}
+
+/* ── 13. Heading sizes on mobile ── */
+@media(max-width:600px){
+  .H2{font-size:clamp(26px,7vw,38px);letter-spacing:-.6px}
+  .eyebrow{font-size:10px;letter-spacing:2px}
+}
+
+/* ── 14. About section ── */
+@media(max-width:600px){
+  .about-img{aspect-ratio:3/2}
+  .about-bdg{display:none}
+}
+
+/* ── 15. Nav mobile — bigger tap targets ── */
+@media(max-width:768px){
+  .nav-mob a{min-height:54px;display:flex;align-items:center;border-bottom-color:var(--s2)}
+}
+
+/* ── 16. WhatsApp button on mobile ── */
+@media(max-width:480px){
+  .wa{padding:12px 18px;font-size:12px;border-radius:26px;bottom:18px;left:14px}
+  body.lang-en .wa{left:auto;right:14px}
+}
 </style>
 
 <section class="plans">
@@ -994,7 +1144,7 @@ body.lang-en .wa{left:auto;right:24px}
       <p class="plans-sub en" style="margin-top:10px">Choose your meat and we marinate it with our secret blend — ready to grill at home anytime</p>
     </div>
 
-    <div class="plans-gr-2" style="grid-template-columns:repeat(3,1fr);max-width:100%">
+    <div class="plans-gr-2 plans-gr-3">
 
       <!-- Tatbela — Weekly -->
       <div class="pcard pt fi fi-d1">
