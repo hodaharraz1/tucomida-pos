@@ -270,6 +270,11 @@
     }
     .btn-cancel-ord:hover{border-color:var(--border2);color:var(--text2)}
 
+    .w-disc-pre{padding:5px 11px;border:1.5px solid var(--primary-light,#43A047);border-radius:20px;background:#fff;color:var(--primary-light,#2A6041);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ar);transition:all .15s}
+    .w-disc-pre:hover,.w-disc-pre.active{background:var(--primary,#2A6041);color:#fff;border-color:var(--primary,#2A6041)}
+    .w-disc-clr{border-color:var(--border,#ddd);color:var(--muted,#888)}
+    .w-disc-clr:hover{background:var(--border,#ddd);color:var(--text2,#555)}
+
     /* ── ACTIVE ORDERS ────────────────────────── */
     .orders-grid{
       display:grid;
@@ -535,6 +540,28 @@
       </div>
       <div class="cart-ftr">
         <div class="cart-total"><span>الإجمالي</span><span class="total-amt" id="cartTotal">0 ج</span></div>
+        <!-- Discount section -->
+        <div id="cartDiscountSection" style="display:none;margin-bottom:10px;padding:10px;background:var(--surface2,#f5f5f5);border-radius:10px;border:1px solid var(--border,#eee)">
+          <div style="font-size:11px;font-weight:700;color:var(--muted,#888);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px">الخصم</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px">
+            <button onclick="wApplyPreset(5,'percent',this)"  class="w-disc-pre">5%</button>
+            <button onclick="wApplyPreset(10,'percent',this)" class="w-disc-pre">10%</button>
+            <button onclick="wApplyPreset(15,'percent',this)" class="w-disc-pre">15%</button>
+            <button onclick="wApplyPreset(20,'percent',this)" class="w-disc-pre">20%</button>
+            <button onclick="wApplyPreset(0,'amount',this)"  class="w-disc-pre w-disc-clr">✕</button>
+          </div>
+          <div style="display:flex;gap:6px">
+            <input type="number" id="wDiscVal" placeholder="0" min="0" oninput="wCalcDiscount()"
+                   style="flex:1;padding:8px 10px;border:1.5px solid var(--border,#ddd);border-radius:8px;font-size:13px;outline:none;direction:ltr">
+            <select id="wDiscType" onchange="wCalcDiscount()"
+                    style="padding:8px 10px;border:1.5px solid var(--border,#ddd);border-radius:8px;font-size:13px;outline:none;font-family:var(--font-ar)">
+              <option value="percent">%</option>
+              <option value="amount">جنيه</option>
+            </select>
+          </div>
+          <div id="wDiscResult" style="font-size:13px;font-weight:700;color:var(--primary-light,#2A6041);margin-top:6px;text-align:center"></div>
+        </div>
+        <button onclick="toggleWDiscount()" id="wDiscToggle" style="width:100%;padding:8px;background:transparent;border:1.5px dashed var(--border,#ddd);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ar);color:var(--muted,#888);margin-bottom:6px">🏷 إضافة خصم</button>
         <button onclick="openCustomItemModal()" style="width:100%;padding:9px;background:var(--surface,#f5f5f5);border:1.5px dashed var(--border,#ddd);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);color:var(--muted,#888);margin-bottom:8px">+ إضافة صنف مخصص</button>
         <button class="btn-send" id="sendBtn" onclick="submitOrder()" disabled>إرسال للمطبخ 🍳</button>
         <button class="btn-cancel-ord" onclick="goToTables()">إلغاء</button>
@@ -902,6 +929,32 @@ function confirmSize() {
   else cart.push({itemId, name:item.name, size, price, quantity:1, notes:''});
   renderCart(); showToast(`تمت إضافة ${item.name} ${size} ✓`); closeSizeModal();
 }
+// ── DISCOUNT STATE ──────────────────────────────────
+let _wDiscOpen = false;
+function toggleWDiscount() {
+  _wDiscOpen = !_wDiscOpen;
+  document.getElementById('cartDiscountSection').style.display = _wDiscOpen ? 'block' : 'none';
+  document.getElementById('wDiscToggle').textContent = _wDiscOpen ? '✕ إلغاء الخصم' : '🏷 إضافة خصم';
+  if (!_wDiscOpen) { document.getElementById('wDiscVal').value=''; wCalcDiscount(); }
+}
+function wApplyPreset(val, type, btn) {
+  document.getElementById('wDiscVal').value = val || '';
+  document.getElementById('wDiscType').value = type;
+  document.querySelectorAll('.w-disc-pre').forEach(b=>b.classList.remove('active'));
+  if (val) btn.classList.add('active');
+  wCalcDiscount();
+}
+function wCalcDiscount() {
+  const subtotal = cart.reduce((s,i)=>s+i.price*i.quantity, 0);
+  const val = parseFloat(document.getElementById('wDiscVal').value)||0;
+  const type = document.getElementById('wDiscType').value;
+  const discAmt = Math.min(type==='percent' ? subtotal*val/100 : val, subtotal);
+  const final = Math.max(0, subtotal - discAmt);
+  document.getElementById('wDiscResult').textContent =
+    discAmt>0 ? `الإجمالي بعد الخصم: ${final.toLocaleString()} ج  (خصم ${Math.round(discAmt)} ج)` : '';
+  document.getElementById('cartTotal').textContent = final.toLocaleString() + ' ج';
+}
+
 function renderCart() {
   const body = document.getElementById('cartBody');
   const btn = document.getElementById('sendBtn');
@@ -930,7 +983,8 @@ function renderCart() {
         onchange="setNote(${idx},this.value)">${ci.notes}</textarea>`;
     body.appendChild(div);
   });
-  tot.textContent = total.toLocaleString() + ' ج'; cnt.textContent = count;
+  cnt.textContent = count;
+  wCalcDiscount();
 }
 function chgQty(idx, delta) { cart[idx].quantity += delta; if (cart[idx].quantity<=0) cart.splice(idx,1); renderCart(); }
 function setNote(idx, val) { cart[idx].notes = val; }
@@ -944,13 +998,17 @@ async function submitOrder() {
     const sessionId = await getCurrentSession();
     const orderNumber = await getNextOrderNumber();
     const subtotal = cart.reduce((s,i) => s+i.price*i.quantity, 0);
+    const wDV = parseFloat(document.getElementById('wDiscVal').value)||0;
+    const wDT = document.getElementById('wDiscType').value;
+    const discAmt = _wDiscOpen ? Math.min(wDT==='percent'?subtotal*wDV/100:wDV, subtotal) : 0;
+    const total = Math.max(0, subtotal - discAmt);
     const orderId = currentOrder.orderId || generateId();
     await db.ref(`orders/${orderId}`).set({
       orderNumber, type:currentOrder.type,
       tableId:currentOrder.tableId||null, tableNumber:currentOrder.tableNumber||null,
       status:'pending',
       items:cart.map(i=>({itemId:i.itemId,name:i.name,size:i.size||null,price:i.price,quantity:i.quantity,notes:i.notes||''})),
-      subtotal, discount:0, total:subtotal, paymentMethod:null,
+      subtotal, discount:Math.round(discAmt), discountType:_wDiscOpen?wDT:null, discountVal:_wDiscOpen?wDV:0, total, paymentMethod:null,
       createdAt:Date.now(), createdBy:currentUser.uid, createdByRole:currentRole,
       updatedAt:Date.now(), cancelRequested:false, cancelRequestedBy:null,
       cancelRequestedAt:null, cancelApproved:false, cancelApprovedBy:null,
@@ -959,7 +1017,7 @@ async function submitOrder() {
     if (currentOrder.tableId) await db.ref(`tables/${currentOrder.tableId}/status`).set('occupied');
     await logActivity(currentUser.uid, currentRole, 'new_order', {orderId, orderNumber, type:currentOrder.type});
     showToast(`تم إرسال الأوردر #${orderNumber} للمطبخ ✓`);
-    cart = []; renderCart(); setTimeout(() => goToTables(), 1500);
+    cart = []; _wDiscOpen=false; document.getElementById('cartDiscountSection').style.display='none'; document.getElementById('wDiscToggle').textContent='🏷 إضافة خصم'; renderCart(); setTimeout(() => goToTables(), 1500);
   } catch(e) {
     console.error(e);
     showToast('حدث خطأ في إرسال الأوردر');

@@ -169,6 +169,10 @@
     .discount-row input { flex:1; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; outline:none; direction:ltr; font-family:var(--font-en); color:var(--text); }
     .discount-row input:focus { border-color:var(--primary-light); }
     .discount-row select { padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; outline:none; font-family:var(--font-ar); }
+    .disc-preset { padding:6px 12px; border:1.5px solid var(--primary-light); border-radius:20px; background:#fff; color:var(--primary); font-size:12px; font-weight:700; cursor:pointer; font-family:var(--font-ar); transition:all .15s; }
+    .disc-preset:hover,.disc-preset.active { background:var(--primary); color:#fff; }
+    .disc-clear { border-color:var(--border); color:var(--muted); }
+    .disc-clear:hover { background:var(--border); color:var(--text2); }
     .modal-btn-row { display:flex; gap:10px; margin-top:18px; }
     .btn-modal-cancel { flex:1; padding:13px; background:var(--surface2); color:var(--muted); border:1px solid var(--border); border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; font-family:var(--font-ar); transition:background .15s; }
     .btn-modal-cancel:hover { background:var(--border); }
@@ -588,6 +592,13 @@
     <div class="modal-items-list" id="payModalItems"></div>
     <div class="modal-section">
       <div class="modal-section-title">الخصم (اختياري)</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+        <button onclick="applyDiscountPreset(5,'percent',this)"  class="disc-preset">5%</button>
+        <button onclick="applyDiscountPreset(10,'percent',this)" class="disc-preset">10%</button>
+        <button onclick="applyDiscountPreset(15,'percent',this)" class="disc-preset">15%</button>
+        <button onclick="applyDiscountPreset(20,'percent',this)" class="disc-preset">20%</button>
+        <button onclick="applyDiscountPreset(0,'amount',this)"  class="disc-preset disc-clear">✕ مسح</button>
+      </div>
       <div class="discount-row">
         <input type="number" id="discountVal" placeholder="0" min="0" oninput="calcDiscount()">
         <select id="discountType" onchange="calcDiscount()">
@@ -1095,6 +1106,7 @@ function openPayModalCommon() {
   document.getElementById('payModalSub').textContent = `أوردر #${o.orderNumber} — ${loc}`;
   document.getElementById('discountVal').value = '';
   document.getElementById('paidAmount').value = '';
+  document.querySelectorAll('.disc-preset').forEach(b => b.classList.remove('active'));
   document.getElementById('changeDisplay').style.display = 'none';
   selectedDiscountedTotal = o.total;
   document.getElementById('discountedTotal').textContent = `الإجمالي: ${o.total} ج`;
@@ -1121,6 +1133,14 @@ function selectPayMethod(method, el) {
   document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
   document.getElementById('cashAmountSection').style.display = method === 'cash' ? 'block' : 'none';
+}
+
+function applyDiscountPreset(val, type, btn) {
+  document.getElementById('discountVal').value = val || '';
+  document.getElementById('discountType').value = type;
+  document.querySelectorAll('.disc-preset').forEach(b => b.classList.remove('active'));
+  if (val) btn.classList.add('active');
+  calcDiscount();
 }
 
 function calcDiscount() {

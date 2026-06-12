@@ -489,6 +489,10 @@
     .opm-method.sel { border-color:var(--accent); color:var(--accent); background:rgba(230,123,32,.07); }
     .opm-confirm-btn { width:100%; padding:14px; background:var(--green); color:white; border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; font-family:var(--font-ar); margin-top:4px; transition:opacity .15s; }
     .opm-confirm-btn:disabled { opacity:.4; cursor:not-allowed; }
+    .o-disc-pre{padding:6px 13px;border:1.5px solid var(--green);border-radius:20px;background:transparent;color:var(--green);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ar);transition:all .15s}
+    .o-disc-pre:hover,.o-disc-pre.active{background:var(--green);color:#fff}
+    .o-disc-clr{border-color:var(--border);color:var(--muted)}
+    .o-disc-clr:hover{background:var(--border);color:var(--text2)}
 
     /* ── PRINT RECEIPT ── */
     @media print {
@@ -1228,6 +1232,27 @@
     <div class="opm-title" id="ownerPayTitle">💳 استلام الدفع</div>
     <div class="opm-body">
       <div id="ownerPayItems" style="background:var(--card2);border-radius:10px;padding:12px;margin-bottom:14px;font-size:13px;line-height:1.9;"></div>
+      <!-- Discount -->
+      <div style="margin-bottom:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">الخصم (اختياري)</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+          <button onclick="oDiscPreset(5,'percent',this)"  class="o-disc-pre">5%</button>
+          <button onclick="oDiscPreset(10,'percent',this)" class="o-disc-pre">10%</button>
+          <button onclick="oDiscPreset(15,'percent',this)" class="o-disc-pre">15%</button>
+          <button onclick="oDiscPreset(20,'percent',this)" class="o-disc-pre">20%</button>
+          <button onclick="oDiscPreset(0,'amount',this)"  class="o-disc-pre o-disc-clr">✕ مسح</button>
+        </div>
+        <div style="display:flex;gap:8px">
+          <input type="number" id="oDiscVal" placeholder="0" min="0" oninput="oCalcDiscount()"
+                 style="flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;outline:none;direction:ltr;background:var(--surface);color:var(--text)">
+          <select id="oDiscType" onchange="oCalcDiscount()"
+                  style="padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;outline:none;font-family:var(--font-ar);background:var(--surface);color:var(--text)">
+            <option value="percent">%</option>
+            <option value="amount">جنيه</option>
+          </select>
+        </div>
+        <div id="oDiscResult" style="font-size:14px;font-weight:800;color:var(--green);margin-top:8px;text-align:center"></div>
+      </div>
       <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">طريقة الدفع</div>
       <div class="opm-methods">
         <div class="opm-method sel" id="opm-cash" onclick="selectOwnerPayMethod('cash')">💵 كاش</div>
@@ -2914,9 +2939,34 @@ function ownerOpenPay(orderId, isOnline) {
     `<span style="display:block">${Number(i.quantity||0)}× ${escapeHtml(i.name||'')}${i.size?` (${escapeHtml(i.size)})`:''} — ${Number((i.price||0)*(i.quantity||0))} ج</span>`
   ).join('') + `<span style="display:block;font-weight:800;font-size:15px;margin-top:8px;border-top:1px solid var(--border);padding-top:8px">الإجمالي: ${o.total} ج</span>`;
   document.getElementById('ownerPayItems').innerHTML = itemsHtml;
+  document.getElementById('oDiscVal').value = '';
+  document.getElementById('oDiscResult').textContent = '';
+  document.querySelectorAll('.o-disc-pre').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.opm-method').forEach(b => b.classList.remove('sel'));
   document.getElementById('opm-cash').classList.add('sel');
   document.getElementById('ownerPayModal').classList.add('open');
+}
+
+function oDiscPreset(val, type, btn) {
+  document.getElementById('oDiscVal').value = val || '';
+  document.getElementById('oDiscType').value = type;
+  document.querySelectorAll('.o-disc-pre').forEach(b=>b.classList.remove('active'));
+  if (val) btn.classList.add('active');
+  oCalcDiscount();
+}
+
+function oCalcDiscount() {
+  const orderId = _ownerPayId;
+  if (!orderId) return;
+  const o = _ownerPayOnline ? onlineOrders[orderId] : activeOrders[orderId];
+  if (!o) return;
+  const val = parseFloat(document.getElementById('oDiscVal').value)||0;
+  const type = document.getElementById('oDiscType').value;
+  const sub = o.total;
+  const discAmt = Math.min(type==='percent' ? sub*val/100 : val, sub);
+  const final = Math.max(0, sub - discAmt);
+  document.getElementById('oDiscResult').textContent =
+    discAmt>0 ? `الإجمالي بعد الخصم: ${final.toLocaleString()} ج  (خصم ${Math.round(discAmt)} ج)` : '';
 }
 
 function selectOwnerPayMethod(m) {
@@ -2937,20 +2987,26 @@ async function confirmOwnerPayment() {
   const o = _ownerPayOnline ? onlineOrders[_ownerPayId] : activeOrders[_ownerPayId];
   if (!o) { closeOwnerPayModal(); return; }
   const path = _ownerPayOnline ? `online_orders/${_ownerPayId}` : `orders/${_ownerPayId}`;
+  const oDV = parseFloat(document.getElementById('oDiscVal').value)||0;
+  const oDT = document.getElementById('oDiscType').value;
+  const oDiscAmt = oDV>0 ? Math.min(oDT==='percent'?o.total*oDV/100:oDV, o.total) : 0;
+  const oFinalTotal = Math.max(0, o.total - oDiscAmt);
   try {
     await db.ref(path).update({
       status:'completed', paymentMethod:_ownerPayMethod,
+      discount: Math.round(oDiscAmt), discountType: oDV>0?oDT:null, discountVal: oDV,
+      total: oFinalTotal,
       completedAt:Date.now(), completedBy:currentUser.uid, updatedAt:Date.now()
     });
     if (!_ownerPayOnline && o.tableId) {
       await db.ref(`tables/${o.tableId}/status`).set('available');
     }
     logActivity(currentUser.uid, 'owner', 'payment', {
-      orderId:_ownerPayId, orderNumber:o.orderNumber, total:o.total, method:_ownerPayMethod
+      orderId:_ownerPayId, orderNumber:o.orderNumber, total:oFinalTotal, discount:Math.round(oDiscAmt), method:_ownerPayMethod
     });
     showToastO(`✅ تم استلام الدفع #${o.orderNumber}`);
-    // Store last paid order for manual print
-    _lastPaidOrder = { order: o, method: _ownerPayMethod };
+    // Store last paid order for manual print (with updated discount/total)
+    _lastPaidOrder = { order: {...o, discount:Math.round(oDiscAmt), total:oFinalTotal}, method: _ownerPayMethod };
     closeOwnerPayModal();
     // Show print button in toast area
     _showPrintToast(o.orderNumber);
