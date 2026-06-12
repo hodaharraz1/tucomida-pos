@@ -999,6 +999,7 @@ body.lang-en .wa{left:auto;right:24px}
 
 /* Hide swipe hint on desktop */
 .plans-swipe-hint { display:none }
+#menuTabsRow::-webkit-scrollbar { display:none }
 </style>
 
 <style>
@@ -1382,32 +1383,29 @@ body.lang-en .wa{left:auto;right:24px}
 <!-- MENU CATEGORIES -->
 <section class="cats" id="menu">
   <div class="W">
-    <div style="text-align:center;max-width:600px;margin:0 auto 72px">
-      <div class="eyebrow fi"><span class="ar">المنيو</span><span class="en">MENU</span></div>
+    <div style="text-align:center;max-width:600px;margin:0 auto 52px">
+      <div class="eyebrow fi"><span class="ar">المنيو الكامل</span><span class="en">FULL MENU</span></div>
       <h2 class="H2 fi"><span class="ar">استكشف <span class="acc">أطباقنا</span></span><span class="en">Explore <span class="acc">Our Menu</span></span></h2>
-      <p class="body-t fi" style="margin:0 auto"><span class="ar">من الراب الصحي للسموثي الطازج — عندنا لكل ذوق الخيار المناسب</span><span class="en">From healthy wraps to fresh smoothies — we have the right option for every taste</span></p>
+      <p class="body-t fi" style="margin:0 auto"><span class="ar">من الراب الصحي للسموثي الطازج والباقات الشهرية — عندنا لكل ذوق الخيار المناسب</span><span class="en">From healthy wraps to fresh smoothies and monthly plans — we have the right option for every taste</span></p>
     </div>
-    <div class="cats-grid">
-      <a href="/order.html" class="cat-card fi fi-d1"><img src="/images/food/food-37.jpg" alt="راب" loading="lazy"><div class="cat-vl"></div><div class="cat-bdg">⭐ <span class="ar">الأكثر طلباً</span><span class="en">Best Seller</span></div><div class="cat-info"><div class="cat-en">Wraps</div><div class="cat-ar">راب صحي</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
-      <a href="/order.html" class="cat-card fi fi-d2"><img src="/images/food/food-15.jpg" alt="إفطار" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Breakfast</div><div class="cat-ar">إفطار صحي</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
-      <a href="/order.html" class="cat-card fi fi-d3"><img src="/images/food/food-66.jpg" alt="سلطة" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Salads</div><div class="cat-ar">سلطات طازجة</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
-      <a href="/order.html" class="cat-card fi fi-d4"><img src="/images/food/food-62.jpg" alt="سموثي" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Smoothies</div><div class="cat-ar">سموثي طازج</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
-      <a href="/order.html" class="cat-card fi fi-d1"><img src="/images/food/food-16.jpg" alt="بروتين" loading="lazy"><div class="cat-vl"></div><div class="cat-bdg">💪 High Protein</div><div class="cat-info"><div class="cat-en">High Protein</div><div class="cat-ar">بروتين عالي</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
-      <a href="/order.html" class="cat-card fi fi-d2"><img src="/images/food/food-61.jpg" alt="أطباق" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Main Course</div><div class="cat-ar">الأطباق الرئيسية</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
-      <a href="/order.html" class="cat-card fi fi-d3"><img src="/images/food/food-79.jpg" alt="تتبيلة" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Marinade</div><div class="cat-ar">تتبيلة على الطلب</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
-      <a href="/order.html" class="cat-card fi fi-d4"><img src="/images/food/food-72.jpg" alt="حلويات" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Desserts</div><div class="cat-ar">حلويات صحية</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+    <!-- Category tabs -->
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-bottom:20px;padding-bottom:4px">
+      <div id="menuTabsRow" style="display:flex;gap:8px;min-width:max-content"></div>
     </div>
-    <!-- CTA to full menu page -->
-    <div style="text-align:center;margin-top:16px" class="fi">
+    <!-- Search -->
+    <div style="margin-bottom:28px">
+      <input id="menuSearch" type="text" placeholder="🔍 ابحث عن صنف..." oninput="filterMenuSearch(this.value)"
+             style="width:100%;box-sizing:border-box;padding:13px 18px;border-radius:14px;border:1.5px solid #D8EDD8;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;background:#fff"
+             onfocus="this.style.borderColor='#2A6041'" onblur="this.style.borderColor='#D8EDD8'">
+    </div>
+    <!-- Items -->
+    <div id="menuItemsGrid"></div>
+    <div style="text-align:center;margin-top:36px" class="fi">
       <a href="/order.html" class="btn btn-fill" style="font-size:16px;padding:16px 40px;display:inline-flex">
-        <span class="ar">🍽 شوف المنيو الكامل واطلب دلوقتي ←</span>
-        <span class="en">🍽 View Full Menu & Order Now →</span>
+        <span class="ar">🛒 اطلب دلوقتي ←</span>
+        <span class="en">🛒 Order Now →</span>
       </a>
     </div>
-    <!-- hidden elements needed by JS (don't remove) -->
-    <div id="menuTabsRow" style="display:none"></div>
-    <div id="menuSearch" style="display:none"></div>
-    <div id="menuItemsGrid" style="display:none"></div>
   </div>
 </section>
 
@@ -1675,8 +1673,10 @@ const TAB_STYLE = 'padding:8px 18px;border-radius:20px;border:1.5px solid #D8EDD
 const TAB_ACTIVE = 'background:#2A6041;border-color:#2A6041;color:#fff';
 
 // ── Load Menu from Firebase ─────────────────────
+let _pubPlansData = {};
 window.addEventListener('load', () => {
   if (typeof db === 'undefined') return;
+  db.ref('settings/plans').once('value').then(snap => { _pubPlansData = snap.val() || {}; }).catch(()=>{});
   db.ref('menu').once('value').then(snap => {
     const data = snap.val() || {categories:{},items:{}};
     buildMenuTabs(data);
@@ -1706,6 +1706,12 @@ function buildMenuTabs(data) {
     b.onclick = function(){ _activeCat=id; setActiveTab(this); document.getElementById('menuSearch').value=''; renderMenuItems(data,id); };
     row.appendChild(b);
   });
+  // Plans tab
+  const pb = document.createElement('button');
+  pb.style.cssText = TAB_STYLE;
+  pb.innerHTML = '📦 الباقات';
+  pb.onclick = function(){ _activeCat='__plans__'; setActiveTab(this); document.getElementById('menuSearch').value=''; renderMenuItems(data,'__plans__'); };
+  row.appendChild(pb);
 }
 
 function setActiveTab(btn) {
@@ -1780,6 +1786,63 @@ function renderMenuItems(data, catId) {
   const container = document.getElementById('menuItemsGrid');
   container.innerHTML = '';
 
+  // Plans category
+  if (catId === '__plans__') {
+    const PLAN_DEFS_ALL = [
+      {id:'weekly',      nameAr:'باقة أسبوعية',    period:'(أسبوع)',      color:'#2A6041'},
+      {id:'monthly',     nameAr:'باقة نصف شهرية',  period:'(15 يوم)',     color:'#E67B20'},
+      {id:'fitness',     nameAr:'باقة شهرية فيتنس', period:'(شهر)',        color:'#7B2800'},
+      {id:'tatbela-week',nameAr:'تتبيلة أسبوعية',  period:'(½ كيلو)',     color:'#2A6041'},
+      {id:'tatbela-2weeks',nameAr:'تتبيلة أسبوعين',period:'(1 كيلو)',     color:'#E67B20'},
+      {id:'tatbela-month',nameAr:'تتبيلة شهرية',   period:'(1.5 كيلو)',   color:'#7B2800'},
+    ];
+    const allPlans = [...PLAN_DEFS_ALL.slice(0,3), ...PLAN_DEFS_ALL.slice(3)];
+    const plansSec = document.createElement('div');
+    // subscriptions header
+    plansSec.innerHTML = `
+      <div style="font-size:16px;font-weight:900;color:#1A3D28;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid #EDF6EE">📦 باقات الاشتراك الشهرية</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:28px">
+        ${PLAN_DEFS_ALL.slice(0,3).map(p => {
+          const pd = (_pubPlansData||{})[p.id] || {};
+          const price = pd.price;
+          const hasP = price !== undefined && price !== null && price !== '';
+          return `<div onclick="location.href='/order.html'" style="background:#fff;border-radius:12px;padding:16px 18px;border:1.5px solid #D8EDD8;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:${hasP?'pointer':'default'};opacity:${hasP?1:.6};transition:all .2s"
+            onmouseenter="if(${hasP})this.style.borderColor='#2A6041',this.style.boxShadow='0 4px 16px rgba(26,61,38,.1)'"
+            onmouseleave="this.style.borderColor='#D8EDD8',this.style.boxShadow='none'">
+            <div>
+              <div style="font-size:14px;font-weight:800;color:#1A1A1A;margin-bottom:2px">${p.nameAr}</div>
+              <div style="font-size:12px;color:#5A6A5A">${p.period}</div>
+            </div>
+            <div style="text-align:left;flex-shrink:0">
+              <div style="font-size:15px;font-weight:900;color:${p.color}">${hasP ? price+' ج' : '—'}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div style="font-size:16px;font-weight:900;color:#1A3D28;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid #EDF6EE">🧂 باقات التتبيلة</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px">
+        ${PLAN_DEFS_ALL.slice(3).map(p => {
+          const pd = (_pubPlansData||{})[p.id] || {};
+          const price = pd.price;
+          const hasP = price !== undefined && price !== null && price !== '';
+          return `<div onclick="location.href='/order.html'" style="background:#fff;border-radius:12px;padding:16px 18px;border:1.5px solid #D8EDD8;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:${hasP?'pointer':'default'};opacity:${hasP?1:.6};transition:all .2s"
+            onmouseenter="if(${hasP})this.style.borderColor='#2A6041',this.style.boxShadow='0 4px 16px rgba(26,61,38,.1)'"
+            onmouseleave="this.style.borderColor='#D8EDD8',this.style.boxShadow='none'">
+            <div>
+              <div style="font-size:14px;font-weight:800;color:#1A1A1A;margin-bottom:2px">${p.nameAr}</div>
+              <div style="font-size:12px;color:#5A6A5A">${p.period}</div>
+            </div>
+            <div style="text-align:left;flex-shrink:0">
+              <div style="font-size:15px;font-weight:900;color:${p.color}">${hasP ? price+' ج' : '—'}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    `;
+    container.appendChild(plansSec);
+    return;
+  }
+
   const cats = Object.entries(data.categories||{})
     .filter(([,c])=>c.active!==false)
     .sort((a,b)=>(a[1].order||0)-(b[1].order||0));
@@ -1797,31 +1860,13 @@ function renderMenuItems(data, catId) {
     const section = document.createElement('div');
     section.style.cssText = 'margin-bottom:36px';
     section.innerHTML = `
-      <!-- صورة الكاتيجوري -->
-      <div style="position:relative;border-radius:20px;overflow:hidden;height:175px;
-                  margin-bottom:16px;box-shadow:0 6px 20px rgba(26,61,38,.18)">
-        <img src="${catImg}" alt="${catName}"
-             style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy">
-        <div style="position:absolute;bottom:0;left:0;right:0;
-                    background:linear-gradient(transparent,rgba(0,0,0,.72));
-                    padding:28px 18px 14px">
-          <div style="font-size:21px;font-weight:900;color:#fff;
-                      display:flex;align-items:center;gap:8px;
-                      text-shadow:0 2px 8px rgba(0,0,0,.4)">
-            ${catName}
-            <span style="font-size:11px;background:rgba(255,255,255,.22);
-                         padding:2px 10px;border-radius:20px;font-weight:600">
-              ${items.length} صنف
-            </span>
-          </div>
-        </div>
+      <div style="font-size:16px;font-weight:900;color:#1A3D28;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid #EDF6EE;display:flex;align-items:center;gap:8px">
+        ${catName}
+        <span style="font-size:12px;background:#EDF6EE;color:#5A6A5A;padding:2px 10px;border-radius:20px;font-weight:600">${items.length} صنف</span>
       </div>
-      <!-- أصناف الكاتيجوري -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px">
         ${items.map(([,i]) => buildItemCard(i)).join('')}
       </div>
-      <!-- زيادة البروتين -->
-      ${_PROTEIN_HTML}
     `;
     container.appendChild(section);
     rendered++;
