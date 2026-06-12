@@ -949,20 +949,68 @@ body.lang-en .wa{left:auto;right:24px}
   .wc-t{font-size:17px}
 }
 
-/* ── 6. Plan cards — touch-friendly buttons, readable on tablet ── */
-@media(max-width:900px){
-  .plans-gr{grid-template-columns:repeat(2,1fr);gap:16px}
-  .pcard{padding:28px 22px 24px}
-  .p-pr{font-size:38px}
-  .p-btn{padding:13px 20px;font-size:14px;min-height:50px}
-  .p-ul{gap:10px}
-  .p-ul li{font-size:13px}
+/* ── 6. Plan cards — HORIZONTAL SCROLL on tablet/mobile ── */
+@media(max-width:1023px){
+  /* Turn both grids into a swipeable row */
+  .plans-gr,
+  .plans-gr-2,
+  .plans-gr-3 {
+    display:flex !important;
+    flex-direction:row !important;
+    overflow-x:auto;
+    gap:16px;
+    padding-bottom:20px;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    /* extend to screen edges without breaking W padding */
+    margin-inline:-20px;
+    padding-inline:20px;
+    max-width:none !important;
+  }
+  .plans-gr::-webkit-scrollbar,
+  .plans-gr-2::-webkit-scrollbar,
+  .plans-gr-3::-webkit-scrollbar { display:none }
+
+  /* Fixed-width cards that snap */
+  .plans-gr > .pcard,
+  .plans-gr-2 > .pcard,
+  .plans-gr-3 > .pcard {
+    flex: 0 0 300px !important;
+    min-width: 0;
+    scroll-snap-align: start;
+    padding: 28px 22px 24px;
+  }
+
+  /* Swipe hint chip */
+  .plans-swipe-hint { display:flex }
 }
 @media(max-width:600px){
-  .plans-gr{grid-template-columns:1fr}
-  .pcard{padding:26px 20px 22px}
-  .p-pr{font-size:44px}
-  .p-btn{min-height:52px;font-size:15px}
+  .plans-gr > .pcard,
+  .plans-gr-2 > .pcard,
+  .plans-gr-3 > .pcard {
+    flex: 0 0 min(290px, 82vw) !important;
+    padding: 24px 18px 20px;
+  }
+  .p-pr { font-size: 40px }
+  .p-btn { min-height:52px; font-size:15px }
+  .p-ul li { font-size:13px }
+}
+
+/* Hide swipe hint on desktop */
+.plans-swipe-hint { display:none }
+</style>
+
+<style>
+/* ── Swipe hint bar ── */
+.plans-swipe-hint {
+  align-items:center; justify-content:center; gap:8px;
+  font-size:12px; font-weight:700; color:var(--muted);
+  margin-top:8px; margin-bottom:4px; letter-spacing:.3px;
+}
+.plans-swipe-hint::before,
+.plans-swipe-hint::after {
+  content:''; width:32px; height:1px; background:var(--s3);
 }
 
 /* ── 7. Reviews — readable on tablet ── */
