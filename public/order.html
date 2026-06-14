@@ -301,7 +301,7 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
   </a>
   <div class="nav-search">
     <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-    <input id="menuSearch" type="search" placeholder="ابحث عن أي طبق..." autocomplete="off" oninput="handleSearch(this.value)">
+    <input id="menuSearch" type="search" placeholder="Search menu..." autocomplete="off" oninput="handleSearch(this.value)">
   </div>
   <button class="nav-cart-btn" onclick="openCheckout()">
     🛒
@@ -318,7 +318,7 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
 <!-- ── CAT TABS ── -->
 <div class="cat-bar">
   <div class="cat-bar-inner" id="catTabs">
-    <button class="cat-tab active" data-cat="all" onclick="filterCat(null,this)">🍴 الكل</button>
+    <button class="cat-tab active" data-cat="all" onclick="filterCat(null,this)">🍴 All</button>
   </div>
 </div>
 
@@ -694,7 +694,7 @@ function buildCatTabs() {
   const cats = Object.entries(menuData.categories||{})
     .filter(([,c])=>c.active!==false).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
   const row = document.getElementById('catTabs');
-  row.innerHTML = '<button class="cat-tab active" data-cat="all" onclick="filterCat(null,this)">🍴 الكل</button>';
+  row.innerHTML = '<button class="cat-tab active" data-cat="all" onclick="filterCat(null,this)">🍴 All</button>';
   cats.forEach(([id,c])=>{
     const b = document.createElement('button');
     b.className = 'cat-tab';
