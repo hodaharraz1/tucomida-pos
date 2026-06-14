@@ -147,10 +147,10 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
 .qty-n{font-size:13px;font-weight:800;min-width:18px;text-align:center;color:var(--ink);font-family:var(--fe)}
 /* New badge */
 .new-tag{
-  position:absolute;top:7px;right:7px;
+  display:inline-block;vertical-align:middle;
   background:var(--o);color:#fff;border-radius:6px;
   font-size:9px;font-weight:800;padding:2px 6px;letter-spacing:.3px;
-  text-transform:uppercase;
+  margin-right:5px;
 }
 /* Sizes list */
 .size-row{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
@@ -663,11 +663,13 @@ window.addEventListener('load', ()=>{
       menuData.categories['__plans__'] = {name:'الباقات الشهرية', nameAr:'الباقات الشهرية', order:9999, active:true};
       Object.entries(plansObj).forEach(([pid, plan])=>{
         if (plan.active===false) return;
+        const descItems = plan.itemsAr || plan.itemsEn || [];
         menuData.items['__plan__'+pid] = {
-          name: plan.name||plan.nameAr||'باقة',
-          nameAr: plan.nameAr||plan.name||'',
-          description: plan.description||plan.desc||'',
+          name: plan.nameAr||plan.nameEn||plan.name||'باقة',
+          nameAr: '',
+          description: descItems.join(' • '),
           singlePrice: plan.price||0,
+          period: plan.period||'',
           calories: null,
           categoryId: '__plans__',
           active: true,
@@ -766,16 +768,16 @@ function buildFoodCard(iid, item) {
   const cal = item.sizes?.M?.calories||item.calories||'';
   const ci = cart.find(x=>x.iid===iid && !x.size);
   const qty = ci ? ci.qty : 0;
+  const priceLabel = item.period ? `${priceStr} ج ${item.period}` : `${priceStr} ج`;
   return `<div class="food-card${qty>0?' in-cart':''}" data-iid="${iid}" data-size="">
-    ${item.isNew?'<div class="new-tag">جديد</div>':''}
     <div class="food-card-body">
-      <div class="food-card-name">${item.name||item.nameAr}</div>
+      <div class="food-card-name">${item.isNew?'<span class="new-tag">جديد</span>':''}${item.name||item.nameAr}</div>
       ${item.nameAr&&item.name!==item.nameAr?`<div style="font-size:10px;color:var(--mute);margin-bottom:3px">${item.nameAr}</div>`:''}
       ${item.description?`<div class="food-card-desc">${item.description}</div>`:''}
       ${hasSizes ? `<div class="size-row">${Object.entries(item.sizes).map(([s,d])=>`<button class="size-pill" onclick="event.stopPropagation();addItem('${iid}','${item.name} ${s}',${d.price},'${s}',${d.calories||0})">${s}: ${d.price}ج</button>`).join('')}</div>` : ''}
       <div class="food-card-foot" style="margin-top:8px">
         <div>
-          <div class="food-card-price">${priceStr} ج</div>
+          <div class="food-card-price">${priceLabel}</div>
           ${cal?`<div class="food-card-cal">${cal} ك</div>`:''}
         </div>
         ${hasSizes ? '' : `
