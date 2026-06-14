@@ -310,8 +310,8 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
 
 <!-- ── TYPE ── -->
 <div class="type-bar">
-  <button class="type-pill active" id="tp-delivery" onclick="quickSetType('delivery')">🛵 توصيل</button>
-  <button class="type-pill" id="tp-pickup" onclick="quickSetType('pickup')">🏪 استلام</button>
+  <button class="type-pill active" id="tp-delivery" onclick="quickSetType('delivery')">🛵 Delivery</button>
+  <button class="type-pill" id="tp-pickup" onclick="quickSetType('pickup')">🏪 Pickup</button>
 </div>
 
 <!-- ── CAT TABS ── -->
@@ -336,7 +336,7 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
   <div class="float-cart-inner">
     <div class="float-cart-info">
       <div class="float-cart-count" id="floatCount">0 أيتم</div>
-      <div class="float-cart-total" id="floatTotal">0 ج</div>
+      <div class="float-cart-total" id="floatTotal">0 EGP</div>
     </div>
     <button class="float-cart-btn" onclick="openCheckout()">
       تأكيد الطلب ←
@@ -361,8 +361,8 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
       <div class="sheet-section">
         <div class="sheet-section-title">نوع الطلب</div>
         <div class="type-switch">
-          <button class="type-switch-btn active" id="cs-delivery" onclick="setCheckoutType('delivery')">🛵 توصيل</button>
-          <button class="type-switch-btn" id="cs-pickup" onclick="setCheckoutType('pickup')">🏪 استلام من المطعم</button>
+          <button class="type-switch-btn active" id="cs-delivery" onclick="setCheckoutType('delivery')">🛵 Delivery</button>
+          <button class="type-switch-btn" id="cs-pickup" onclick="setCheckoutType('pickup')">🏪 Pickup</button>
         </div>
       </div>
 
@@ -401,7 +401,7 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
 
       <div class="checkout-total" id="checkoutTotal">
         <span>الإجمالي</span>
-        <span style="color:var(--g1);font-family:var(--fe)">0 ج</span>
+        <span style="color:var(--g1);font-family:var(--fe)">0 EGP</span>
       </div>
 
       <button class="checkout-submit" id="checkoutSubmitBtn" onclick="submitOnlineOrder()" style="margin-top:18px">
@@ -504,7 +504,7 @@ function updateUI() {
   badge.textContent = count;
   badge.classList.toggle('show', count>0);
   document.getElementById('floatCount').textContent = count + ' أيتم';
-  document.getElementById('floatTotal').textContent = total.toLocaleString() + ' ج';
+  document.getElementById('floatTotal').textContent = total.toLocaleString() + ' EGP';
   document.getElementById('floatCart').classList.toggle('show', count>0);
   // Update add buttons
   document.querySelectorAll('.food-card').forEach(c => {
@@ -589,7 +589,7 @@ function openCheckout() {
     </div>`).join('');
   document.getElementById('checkoutTotal').innerHTML = `
     <span style="font-size:17px;font-weight:900">الإجمالي</span>
-    <span style="font-size:20px;font-weight:900;color:var(--g1);font-family:var(--fe)">${total.toLocaleString()} ج</span>`;
+    <span style="font-size:20px;font-weight:900;color:var(--g1);font-family:var(--fe)">${total.toLocaleString()} EGP</span>`;
   document.getElementById('checkoutOverlay').classList.add('open');
   document.getElementById('addressField').style.display = orderType==='delivery' ? '' : 'none';
 }
@@ -814,21 +814,21 @@ function showPlanModal(iid) {
 function buildFoodCard(iid, item) {
   const hasSizes = item.sizes && Object.keys(item.sizes).length>0;
   const minP = hasSizes ? Math.min(...Object.values(item.sizes).map(s=>s.price)) : (item.singlePrice||0);
-  const priceStr = hasSizes ? 'من '+minP : minP;
+  const priceStr = hasSizes ? 'from '+minP : minP;
   const cal = item.sizes?.M?.calories||item.calories||'';
   const ci = cart.find(x=>x.iid===iid && !x.size);
   const qty = ci ? ci.qty : 0;
-  const priceLabel = item.period ? `${priceStr} ج ${item.period}` : `${priceStr} ج`;
+  const priceLabel = item.period ? `${priceStr} EGP ${item.period}` : `${priceStr} EGP`;
   return `<div class="food-card${qty>0?' in-cart':''}" data-iid="${iid}" data-size="">
     <div class="food-card-body">
       <div class="food-card-name">${item.isNew?'<span class="new-tag">جديد</span>':''}${item.name||item.nameAr}</div>
       ${item.nameAr&&item.name!==item.nameAr?`<div style="font-size:10px;color:var(--mute);margin-bottom:3px">${item.nameAr}</div>`:''}
       ${item.description?`<div class="food-card-desc">${item.description}</div>`:''}
-      ${hasSizes ? `<div class="size-row">${Object.entries(item.sizes).map(([s,d])=>`<button class="size-pill" onclick="event.stopPropagation();addItem('${iid}','${item.name} ${s}',${d.price},'${s}',${d.calories||0})">${s}: ${d.price}ج</button>`).join('')}</div>` : ''}
+      ${hasSizes ? `<div class="size-row">${Object.entries(item.sizes).map(([s,d])=>`<button class="size-pill" onclick="event.stopPropagation();addItem('${iid}','${item.name} ${s}',${d.price},'${s}',${d.calories||0})">${s}: ${d.price} EGP</button>`).join('')}</div>` : ''}
       <div class="food-card-foot" style="margin-top:8px">
         <div>
           <div class="food-card-price">${priceLabel}</div>
-          ${cal?`<div class="food-card-cal">${cal} ك</div>`:''}
+          ${cal?`<div class="food-card-cal">${cal} cal</div>`:''}
         </div>
         ${hasSizes ? '' : `
           <button class="add-btn" onclick="addItem('${iid}','${item.name||item.nameAr}',${item.singlePrice||0},null,${item.calories||0})" style="${qty>0?'display:none':''}">+</button>
