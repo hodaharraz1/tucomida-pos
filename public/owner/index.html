@@ -377,6 +377,24 @@
     .exp-cat-badge { display:inline-block; padding:2px 8px; border-radius:6px; font-size:10px; font-weight:700; background:rgba(230,123,32,.1); color:var(--accent); }
     @media(max-width:480px) { .exp-form-grid { grid-template-columns:1fr; } .exp-summary { grid-template-columns:1fr 1fr; } }
 
+    /* ══ EXPENSE CALENDAR ══ */
+    .exp-cal { background:var(--card); border-radius:14px; border:1px solid var(--border); padding:16px; margin-bottom:16px; }
+    .exp-cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+    .exp-cal-title { font-size:15px; font-weight:800; color:var(--text); }
+    .exp-cal-nav { background:var(--card2); border:1px solid var(--border); border-radius:8px; padding:6px 12px; cursor:pointer; font-size:16px; font-family:var(--font-ar); color:var(--text); min-height:36px; }
+    .exp-cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+    .exp-cal-dow { font-size:10px; font-weight:700; color:var(--muted); text-align:center; padding:4px 0; }
+    .exp-cal-day { border-radius:10px; padding:6px 4px; min-height:54px; cursor:pointer; border:1.5px solid transparent; display:flex; flex-direction:column; align-items:center; gap:2px; transition:all .15s; background:var(--card2); }
+    .exp-cal-day:hover { border-color:var(--accent); }
+    .exp-cal-day.has-exp { background:rgba(230,123,32,.08); border-color:rgba(230,123,32,.25); }
+    .exp-cal-day.today { border-color:var(--accent); }
+    .exp-cal-day.selected { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .exp-cal-day.empty { background:none; cursor:default; border-color:transparent; }
+    .exp-cal-day-num { font-size:12px; font-weight:800; }
+    .exp-cal-day-amt { font-size:9px; font-weight:700; color:var(--accent); }
+    .exp-cal-day.selected .exp-cal-day-amt { color:#fff; }
+    .exp-cal-day-detail { margin-top:12px; }
+
     /* ══ INVENTORY ══ */
     .inv-alert-bar { background:rgba(229,57,53,.1); border:1px solid rgba(229,57,53,.25); border-radius:12px; padding:12px 14px; margin-bottom:14px; display:none; }
     .inv-alert-bar.show { display:block; }
@@ -866,8 +884,9 @@
 
     <!-- Summary tabs -->
     <div class="exp-tabs">
-      <button class="exp-tab active" id="etab-day"   onclick="expSetTab('day')">اليوم</button>
-      <button class="exp-tab" id="etab-month" onclick="expSetTab('month')">الشهر</button>
+      <button class="exp-tab active" id="etab-day"      onclick="expSetTab('day')">اليوم</button>
+      <button class="exp-tab"        id="etab-month"    onclick="expSetTab('month')">الشهر</button>
+      <button class="exp-tab"        id="etab-calendar" onclick="expSetTab('calendar')">📅 التقويم</button>
     </div>
 
     <!-- Summary cards -->
@@ -916,6 +935,9 @@
       </div>
       <button class="exp-add-btn" onclick="addExpense()">💾 حفظ المصروف</button>
     </div>
+
+    <!-- Calendar view (hidden by default) -->
+    <div id="expCalendarContainer" style="display:none"></div>
 
     <!-- Expenses list -->
     <div id="expListContainer">
@@ -3108,11 +3130,20 @@ function _printOwnerReceiptData(order, payMethod) {
 ═══════════════════════════════════════════════ */
 let expTab = 'day', expData = {};
 
+let _expCalYear = new Date().getFullYear();
+let _expCalMonth = new Date().getMonth(); // 0-indexed
+let _expCalSelected = null;
+
 function expSetTab(t) {
   expTab = t;
   document.querySelectorAll('.exp-tab').forEach(b => b.classList.remove('active'));
   document.getElementById('etab-' + t).classList.add('active');
-  renderExpenses();
+  const isCal = t === 'calendar';
+  document.getElementById('expSummaryCards').style.display = isCal ? 'none' : '';
+  document.getElementById('expCalendarContainer').style.display = isCal ? '' : 'none';
+  document.getElementById('expListContainer').style.display = isCal ? 'none' : '';
+  if (isCal) renderExpCalendar();
+  else renderExpenses();
 }
 
 function expGetDateRange() {
@@ -3129,7 +3160,8 @@ function expGetDateRange() {
 function listenExpenses() {
   db.ref('expenses').on('value', snap => {
     expData = snap.val() || {};
-    renderExpenses();
+    if (expTab === 'calendar') renderExpCalendar();
+    else renderExpenses();
     _checkExpDot();
   });
 }
@@ -3174,6 +3206,90 @@ function renderExpenses() {
       <div class="exp-item-amount">${(e.amount||0).toLocaleString()} ج</div>
       <button class="exp-del-btn" onclick="deleteExpense('${escapeHtml(id)}')">حذف</button>
     </div>`).join('');
+}
+
+function renderExpCalendar() {
+  const y = _expCalYear, m = _expCalMonth;
+  const monthKey = `${y}-${String(m+1).padStart(2,'0')}`;
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  const firstDow = new Date(y, m, 1).getDay(); // 0=Sun
+  const today = getDayId();
+
+  // Sum expenses per day for this month
+  const dayTotals = {};
+  Object.values(expData).forEach(e => {
+    if (e.dayId && e.dayId.startsWith(monthKey)) {
+      const d = e.dayId;
+      dayTotals[d] = (dayTotals[d] || 0) + (e.amount || 0);
+    }
+  });
+
+  const MONTHS_AR = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  const DAYS_AR = ['أح','اث','ث','أر','خ','ج','س'];
+
+  let html = `<div class="exp-cal">
+    <div class="exp-cal-header">
+      <button class="exp-cal-nav" onclick="expCalNav(-1)">‹</button>
+      <div class="exp-cal-title">${MONTHS_AR[m]} ${y}</div>
+      <button class="exp-cal-nav" onclick="expCalNav(1)">›</button>
+    </div>
+    <div class="exp-cal-grid">
+      ${DAYS_AR.map(d=>`<div class="exp-cal-dow">${d}</div>`).join('')}`;
+
+  // Empty cells before first day
+  for (let i = 0; i < firstDow; i++) html += `<div class="exp-cal-day empty"></div>`;
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dayId = `${monthKey}-${String(d).padStart(2,'0')}`;
+    const amt = dayTotals[dayId] || 0;
+    const isToday = dayId === today;
+    const isSel = dayId === _expCalSelected;
+    const hasExp = amt > 0;
+    const cls = ['exp-cal-day', hasExp?'has-exp':'', isToday?'today':'', isSel?'selected':''].filter(Boolean).join(' ');
+    html += `<div class="${cls}" onclick="expCalSelectDay('${dayId}')">
+      <span class="exp-cal-day-num">${d}</span>
+      ${amt > 0 ? `<span class="exp-cal-day-amt">${amt >= 1000 ? (amt/1000).toFixed(1)+'k' : amt}</span>` : ''}
+    </div>`;
+  }
+
+  html += `</div></div>`;
+
+  // Selected day detail
+  if (_expCalSelected) {
+    const selItems = Object.entries(expData).filter(([,e]) => e.dayId === _expCalSelected).sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));
+    const selTotal = selItems.reduce((s,[,e])=>s+(e.amount||0),0);
+    if (selItems.length) {
+      html += `<div class="exp-cal-day-detail">
+        <div style="font-size:13px;font-weight:800;color:var(--muted);margin-bottom:10px">📅 ${_expCalSelected} — إجمالي: <span style="color:var(--accent)">${selTotal.toLocaleString()} ج</span></div>
+        ${selItems.map(([id,e])=>`
+          <div class="exp-list-item">
+            <div class="exp-item-info">
+              <div class="exp-item-name">${escapeHtml(e.name||'')}</div>
+              <div class="exp-item-meta"><span class="exp-cat-badge">${escapeHtml(e.category||'')}</span></div>
+            </div>
+            <div class="exp-item-amount">${(e.amount||0).toLocaleString()} ج</div>
+            <button class="exp-del-btn" onclick="deleteExpense('${escapeHtml(id)}')">حذف</button>
+          </div>`).join('')}
+      </div>`;
+    } else {
+      html += `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">لا توجد مصروفات في هذا اليوم</div>`;
+    }
+  }
+
+  document.getElementById('expCalendarContainer').innerHTML = html;
+}
+
+function expCalNav(dir) {
+  _expCalMonth += dir;
+  if (_expCalMonth > 11) { _expCalMonth = 0; _expCalYear++; }
+  if (_expCalMonth < 0)  { _expCalMonth = 11; _expCalYear--; }
+  _expCalSelected = null;
+  renderExpCalendar();
+}
+
+function expCalSelectDay(dayId) {
+  _expCalSelected = _expCalSelected === dayId ? null : dayId;
+  renderExpCalendar();
 }
 
 async function addExpense() {
