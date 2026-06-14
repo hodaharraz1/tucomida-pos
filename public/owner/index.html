@@ -383,47 +383,56 @@
     .inv-alert-title { font-size:13px; font-weight:700; color:#EF5350; margin-bottom:6px; }
     .inv-alert-items { display:flex; flex-wrap:wrap; gap:6px; }
     .inv-alert-chip { background:rgba(229,57,53,.15); color:#EF5350; border-radius:20px; padding:3px 10px; font-size:12px; font-weight:700; }
-    /* ── INVENTORY REDESIGN — clean list by category ── */
+    /* ── INVENTORY LIST ── */
     .inv-list { display:flex; flex-direction:column; gap:0; margin-bottom:14px; }
-    .inv-cat-hdr { display:flex; align-items:center; gap:8px; padding:10px 4px 6px;
-      font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase;
-      letter-spacing:.8px; border-bottom:1px solid var(--border); margin-bottom:4px; margin-top:8px; }
+    .inv-cat-hdr { display:flex; align-items:center; gap:8px; padding:12px 6px 8px;
+      font-size:12px; font-weight:800; color:var(--muted); text-transform:uppercase;
+      letter-spacing:.8px; border-bottom:1px solid var(--border); margin-bottom:6px; margin-top:10px; }
     .inv-cat-hdr:first-child { margin-top:0; }
-    .inv-row { display:flex; align-items:center; gap:10px; padding:10px 12px;
-      background:var(--card); border-radius:10px; margin-bottom:5px;
+    .inv-row { display:flex; align-items:center; gap:12px; padding:12px 14px;
+      background:var(--card); border-radius:12px; margin-bottom:6px;
       border:1px solid var(--border); transition:border-color .15s; }
     .inv-row.low { border-color:rgba(229,57,53,.35); background:rgba(229,57,53,.03); }
-    .inv-row-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .inv-row-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
     .inv-row-dot.low { background:#EF5350; box-shadow:0 0 6px rgba(229,57,53,.4); }
     .inv-row-dot.ok  { background:#4ADE80; }
-    .inv-row-name { flex:1; font-size:14px; font-weight:700; color:var(--text); min-width:0; }
-    .inv-row-stock { font-size:18px; font-weight:900; color:var(--text); font-family:var(--font-en); white-space:nowrap; }
+    .inv-row-name { flex:1; font-size:15px; font-weight:700; color:var(--text); min-width:0; }
+    .inv-row-stock { font-size:20px; font-weight:900; color:var(--text); font-family:var(--font-en); white-space:nowrap; }
     .inv-row-stock.low-text { color:#EF5350; }
-    .inv-row-unit  { font-size:11px; color:var(--muted); white-space:nowrap; }
-    .inv-row-min   { font-size:10px; color:var(--muted); white-space:nowrap; }
+    .inv-row-unit  { font-size:12px; color:var(--muted); white-space:nowrap; }
+    .inv-row-min   { font-size:11px; color:var(--muted); white-space:nowrap; }
     .inv-row-min.warn { color:#EF5350; font-weight:700; }
-    .inv-adj { display:flex; align-items:center; gap:4px; flex-shrink:0; }
-    .iab { width:44px; height:44px; border-radius:8px; border:none; font-size:18px; font-weight:800;
+    .inv-adj { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+    .iab { width:44px; height:44px; border-radius:10px; border:none; font-size:22px; font-weight:800;
       cursor:pointer; display:flex; align-items:center; justify-content:center;
       touch-action:manipulation; -webkit-tap-highlight-color:transparent; flex-shrink:0; }
-    .iab.m { background:rgba(229,57,53,.1); color:#EF5350; }
-    .iab.p { background:rgba(45,213,91,.12);  color:var(--green); }
-    .iab:active { transform:scale(.93); }
-    .iqn { width:44px; padding:8px 4px; min-height:44px; border:1.5px solid var(--border); border-radius:7px;
-      font-size:14px; font-weight:700; text-align:center; outline:none;
-      font-family:var(--font-en); background:var(--card2); }
+    .iab.m { background:rgba(229,57,53,.12); color:#EF5350; }
+    .iab.p { background:rgba(45,213,91,.15);  color:var(--green); }
+    .iab:active { transform:scale(.9); }
+    .iqn { width:56px; padding:6px 4px; border:1.5px solid var(--border); border-radius:9px;
+      font-size:15px; font-weight:700; text-align:center; outline:none;
+      font-family:var(--font-en); background:var(--card2); min-height:44px; }
     .iqn:focus { border-color:var(--green); }
-    .inv-del { background:none; border:none; color:var(--border2); font-size:15px;
-      cursor:pointer; padding:4px; flex-shrink:0; transition:color .15s; }
-    .inv-del:hover { color:#EF5350; }
-    /* Add form */
-    .inv-add-form { background:var(--card); border-radius:14px; border:1px solid var(--border); padding:16px; margin-bottom:14px; }
-    .inv-add-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr auto; gap:8px; margin-bottom:0; align-items:end; }
-    .inv-add-grid input { padding:9px 10px; border:1.5px solid var(--border); border-radius:9px; font-size:13px; outline:none; font-family:var(--font-ar); color:var(--text); background:var(--card2); min-height:42px; }
-    .inv-add-grid input:focus { border-color:var(--green); }
-    @media(max-width:767px){
-      .inv-add-grid { grid-template-columns:1fr 1fr; }
-      .inv-row-min { display:none; }
+    .inv-del { background:none; border:1px solid transparent; color:var(--muted); font-size:18px;
+      cursor:pointer; padding:6px 8px; flex-shrink:0; transition:all .15s; border-radius:8px; min-height:44px; min-width:44px; display:flex; align-items:center; justify-content:center; }
+    .inv-del:hover { color:#EF5350; border-color:rgba(229,57,53,.3); background:rgba(229,57,53,.06); }
+    /* ── ADD FORM — tablet-optimised ── */
+    .inv-add-form { background:var(--card); border-radius:16px; border:1px solid var(--border); padding:18px; margin-bottom:14px; }
+    .inv-add-form label { display:block; font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.8px; margin-bottom:5px; }
+    .inv-add-form input, .inv-add-form select {
+      width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:10px;
+      font-size:16px; outline:none; font-family:var(--font-ar); color:var(--text);
+      background:var(--card2); min-height:50px; transition:border-color .15s; }
+    .inv-add-form input:focus, .inv-add-form select:focus { border-color:var(--green); }
+    .inv-form-row1 { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+    .inv-form-row2 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:12px; }
+    .inv-add-btn { width:100%; padding:15px; background:var(--green); color:#fff; border:none;
+      border-radius:12px; font-size:16px; font-weight:800; cursor:pointer; font-family:var(--font-ar);
+      min-height:54px; transition:opacity .15s; }
+    .inv-add-btn:hover { opacity:.9; }
+    @media(max-width:600px){
+      .inv-form-row1 { grid-template-columns:1fr; }
+      .inv-form-row2 { grid-template-columns:1fr 1fr; }
     }
 
     /* ── LOG PAYMENT DETAIL ── */
@@ -482,6 +491,10 @@
     .opm-method.sel { border-color:var(--accent); color:var(--accent); background:rgba(230,123,32,.07); }
     .opm-confirm-btn { width:100%; padding:14px; background:var(--green); color:white; border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; font-family:var(--font-ar); margin-top:4px; transition:opacity .15s; }
     .opm-confirm-btn:disabled { opacity:.4; cursor:not-allowed; }
+    .o-disc-pre{padding:6px 13px;border:1.5px solid var(--green);border-radius:20px;background:transparent;color:var(--green);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ar);transition:all .15s}
+    .o-disc-pre:hover,.o-disc-pre.active{background:var(--green);color:#fff}
+    .o-disc-clr{border-color:var(--border);color:var(--muted)}
+    .o-disc-clr:hover{background:var(--border);color:var(--text2)}
 
     /* ── PRINT RECEIPT ── */
     @media print {
@@ -927,41 +940,54 @@
       <div class="inv-alert-items" id="invAlertItems"></div>
     </div>
 
-    <!-- Add item form -->
     <!-- Action buttons -->
-    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-      <button onclick="invLoadDefaults()" style="flex:1;min-width:140px;padding:11px;background:rgba(45,213,91,.12);color:var(--green);border:1px solid rgba(45,213,91,.3);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar)">🚀 إضافة أصناف شائعة للمطعم</button>
-      <button onclick="invQuickReceive()" style="flex:1;min-width:120px;padding:11px;background:rgba(59,130,246,.1);color:#60A5FA;border:1px solid rgba(59,130,246,.25);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar)">📥 استلام بضاعة</button>
-      <button onclick="exportInventoryCSV()" style="flex:1;min-width:100px;padding:11px;background:var(--card2);color:var(--muted);border:1px solid var(--border);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar)">📊 CSV</button>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <button onclick="invLoadDefaults()" style="padding:13px 10px;background:rgba(45,213,91,.12);color:var(--green);border:1px solid rgba(45,213,91,.3);border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:50px">🚀 أصناف شائعة للمطعم</button>
+      <button onclick="invQuickReceive()" style="padding:13px 10px;background:rgba(59,130,246,.1);color:#60A5FA;border:1px solid rgba(59,130,246,.25);border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:50px">📥 استلام بضاعة</button>
+      <button onclick="exportInventoryCSV()" style="padding:13px 10px;background:var(--card2);color:var(--muted);border:1px solid var(--border);border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:50px;grid-column:1/-1">📊 تصدير CSV</button>
     </div>
 
+    <!-- Add item form — tablet-friendly -->
     <div class="inv-add-form">
-      <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">➕ إضافة صنف جديد</div>
-      <div class="inv-add-grid">
-        <input type="text" id="invName" aria-label="اسم الصنف" placeholder="اسم الصنف..." maxlength="60">
-        <input type="number" id="invStock" aria-label="الكمية الحالية" placeholder="الكمية" min="0" inputmode="decimal">
-        <input type="number" id="invMinStock" aria-label="حد التنبيه" placeholder="حد التنبيه" min="0" inputmode="decimal">
-        <input type="text" id="invUnit" aria-label="وحدة القياس" list="invUnitList"
-          placeholder="كيلو / لتر / عبوة..."
-          style="padding:9px 10px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;outline:none;font-family:var(--font-ar);background:var(--card2);min-height:42px;width:100%">
-        <datalist id="invUnitList">
-          <option value="كيلو"><option value="جرام"><option value="لتر">
-          <option value="مل"><option value="عبوة"><option value="قطعة">
-          <option value="علبة"><option value="كرتون"><option value="رأس">
-          <option value="حبة"><option value="باكيت"><option value="لفة">
-        </datalist>
-        <input type="text" id="invCategory" aria-label="تصنيف الصنف" list="invCatList"
-          placeholder="الفئة..."
-          style="padding:9px 10px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;outline:none;font-family:var(--font-ar);background:var(--card2);min-height:42px;width:100%">
-        <datalist id="invCatList">
-          <option value="لحوم ودواجن"><option value="خضار وفاكهة">
-          <option value="أجبان وألبان"><option value="حبوب وجاف">
-          <option value="توابل وصوص"><option value="مشروبات">
-          <option value="زيوت وسمن"><option value="تغليف وعبوات">
-          <option value="نظافة ومستلزمات"><option value="أخرى">
-        </datalist>
-        <button onclick="addInventoryItem()" style="padding:9px;background:var(--green);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:42px">إضافة ✓</button>
+      <div style="font-size:13px;font-weight:800;color:var(--muted);margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px">➕ إضافة صنف جديد</div>
+      <div class="inv-form-row1">
+        <div>
+          <label>اسم الصنف</label>
+          <input type="text" id="invName" placeholder="مثال: صدر فراخ..." maxlength="60">
+        </div>
+        <div>
+          <label>التصنيف</label>
+          <input type="text" id="invCategory" list="invCatList" placeholder="لحوم ودواجن...">
+          <datalist id="invCatList">
+            <option value="لحوم ودواجن"><option value="خضار وفاكهة">
+            <option value="أجبان وألبان"><option value="حبوب وجاف">
+            <option value="توابل وصوص"><option value="مشروبات">
+            <option value="زيوت وسمن"><option value="تغليف وعبوات">
+            <option value="نظافة ومستلزمات"><option value="أخرى">
+          </datalist>
+        </div>
       </div>
+      <div class="inv-form-row2">
+        <div>
+          <label>الكمية الحالية</label>
+          <input type="number" id="invStock" placeholder="0" min="0" inputmode="decimal">
+        </div>
+        <div>
+          <label>الوحدة</label>
+          <input type="text" id="invUnit" list="invUnitList" placeholder="كيلو / لتر...">
+          <datalist id="invUnitList">
+            <option value="كيلو"><option value="جرام"><option value="لتر">
+            <option value="مل"><option value="عبوة"><option value="قطعة">
+            <option value="علبة"><option value="كرتون"><option value="رأس">
+            <option value="حبة"><option value="باكيت"><option value="لفة">
+          </datalist>
+        </div>
+        <div>
+          <label>حد التنبيه</label>
+          <input type="number" id="invMinStock" placeholder="0" min="0" inputmode="decimal">
+        </div>
+      </div>
+      <button class="inv-add-btn" onclick="addInventoryItem()">✓ إضافة للمخزون</button>
     </div>
 
     <!-- Inventory list grouped by category -->
@@ -1213,6 +1239,27 @@
     <div class="opm-title" id="ownerPayTitle">💳 استلام الدفع</div>
     <div class="opm-body">
       <div id="ownerPayItems" style="background:var(--card2);border-radius:10px;padding:12px;margin-bottom:14px;font-size:13px;line-height:1.9;"></div>
+      <!-- Discount -->
+      <div style="margin-bottom:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">الخصم (اختياري)</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+          <button onclick="oDiscPreset(5,'percent',this)"  class="o-disc-pre">5%</button>
+          <button onclick="oDiscPreset(10,'percent',this)" class="o-disc-pre">10%</button>
+          <button onclick="oDiscPreset(15,'percent',this)" class="o-disc-pre">15%</button>
+          <button onclick="oDiscPreset(20,'percent',this)" class="o-disc-pre">20%</button>
+          <button onclick="oDiscPreset(0,'amount',this)"  class="o-disc-pre o-disc-clr">✕ مسح</button>
+        </div>
+        <div style="display:flex;gap:8px">
+          <input type="number" id="oDiscVal" placeholder="0" min="0" oninput="oCalcDiscount()"
+                 style="flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;outline:none;direction:ltr;background:var(--surface);color:var(--text)">
+          <select id="oDiscType" onchange="oCalcDiscount()"
+                  style="padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;outline:none;font-family:var(--font-ar);background:var(--surface);color:var(--text)">
+            <option value="percent">%</option>
+            <option value="amount">جنيه</option>
+          </select>
+        </div>
+        <div id="oDiscResult" style="font-size:14px;font-weight:800;color:var(--green);margin-top:8px;text-align:center"></div>
+      </div>
       <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">طريقة الدفع</div>
       <div class="opm-methods">
         <div class="opm-method sel" id="opm-cash" onclick="selectOwnerPayMethod('cash')">💵 كاش</div>
@@ -2256,7 +2303,7 @@ const PLAN_DEFAULT_COMPONENTS = {
 function listenPlans() {
   db.ref('settings/plans').on('value', snap => {
     plansData = snap.val() || {};
-    /* Seed default components for any plan that has none yet */
+    /* Seed default components for plans that have none */
     PLAN_DEFS.forEach(p => {
       if (!Array.isArray(plansData[p.id]?.components) || plansData[p.id].components.length === 0) {
         const defaults = PLAN_DEFAULT_COMPONENTS[p.id];
@@ -2275,36 +2322,35 @@ function renderPlansManage() {
     const current = pData.price ?? '—';
     const active = pData.active !== false;
     const components = Array.isArray(pData.components) ? pData.components : [];
-    const compsHtml = components.length ? components.map((c, i) => `
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:6px 10px;background:var(--card2);border-radius:8px;margin-bottom:5px">
-        <span style="font-size:13px;color:var(--text);flex:1">${c}</span>
-        <button onclick="removePlanComp('${p.id}',${i})" style="background:none;border:none;color:var(--red,#e74c3c);font-size:16px;cursor:pointer;padding:2px 4px;line-height:1">✕</button>
-      </div>`).join('') : `<div style="font-size:12px;color:var(--muted);padding:6px 0">لا توجد مكونات بعد</div>`;
+    const compsHtml = components.map((c, i) => `
+      <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--card2);border-radius:8px;margin-bottom:5px">
+        <span style="font-size:13px;color:var(--text);flex:1">${escapeHtml(c)}</span>
+        <button onclick="removePlanComp('${p.id}',${i})" style="background:none;border:none;color:var(--red,#e74c3c);font-size:16px;cursor:pointer;padding:2px 6px;line-height:1;border-radius:6px" title="حذف">✕</button>
+      </div>`).join('') || `<div style="font-size:12px;color:var(--muted);padding:6px 0">لا توجد مكونات — اضغط + لإضافة</div>`;
     return `
-    <div style="background:var(--card);border-radius:14px;border:1.5px solid ${active ? 'var(--border)' : 'var(--muted)'};padding:16px;margin-bottom:12px;opacity:${active ? 1 : 0.7}">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+    <div style="background:var(--card);border-radius:14px;border:1.5px solid ${active?'var(--border)':'rgba(229,57,53,.3)'};padding:16px;margin-bottom:12px;opacity:${active?1:0.75}">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px">
         <div>
-          <div style="font-size:15px;font-weight:700;color:var(--text)">${p.nameAr}</div>
+          <div style="font-size:15px;font-weight:800;color:var(--text)">${p.nameAr}</div>
           <div style="font-size:12px;color:var(--muted)">${p.nameEn} · ${p.period}</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <button onclick="togglePlanActive('${p.id}')" style="padding:7px 13px;border:1.5px solid ${active ? 'var(--green)' : 'var(--muted)'};border-radius:9px;background:${active ? 'rgba(46,204,113,0.1)' : 'var(--card2)'};color:${active ? 'var(--green)' : 'var(--muted)'};font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:36px">${active ? '👁 ظاهر' : '🚫 مخفي'}</button>
-          <div style="font-size:20px;font-weight:900;color:${p.color};font-family:var(--font-en)">${Number(current) >= 1000 ? Number(current).toLocaleString() : current} <span style="font-size:11px">ج</span></div>
-          <input type="number" id="plan-inp-${p.id}" value="${pData.price ?? ''}" placeholder="السعر..."
-            style="width:90px;padding:7px 9px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;outline:none;font-family:var(--font-en);background:var(--card2);min-height:36px"
-            min="0" inputmode="numeric"
-            onkeydown="if(event.key==='Enter')savePlanPrice('${p.id}')">
-          <button onclick="savePlanPrice('${p.id}')" style="padding:7px 14px;background:var(--green);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:36px">حفظ</button>
+          <button onclick="togglePlanActive('${p.id}')" style="padding:8px 14px;border:1.5px solid ${active?'var(--green)':'rgba(229,57,53,.5)'};border-radius:9px;background:${active?'rgba(46,204,113,.1)':'rgba(229,57,53,.08)'};color:${active?'var(--green)':'#EF5350'};font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:38px">${active?'👁 متاح':'🚫 مخفي'}</button>
+          <div style="font-size:22px;font-weight:900;color:${p.color};font-family:var(--font-en)">${Number(current)>=1000?Number(current).toLocaleString():current} <span style="font-size:12px">ج</span></div>
+          <input type="number" id="plan-inp-${p.id}" value="${pData.price??''}" placeholder="السعر..."
+            style="width:95px;padding:8px 10px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;outline:none;font-family:var(--font-en);background:var(--card2);min-height:38px"
+            min="0" inputmode="numeric" onkeydown="if(event.key==='Enter')savePlanPrice('${p.id}')">
+          <button onclick="savePlanPrice('${p.id}')" style="padding:8px 16px;background:var(--green);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:38px">حفظ</button>
         </div>
       </div>
       <div style="border-top:1px solid var(--border);padding-top:12px">
-        <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:8px">📋 مكونات الباقة</div>
+        <div style="font-size:12px;font-weight:800;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">📋 المكونات</div>
         <div id="plan-comps-${p.id}">${compsHtml}</div>
-        <div style="display:flex;gap:7px;margin-top:9px">
-          <input type="text" id="comp-inp-${p.id}" placeholder="أضف مكون جديد..." maxlength="80"
-            style="flex:1;padding:8px 11px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;outline:none;font-family:var(--font-ar);background:var(--card2);min-height:38px"
+        <div style="display:flex;gap:7px;margin-top:8px">
+          <input type="text" id="comp-inp-${p.id}" placeholder="أضف مكون جديد..." maxlength="100"
+            style="flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;outline:none;font-family:var(--font-ar);background:var(--card2);min-height:38px"
             onkeydown="if(event.key==='Enter')addPlanComp('${p.id}')">
-          <button onclick="addPlanComp('${p.id}')" style="padding:8px 14px;background:var(--accent,#3498db);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:38px">+ إضافة</button>
+          <button onclick="addPlanComp('${p.id}')" style="padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);min-height:38px">+ إضافة</button>
         </div>
       </div>
     </div>`;
@@ -2905,9 +2951,34 @@ function ownerOpenPay(orderId, isOnline) {
     `<span style="display:block">${Number(i.quantity||0)}× ${escapeHtml(i.name||'')}${i.size?` (${escapeHtml(i.size)})`:''} — ${Number((i.price||0)*(i.quantity||0))} ج</span>`
   ).join('') + `<span style="display:block;font-weight:800;font-size:15px;margin-top:8px;border-top:1px solid var(--border);padding-top:8px">الإجمالي: ${o.total} ج</span>`;
   document.getElementById('ownerPayItems').innerHTML = itemsHtml;
+  document.getElementById('oDiscVal').value = '';
+  document.getElementById('oDiscResult').textContent = '';
+  document.querySelectorAll('.o-disc-pre').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.opm-method').forEach(b => b.classList.remove('sel'));
   document.getElementById('opm-cash').classList.add('sel');
   document.getElementById('ownerPayModal').classList.add('open');
+}
+
+function oDiscPreset(val, type, btn) {
+  document.getElementById('oDiscVal').value = val || '';
+  document.getElementById('oDiscType').value = type;
+  document.querySelectorAll('.o-disc-pre').forEach(b=>b.classList.remove('active'));
+  if (val) btn.classList.add('active');
+  oCalcDiscount();
+}
+
+function oCalcDiscount() {
+  const orderId = _ownerPayId;
+  if (!orderId) return;
+  const o = _ownerPayOnline ? onlineOrders[orderId] : activeOrders[orderId];
+  if (!o) return;
+  const val = parseFloat(document.getElementById('oDiscVal').value)||0;
+  const type = document.getElementById('oDiscType').value;
+  const sub = o.total;
+  const discAmt = Math.min(type==='percent' ? sub*val/100 : val, sub);
+  const final = Math.max(0, sub - discAmt);
+  document.getElementById('oDiscResult').textContent =
+    discAmt>0 ? `الإجمالي بعد الخصم: ${final.toLocaleString()} ج  (خصم ${Math.round(discAmt)} ج)` : '';
 }
 
 function selectOwnerPayMethod(m) {
@@ -2928,20 +2999,26 @@ async function confirmOwnerPayment() {
   const o = _ownerPayOnline ? onlineOrders[_ownerPayId] : activeOrders[_ownerPayId];
   if (!o) { closeOwnerPayModal(); return; }
   const path = _ownerPayOnline ? `online_orders/${_ownerPayId}` : `orders/${_ownerPayId}`;
+  const oDV = parseFloat(document.getElementById('oDiscVal').value)||0;
+  const oDT = document.getElementById('oDiscType').value;
+  const oDiscAmt = oDV>0 ? Math.min(oDT==='percent'?o.total*oDV/100:oDV, o.total) : 0;
+  const oFinalTotal = Math.max(0, o.total - oDiscAmt);
   try {
     await db.ref(path).update({
       status:'completed', paymentMethod:_ownerPayMethod,
+      discount: Math.round(oDiscAmt), discountType: oDV>0?oDT:null, discountVal: oDV,
+      total: oFinalTotal,
       completedAt:Date.now(), completedBy:currentUser.uid, updatedAt:Date.now()
     });
     if (!_ownerPayOnline && o.tableId) {
       await db.ref(`tables/${o.tableId}/status`).set('available');
     }
     logActivity(currentUser.uid, 'owner', 'payment', {
-      orderId:_ownerPayId, orderNumber:o.orderNumber, total:o.total, method:_ownerPayMethod
+      orderId:_ownerPayId, orderNumber:o.orderNumber, total:oFinalTotal, discount:Math.round(oDiscAmt), method:_ownerPayMethod
     });
     showToastO(`✅ تم استلام الدفع #${o.orderNumber}`);
-    // Store last paid order for manual print
-    _lastPaidOrder = { order: o, method: _ownerPayMethod };
+    // Store last paid order for manual print (with updated discount/total)
+    _lastPaidOrder = { order: {...o, discount:Math.round(oDiscAmt), total:oFinalTotal}, method: _ownerPayMethod };
     closeOwnerPayModal();
     // Show print button in toast area
     _showPrintToast(o.orderNumber);
@@ -3555,6 +3632,13 @@ function oRenderCats() {
     b.onclick = function(){ oSelectCat(id, this); };
     row.appendChild(b);
   });
+  /* Plans tab */
+  const pb = document.createElement('button');
+  pb.className = 'o-cat-tab';
+  pb.dataset.cat = '__plans__';
+  pb.textContent = '📦 الباقات';
+  pb.onclick = function(){ oSelectCat('__plans__', this); };
+  row.appendChild(pb);
 }
 
 function oSelectCat(catId, btn) {
@@ -3571,6 +3655,29 @@ function oRenderMenu(q) {
   const grid = document.getElementById('oMenuGrid');
   if (!grid) return;
   grid.innerHTML = '';
+
+  /* Plans category */
+  if (oCatFilter === '__plans__') {
+    const activePlans = PLAN_DEFS.filter(p => plansData[p.id]?.active !== false);
+    if (!activePlans.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted)">لا توجد باقات متاحة</div>';
+      return;
+    }
+    activePlans.forEach(p => {
+      const pData = plansData[p.id] || {};
+      const price = pData.price;
+      const hasPrice = price !== undefined && price !== null && price > 0;
+      const div = document.createElement('div');
+      div.className = 'o-menu-item';
+      div.style.opacity = hasPrice ? '1' : '0.5';
+      div.innerHTML = `<div class="o-mi-name">${escapeHtml(p.nameAr)}</div>
+                       <div class="o-mi-price" style="color:${p.color}">${hasPrice ? Number(price).toLocaleString()+' ج' : '— (بدون سعر)'}</div>`;
+      if (hasPrice) div.onclick = () => oAddToCart('__plan__'+p.id, {name: p.nameAr+' '+p.period, singlePrice: price}, null, price);
+      grid.appendChild(div);
+    });
+    return;
+  }
+
   const items = Object.entries(menuData.items||{})
     .filter(([,i]) => {
       if (i.active === false) return false;

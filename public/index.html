@@ -53,6 +53,7 @@
 <link rel="dns-prefetch" href="https://tucomida-pos-default-rtdb.firebaseio.com">
 <link rel="dns-prefetch" href="https://maps.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="/images/food/food-07.jpg" fetchpriority="high">
 
 <!-- PWA -->
 <link rel="manifest" href="/manifest.json">
@@ -193,7 +194,15 @@
           "acceptedAnswer":{"@type":"Answer","text":"المطعم في دمياط الجديدة، المنطقة المركزية، خلف السنترال المركزي. يمكنك الاتصال على 01102708550 للاستفسار."}
         }
       ]
-    }
+    },{
+  "@type":"Organization",
+  "@id":"https://tucomida-pos.web.app/#organization",
+  "name":"TuComida",
+  "url":"https://tucomida-pos.web.app",
+  "logo":{"@type":"ImageObject","url":"https://tucomida-pos.web.app/images/logo-brand.jpeg","width":512,"height":512},
+  "sameAs":["https://www.instagram.com/tucomida.eg","https://www.facebook.com/share/1cbR8eMWki/"],
+  "contactPoint":{"@type":"ContactPoint","telephone":"+201102708550","contactType":"customer service","areaServed":"EG","availableLanguage":["Arabic","English"]}
+}
   ]
 }
 </script>
@@ -737,7 +746,7 @@ body.lang-en .wa{left:auto;right:24px}
     </div>
     <div class="dish-grid">
       <article class="dish fi fi-d1">
-        <div class="dish-ph"><img src="/images/food/food-07.jpg?v=2" alt="توكسيك" loading="lazy"><div class="dish-bdg hot"><span class="ar">🔥 الأكثر طلباً</span><span class="en">🔥 Most Ordered</span></div></div>
+        <div class="dish-ph"><img src="/images/food/food-07.jpg?v=2" alt="توكسيك راب صحي بروتين عالي — TuComida دمياط الجديدة" loading="lazy"><div class="dish-bdg hot"><span class="ar">🔥 الأكثر طلباً</span><span class="en">🔥 Most Ordered</span></div></div>
         <div class="dish-body">
           <div class="dish-chips"><span class="chip p">💪 59g</span><span class="chip">🔥 506 kcal</span></div>
           <h3 class="dish-n ar">توكسيك</h3><h3 class="dish-n en">Toxic</h3>
@@ -747,7 +756,7 @@ body.lang-en .wa{left:auto;right:24px}
         </div>
       </article>
       <article class="dish fi fi-d2">
-        <div class="dish-ph"><img src="/images/food/food-08.jpg?v=2" alt="رولت باستا" loading="lazy"><div class="dish-bdg pick">🍝 Signature</div></div>
+        <div class="dish-ph"><img src="/images/food/food-08.jpg?v=2" alt="رولت باستا دجاج مشوي صحي — TuComida دمياط" loading="lazy"><div class="dish-bdg pick">🍝 Signature</div></div>
         <div class="dish-body">
           <div class="dish-chips"><span class="chip p">💪 47g</span><span class="chip">🔥 511 kcal</span></div>
           <h3 class="dish-n ar">رولت باستا</h3><h3 class="dish-n en">Rolit Pasta</h3>
@@ -757,7 +766,7 @@ body.lang-en .wa{left:auto;right:24px}
         </div>
       </article>
       <article class="dish fi fi-d3">
-        <div class="dish-ph"><img src="/images/food/food-66.jpg" alt="Caesar Salad" loading="lazy"><div class="dish-bdg hot"><span class="ar">⭐ الأكثر طلباً</span><span class="en">⭐ Best Seller</span></div></div>
+        <div class="dish-ph"><img src="/images/food/food-66.jpg" alt="سيزار سلاد صحي بروتين — Healthy Caesar Salad TuComida New Damietta" loading="lazy"><div class="dish-bdg hot"><span class="ar">⭐ الأكثر طلباً</span><span class="en">⭐ Best Seller</span></div></div>
         <div class="dish-body">
           <div class="dish-chips"><span class="chip p">💪 24g</span><span class="chip">🔥 307 kcal</span></div>
           <h3 class="dish-n ar">سيزار سلاد</h3><h3 class="dish-n en">Caesar Salad</h3>
@@ -767,7 +776,7 @@ body.lang-en .wa{left:auto;right:24px}
         </div>
       </article>
       <article class="dish fi fi-d4">
-        <div class="dish-ph"><img src="/images/food/food-20.jpg" alt="Rizzo Shrimp" loading="lazy"><div class="dish-bdg new"><span class="ar">🦐 جديد</span><span class="en">🦐 New</span></div></div>
+        <div class="dish-ph"><img src="/images/food/food-20.jpg" alt="ريزو شريمب جمبري — Healthy Shrimp Meal TuComida دمياط" loading="lazy"><div class="dish-bdg new"><span class="ar">🦐 جديد</span><span class="en">🦐 New</span></div></div>
         <div class="dish-body">
           <div class="dish-chips"><span class="chip p">💪 29g</span><span class="chip">🔥 380 kcal</span></div>
           <h3 class="dish-n ar">ريزو شريمب</h3><h3 class="dish-n en">Rizzo Shrimp</h3>
@@ -875,7 +884,205 @@ body.lang-en .wa{left:auto;right:24px}
 .pcard.ptf .p-btn{ background:#fff;color:#7B2800;border:1.5px solid transparent; }
 .pcard.ptf .p-btn:hover{ background:var(--o);color:#fff;transform:translateY(-2px);box-shadow:0 6px 22px rgba(230,123,32,.4);border-color:transparent; }
 .p-badge-fire{ position:absolute;top:18px;right:18px;background:var(--o);color:#fff;font-size:11px;font-weight:800;padding:5px 13px;border-radius:60px;letter-spacing:.3px;font-family:var(--fa); }
+@media(max-width:900px){.plans-gr-2{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.plans-gr-2{grid-template-columns:1fr;max-width:100%}}
+.plans-gr-3{grid-template-columns:repeat(3,1fr)!important;max-width:100%}
+@media(max-width:900px){.plans-gr-3{grid-template-columns:repeat(3,1fr)!important}}
+@media(max-width:600px){.plans-gr-3{grid-template-columns:1fr!important}}
+</style>
+
+<style>
+/* ════════════════════════════════════════
+   MOBILE & TABLET — GLOBAL FIXES
+════════════════════════════════════════ */
+
+/* ── 1. Section padding: 112px → 64px (tablet) / 48px (mobile) ── */
+@media(max-width:900px){
+  .sec,.showcase,.why,.bento,.reviews,.cats,.gallery,.about,.faq,.loc,.cta-sec,.plans{padding:72px 0}
+  .sec-hd{margin-bottom:48px}
+  .plans-hd{margin-bottom:48px}
+  .rev-hd{margin-bottom:40px}
+  .plans-divider{margin:48px auto 32px}
+}
+@media(max-width:600px){
+  .sec,.showcase,.why,.bento,.reviews,.cats,.gallery,.about,.faq,.loc,.cta-sec,.plans{padding:48px 0}
+  .sec-hd{margin-bottom:32px}
+  .plans-hd{margin-bottom:32px}
+  .rev-hd{margin-bottom:24px}
+  .plans-divider{margin:36px auto 24px;padding-top:36px}
+}
+
+/* ── 2. Hero — tighter on mobile ── */
+@media(max-width:600px){
+  .hero-H{font-size:clamp(38px,11vw,52px);letter-spacing:-1.5px}
+  .hero-p{font-size:15px}
+  .hero-L{padding:88px 20px 40px}
+  .hero-acts{gap:10px}
+  .btn-fill,.btn-amb{padding:13px 24px;font-size:14px}
+  .hthumb{width:58px;height:58px}
+  .hero-badges{gap:6px}
+  .hbadge{font-size:11px;padding:7px 13px}
+}
+@media(max-width:900px){
+  .hero-fb,.hero-meal-pill{display:none}  /* floating badges too cramped on tablet portrait */
+}
+
+/* ── 3. Trust bar — wrap nicely, no ugly overflow ── */
+@media(max-width:768px){
+  .trust-i{
+    gap:12px;
+    overflow-x:visible;
+    flex-wrap:wrap;
+    justify-content:center;
+    padding:12px 20px;
+  }
+  .ti{font-size:12px}
+}
+
+/* ── 4. Showcase — 2 cols on small tablet, not 1 col ── */
+@media(max-width:600px){
+  .dish-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .dish-body{padding:14px 14px 18px}
+  .dish-n{font-size:15px}
+  .dish-pr{font-size:22px}
+  .dish-d{font-size:12px;margin-bottom:12px}
+  .dish-btn{padding:8px 14px;font-size:11px}
+}
+@media(max-width:380px){
+  .dish-grid{grid-template-columns:1fr}
+}
+
+/* ── 5. Why section — better mobile cards ── */
+@media(max-width:768px){
+  .wc{padding:32px 28px}
+  .wc-t{font-size:17px}
+}
+
+/* ── 6. Plan cards — HORIZONTAL SCROLL on tablet/mobile ── */
+@media(max-width:1023px){
+  /* Turn both grids into a swipeable row */
+  .plans-gr,
+  .plans-gr-2,
+  .plans-gr-3 {
+    display:flex !important;
+    flex-direction:row !important;
+    overflow-x:auto;
+    gap:16px;
+    padding-bottom:20px;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    /* extend to screen edges without breaking W padding */
+    margin-inline:-20px;
+    padding-inline:20px;
+    max-width:none !important;
+  }
+  .plans-gr::-webkit-scrollbar,
+  .plans-gr-2::-webkit-scrollbar,
+  .plans-gr-3::-webkit-scrollbar { display:none }
+
+  /* Fixed-width cards that snap */
+  .plans-gr > .pcard,
+  .plans-gr-2 > .pcard,
+  .plans-gr-3 > .pcard {
+    flex: 0 0 300px !important;
+    min-width: 0;
+    scroll-snap-align: start;
+    padding: 28px 22px 24px;
+  }
+
+  /* Swipe hint chip */
+  .plans-swipe-hint { display:flex }
+}
+@media(max-width:600px){
+  .plans-gr > .pcard,
+  .plans-gr-2 > .pcard,
+  .plans-gr-3 > .pcard {
+    flex: 0 0 min(290px, 82vw) !important;
+    padding: 24px 18px 20px;
+  }
+  .p-pr { font-size: 40px }
+  .p-btn { min-height:52px; font-size:15px }
+  .p-ul li { font-size:13px }
+}
+
+/* Hide swipe hint on desktop */
+.plans-swipe-hint { display:none }
+</style>
+
+<style>
+/* ── Swipe hint bar ── */
+.plans-swipe-hint {
+  align-items:center; justify-content:center; gap:8px;
+  font-size:12px; font-weight:700; color:var(--muted);
+  margin-top:8px; margin-bottom:4px; letter-spacing:.3px;
+}
+.plans-swipe-hint::before,
+.plans-swipe-hint::after {
+  content:''; width:32px; height:1px; background:var(--s3);
+}
+
+/* ── 7. Reviews — readable on tablet ── */
+@media(max-width:900px){
+  .rr-big{font-size:48px}
+  .rc{padding:26px 22px}
+  .rc-txt{font-size:14px}
+}
+
+/* ── 8. FAQ — better layout on tablet ── */
+@media(max-width:900px){
+  .faq-aside{position:static;top:auto;margin-top:32px}
+  .faq-q{font-size:14px;padding:16px 20px}
+}
+
+/* ── 9. CTA box ── */
+@media(max-width:600px){
+  .cta-box{padding:48px 20px}
+  .cta-acts{flex-direction:column;align-items:center}
+  .cta-acts .btn{width:100%;max-width:340px;justify-content:center}
+}
+
+/* ── 10. Footer ── */
+@media(max-width:600px){
+  .ft-g{padding-bottom:32px}
+  footer{padding:44px 0 0}
+}
+
+/* ── 11. Bento — bigger rows on mobile ── */
+@media(max-width:768px){
+  .bg{grid-auto-rows:90px}
+  .bc-t{font-size:16px}
+  .bc-pr{display:none}
+  .bn-sn{font-size:36px}
+}
+
+/* ── 12. Gallery ── */
+@media(max-width:600px){
+  .gal-grid{grid-auto-rows:130px}
+}
+
+/* ── 13. Heading sizes on mobile ── */
+@media(max-width:600px){
+  .H2{font-size:clamp(26px,7vw,38px);letter-spacing:-.6px}
+  .eyebrow{font-size:10px;letter-spacing:2px}
+}
+
+/* ── 14. About section ── */
+@media(max-width:600px){
+  .about-img{aspect-ratio:3/2}
+  .about-bdg{display:none}
+}
+
+/* ── 15. Nav mobile — bigger tap targets ── */
+@media(max-width:768px){
+  .nav-mob a{min-height:54px;display:flex;align-items:center;border-bottom-color:var(--s2)}
+}
+
+/* ── 16. WhatsApp button on mobile ── */
+@media(max-width:480px){
+  .wa{padding:12px 18px;font-size:12px;border-radius:26px;bottom:18px;left:14px}
+  body.lang-en .wa{left:auto;right:14px}
+}
 </style>
 
 <section class="plans">
@@ -994,7 +1201,7 @@ body.lang-en .wa{left:auto;right:24px}
       <p class="plans-sub en" style="margin-top:10px">Choose your meat and we marinate it with our secret blend — ready to grill at home anytime</p>
     </div>
 
-    <div class="plans-gr-2" style="grid-template-columns:repeat(3,1fr);max-width:100%">
+    <div class="plans-gr-2 plans-gr-3">
 
       <!-- Tatbela — Weekly -->
       <div class="pcard pt fi fi-d1">
@@ -1190,14 +1397,14 @@ body.lang-en .wa{left:auto;right:24px}
       <p class="body-t fi" style="margin:0 auto"><span class="ar">من الراب الصحي للسموثي الطازج — عندنا لكل ذوق الخيار المناسب</span><span class="en">From healthy wraps to fresh smoothies — we have the right option for every taste</span></p>
     </div>
     <div class="cats-grid">
-      <a href="/order.html" class="cat-card fi fi-d1"><img src="/images/food/food-37.jpg" alt="راب" loading="lazy"><div class="cat-vl"></div><div class="cat-bdg">⭐ <span class="ar">الأكثر طلباً</span><span class="en">Best Seller</span></div><div class="cat-info"><div class="cat-en">Wraps</div><div class="cat-ar">راب صحي</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
-      <a href="/order.html" class="cat-card fi fi-d2"><img src="/images/food/food-15.jpg" alt="إفطار" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Breakfast</div><div class="cat-ar">إفطار صحي</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
-      <a href="/order.html" class="cat-card fi fi-d3"><img src="/images/food/food-66.jpg" alt="سلطة" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Salads</div><div class="cat-ar">سلطات طازجة</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
-      <a href="/order.html" class="cat-card fi fi-d4"><img src="/images/food/food-62.jpg" alt="سموثي" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Smoothies</div><div class="cat-ar">سموثي طازج</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
-      <a href="/order.html" class="cat-card fi fi-d1"><img src="/images/food/food-16.jpg" alt="بروتين" loading="lazy"><div class="cat-vl"></div><div class="cat-bdg">💪 High Protein</div><div class="cat-info"><div class="cat-en">High Protein</div><div class="cat-ar">بروتين عالي</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
-      <a href="/order.html" class="cat-card fi fi-d2"><img src="/images/food/food-61.jpg" alt="أطباق" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Main Course</div><div class="cat-ar">الأطباق الرئيسية</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
-      <a href="/order.html" class="cat-card fi fi-d3"><img src="/images/food/food-79.jpg" alt="تتبيلة" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Marinade</div><div class="cat-ar">تتبيلة على الطلب</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
-      <a href="/order.html" class="cat-card fi fi-d4"><img src="/images/food/food-72.jpg" alt="حلويات" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Desserts</div><div class="cat-ar">حلويات صحية</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+      <a href="/order.html" class="cat-card fi fi-d1"><img src="/images/food/food-37.jpg" alt="راب صحي بروتين عالي دمياط الجديدة" loading="lazy"><div class="cat-vl"></div><div class="cat-bdg">⭐ <span class="ar">الأكثر طلباً</span><span class="en">Best Seller</span></div><div class="cat-info"><div class="cat-en">Wraps</div><div class="cat-ar">راب صحي</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+      <a href="/order.html" class="cat-card fi fi-d2"><img src="/images/food/food-15.jpg" alt="إفطار صحي طازج TuComida دمياط" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Breakfast</div><div class="cat-ar">إفطار صحي</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+      <a href="/order.html" class="cat-card fi fi-d3"><img src="/images/food/food-66.jpg" alt="سلطة صحية طازجة بروتين دمياط" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Salads</div><div class="cat-ar">سلطات طازجة</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+      <a href="/order.html" class="cat-card fi fi-d4"><img src="/images/food/food-62.jpg" alt="سموثي طازج صحي دمياط الجديدة" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Smoothies</div><div class="cat-ar">سموثي طازج</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+      <a href="/order.html" class="cat-card fi fi-d1"><img src="/images/food/food-16.jpg" alt="وجبات بروتين عالي للرياضيين دمياط" loading="lazy"><div class="cat-vl"></div><div class="cat-bdg">💪 High Protein</div><div class="cat-info"><div class="cat-en">High Protein</div><div class="cat-ar">بروتين عالي</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+      <a href="/order.html" class="cat-card fi fi-d2"><img src="/images/food/food-61.jpg" alt="أطباق رئيسية صحية TuComida دمياط" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Main Course</div><div class="cat-ar">الأطباق الرئيسية</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+      <a href="/order.html" class="cat-card fi fi-d3"><img src="/images/food/food-79.jpg" alt="تتبيلة لحمة ودجاج على الطلب دمياط" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Marinade</div><div class="cat-ar">تتبيلة على الطلب</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
+      <a href="/order.html" class="cat-card fi fi-d4"><img src="/images/food/food-72.jpg" alt="حلويات صحية طبيعية TuComida" loading="lazy"><div class="cat-vl"></div><div class="cat-info"><div class="cat-en">Desserts</div><div class="cat-ar">حلويات صحية</div><div class="cat-go ar">اطلب الآن ←</div><div class="cat-go en">Order Now →</div></div></a>
     </div>
     <!-- CTA to full menu page -->
     <div style="text-align:center;margin-top:16px" class="fi">
@@ -1206,7 +1413,7 @@ body.lang-en .wa{left:auto;right:24px}
         <span class="en">🍽 View Full Menu & Order Now →</span>
       </a>
     </div>
-    <!-- hidden elements needed by JS (don't remove) -->
+    <!-- Dynamic menu from Firebase (hidden until loaded) -->
     <div id="menuTabsRow" style="display:none"></div>
     <div id="menuSearch" style="display:none"></div>
     <div id="menuItemsGrid" style="display:none"></div>
@@ -1216,18 +1423,18 @@ body.lang-en .wa{left:auto;right:24px}
 <!-- STRIP -->
 <section class="strip" aria-hidden="true">
   <div style="display:flex;gap:12px;animation:scrollStrip 32s linear infinite;width:max-content">
-    <img src="/images/food/food-22.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
-    <img src="/images/food/food-23.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
-    <img src="/images/food/food-24.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
-    <img src="/images/food/food-25.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
-    <img src="/images/food/food-26.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
-    <img src="/images/food/food-27.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
-    <img src="/images/food/food-28.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
-    <img src="/images/food/food-29.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
-    <img src="/images/food/food-22.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
-    <img src="/images/food/food-23.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
-    <img src="/images/food/food-24.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
-    <img src="/images/food/food-25.jpg" alt="" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-22.jpg" alt="أكل صحي TuComida دمياط الجديدة" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-23.jpg" alt="وجبة صحية طازجة TuComida" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-24.jpg" alt="راب بروتين صحي TuComida دمياط" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-25.jpg" alt="طعام صحي دمياط الجديدة مصر" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-26.jpg" alt="سموثي طازج TuComida" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-27.jpg" alt="سلطة صحية دمياط" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-28.jpg" alt="وجبات رجيم دمياط TuComida" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-29.jpg" alt="أكل صحي وبروتين دمياط" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-22.jpg" alt="أكل صحي TuComida دمياط الجديدة" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-23.jpg" alt="وجبة صحية طازجة TuComida" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-24.jpg" alt="راب بروتين صحي TuComida دمياط" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
+    <img src="/images/food/food-25.jpg" alt="طعام صحي دمياط الجديدة مصر" loading="lazy" style="width:230px;height:170px;object-fit:cover;border-radius:16px;flex-shrink:0">
   </div>
   <style>@keyframes scrollStrip{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}</style>
 </section>
@@ -1240,16 +1447,16 @@ body.lang-en .wa{left:auto;right:24px}
       <h2 class="H2 fi"><span class="ar">صور <span class="acc">حقيقية</span></span><span class="en"><span class="acc">Real Photos</span> from Our Kitchen</span></h2>
     </div>
     <div class="gal-grid">
-      <div class="gi tall fi"><img src="/images/food/food-10.jpg" alt="" loading="lazy"></div>
-      <div class="gi fi fi-d1"><img src="/images/food/food-11.jpg" alt="" loading="lazy"></div>
-      <div class="gi fi fi-d2"><img src="/images/food/food-12.jpg" alt="" loading="lazy"></div>
-      <div class="gi tall fi fi-d1"><img src="/images/food/food-13.jpg" alt="" loading="lazy"></div>
-      <div class="gi fi fi-d2"><img src="/images/food/food-14.jpg" alt="" loading="lazy"></div>
-      <div class="gi fi fi-d3"><img src="/images/food/food-15.jpg" alt="" loading="lazy"></div>
-      <div class="gi wide fi"><img src="/images/food/food-16.jpg" alt="" loading="lazy"></div>
-      <div class="gi fi fi-d1"><img src="/images/food/food-17.jpg" alt="" loading="lazy"></div>
-      <div class="gi fi fi-d2"><img src="/images/food/food-18.jpg" alt="" loading="lazy"></div>
-      <div class="gi fi fi-d3"><img src="/images/food/food-19.jpg" alt="" loading="lazy"></div>
+      <div class="gi tall fi"><img src="/images/food/food-10.jpg" alt="مطبخ TuComida — أكل صحي طازج دمياط الجديدة" loading="lazy"></div>
+      <div class="gi fi fi-d1"><img src="/images/food/food-11.jpg" alt="وجبة صحية طازجة من TuComida دمياط" loading="lazy"></div>
+      <div class="gi fi fi-d2"><img src="/images/food/food-12.jpg" alt="راب صحي بروتين عالي TuComida" loading="lazy"></div>
+      <div class="gi tall fi fi-d1"><img src="/images/food/food-13.jpg" alt="أكل صحي طازج يومي دمياط الجديدة" loading="lazy"></div>
+      <div class="gi fi fi-d2"><img src="/images/food/food-14.jpg" alt="وجبات دايت صحية دمياط" loading="lazy"></div>
+      <div class="gi fi fi-d3"><img src="/images/food/food-15.jpg" alt="إفطار صحي طازج TuComida دمياط" loading="lazy"></div>
+      <div class="gi wide fi"><img src="/images/food/food-16.jpg" alt="وجبات بروتين للرياضيين دمياط الجديدة" loading="lazy"></div>
+      <div class="gi fi fi-d1"><img src="/images/food/food-17.jpg" alt="سلطة صحية طازجة TuComida" loading="lazy"></div>
+      <div class="gi fi fi-d2"><img src="/images/food/food-18.jpg" alt="طعام صحي طازج بدون مواد حافظة" loading="lazy"></div>
+      <div class="gi fi fi-d3"><img src="/images/food/food-19.jpg" alt="وجبة صحية محسوبة السعرات دمياط" loading="lazy"></div>
       <div class="gi fi"><img src="/images/food/food-20.jpg" alt="" loading="lazy"></div>
       <div class="gi fi fi-d1"><img src="/images/food/food-21.jpg" alt="" loading="lazy"></div>
     </div>
@@ -1340,6 +1547,26 @@ body.lang-en .wa{left:auto;right:24px}
     </div>
   </div>
 </section>
+
+<!-- LOCAL SEO CONTENT — visible to search engines, hidden visually -->
+<div aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">
+  <section>
+    <h2>أكل صحي في دمياط الجديدة</h2>
+    <p>TuComida هو أفضل مطعم أكل صحي في دمياط الجديدة. نقدم وجبات صحية طازجة يومياً بمكونات محسوبة وبدون مواد حافظة. إذا كنت تبحث عن أكل صحي في دمياط أو وجبات دايت في دمياط الجديدة، فـ TuComida هو خيارك الأول.</p>
+    <h2>وجبات بروتين عالي في دمياط</h2>
+    <p>نقدم أفضل وجبات البروتين في دمياط الجديدة للرياضيين وعشاق الحياة الصحية. كل طبق محسوب السعرات الحرارية والبروتين والكربوهيدرات. وجبات بروتين دمياط بأعلى جودة وأسعار مناسبة.</p>
+    <h2>مطعم رجيم دمياط الجديدة</h2>
+    <p>هل تبحث عن رجيم دمياط أو وجبات دايت دمياط الجديدة؟ TuComida يقدم وجبات مناسبة لكل الأنظمة الغذائية — كيتو، بروتين، كالوري كاونتينج. اطلب وجبتك الصحية من مطعم دمياط المتخصص في الأكل الصحي.</p>
+    <h2>توصيل أكل صحي دمياط الجديدة</h2>
+    <p>خدمة توصيل أكل صحي في دمياط الجديدة — نوصّل وجباتنا الطازجة لباب منزلك. اطلب عبر واتساب 01102708550 أو من خلال موقعنا الإلكتروني. توصيل سريع داخل دمياط الجديدة.</p>
+    <h2>باقات اشتراك وجبات صحية دمياط</h2>
+    <p>اشترك في باقاتنا الشهرية والأسبوعية للحصول على وجبات صحية يومية في دمياط الجديدة. باقات فيتنس، باقات دايت، وباقات تتبيلة مخصصة لكل احتياجاتك الغذائية.</p>
+    <h2>Healthy Food New Damietta Egypt</h2>
+    <p>TuComida is the best healthy food restaurant in New Damietta, Egypt. We serve fresh high-protein meals, healthy wraps, salads, and smoothies daily. Order healthy food in Damietta online or via WhatsApp. Best healthy restaurant in New Damietta since 2021.</p>
+    <h2>Protein Meals Damietta</h2>
+    <p>Looking for high protein meals in Damietta Egypt? TuComida offers carefully calculated protein meals for athletes and fitness enthusiasts in New Damietta. Each meal has calculated calories, protein, and carbohydrates.</p>
+  </section>
+</div>
 
 <!-- CTA -->
 <section class="cta-sec">
@@ -1476,18 +1703,10 @@ document.querySelectorAll('.fi').forEach(el => observer.observe(el));
 const TAB_STYLE = 'padding:8px 18px;border-radius:20px;border:1.5px solid #D8EDD8;background:#fff;color:#5A6A5A;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .2s';
 const TAB_ACTIVE = 'background:#2A6041;border-color:#2A6041;color:#fff';
 
-// ── Load Menu from Firebase ─────────────────────
-window.addEventListener('load', () => {
-  if (typeof db === 'undefined') return;
-  db.ref('menu').once('value').then(snap => {
-    const data = snap.val() || {categories:{},items:{}};
-    buildMenuTabs(data);
-    renderMenuItems(data, null);
-  }).catch(() => {
-    document.getElementById('menuItemsGrid').innerHTML =
-      '<div style="grid-column:1/-1;text-align:center;padding:24px;color:#5A6A5A;font-size:14px">تعذّر تحميل المنيو حالياً — <a href="/order.html" style="color:#2A6041;font-weight:700">اطلب من هنا</a></div>';
-  });
-});
+// ── Menu Firebase hooks (unused on homepage, kept for future use) ─────────────────────
+function buildMenuTabs() {}
+function renderMenuItems() {}
+function filterMenuSearch() {}
 
 let _activeCat = null;
 let _menuData = {};
@@ -1501,7 +1720,7 @@ function buildMenuTabs(data) {
   allBtn.innerHTML = '<span>الكل</span>';
   allBtn.onclick = function(){ _activeCat=null; setActiveTab(this); document.getElementById('menuSearch').value=''; renderMenuItems(data,null); };
   row.appendChild(allBtn);
-  cats.slice(0,10).forEach(([id,c]) => {
+  cats.forEach(([id,c]) => {
     const b = document.createElement('button');
     b.style.cssText = TAB_STYLE;
     b.textContent = c.nameAr || c.name;

@@ -4,19 +4,39 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://tucomida-pos.web.app/</loc>
-    <lastmod>2026-05-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="ar" href="https://tucomida-pos.web.app/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://tucomida-pos.web.app/"/>
     <image:image>
-      <image:loc>https://tucomida-pos.web.app/icons/icon-512.png</image:loc>
-      <image:title>TuComida — مطعم أكل صحي دمياط الجديدة</image:title>
+      <image:loc>https://tucomida-pos.web.app/images/food/food-07.jpg</image:loc>
+      <image:title>توكسيك راب صحي بروتين عالي — TuComida دمياط الجديدة</image:title>
+      <image:caption>راب صحي بروتين عالي من TuComida مطعم الأكل الصحي في دمياط الجديدة</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://tucomida-pos.web.app/images/food/food-08.jpg</image:loc>
+      <image:title>رولت باستا دجاج مشوي صحي — TuComida دمياط</image:title>
+      <image:caption>باستا بالدجاج المشوي الصحي من مطعم TuComida دمياط الجديدة</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://tucomida-pos.web.app/images/food/food-66.jpg</image:loc>
+      <image:title>سيزار سلاد صحي بروتين — Healthy Caesar Salad TuComida New Damietta</image:title>
+      <image:caption>سلطة سيزار صحية بالبروتين المحسوب من TuComida دمياط الجديدة</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://tucomida-pos.web.app/images/food/food-05.jpg</image:loc>
+      <image:title>أكل صحي طازج TuComida — مطعم دمياط الجديدة</image:title>
+      <image:caption>وجبات صحية طازجة يومية من TuComida أفضل مطعم صحي في دمياط الجديدة</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://tucomida-pos.web.app/images/logo-brand.jpeg</image:loc>
+      <image:title>TuComida Logo — مطعم أكل صحي دمياط الجديدة</image:title>
     </image:image>
   </url>
   <url>
     <loc>https://tucomida-pos.web.app/order.html</loc>
-    <lastmod>2026-05-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar" href="https://tucomida-pos.web.app/order.html"/>

@@ -169,6 +169,10 @@
     .discount-row input { flex:1; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; outline:none; direction:ltr; font-family:var(--font-en); color:var(--text); }
     .discount-row input:focus { border-color:var(--primary-light); }
     .discount-row select { padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; outline:none; font-family:var(--font-ar); }
+    .disc-preset { padding:6px 12px; border:1.5px solid var(--primary-light); border-radius:20px; background:#fff; color:var(--primary); font-size:12px; font-weight:700; cursor:pointer; font-family:var(--font-ar); transition:all .15s; }
+    .disc-preset:hover,.disc-preset.active { background:var(--primary); color:#fff; }
+    .disc-clear { border-color:var(--border); color:var(--muted); }
+    .disc-clear:hover { background:var(--border); color:var(--text2); }
     .modal-btn-row { display:flex; gap:10px; margin-top:18px; }
     .btn-modal-cancel { flex:1; padding:13px; background:var(--surface2); color:var(--muted); border:1px solid var(--border); border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; font-family:var(--font-ar); transition:background .15s; }
     .btn-modal-cancel:hover { background:var(--border); }
@@ -439,6 +443,7 @@
       .mic-name { font-size: 12px; }
       .mic-price { font-size: 12px; }
     }
+
   </style>
 </head>
 <body>
@@ -587,6 +592,13 @@
     <div class="modal-items-list" id="payModalItems"></div>
     <div class="modal-section">
       <div class="modal-section-title">الخصم (اختياري)</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+        <button onclick="applyDiscountPreset(5,'percent',this)"  class="disc-preset">5%</button>
+        <button onclick="applyDiscountPreset(10,'percent',this)" class="disc-preset">10%</button>
+        <button onclick="applyDiscountPreset(15,'percent',this)" class="disc-preset">15%</button>
+        <button onclick="applyDiscountPreset(20,'percent',this)" class="disc-preset">20%</button>
+        <button onclick="applyDiscountPreset(0,'amount',this)"  class="disc-preset disc-clear">✕ مسح</button>
+      </div>
       <div class="discount-row">
         <input type="number" id="discountVal" placeholder="0" min="0" oninput="calcDiscount()">
         <select id="discountType" onchange="calcDiscount()">
@@ -817,6 +829,7 @@ setInterval(() => {
     listenDineOrders();
     listenOnlineOrders();
     loadMenu();
+    loadPlans();
     loadTables();
     watchConnection('cdot', 'connLabel');
   });
@@ -1093,6 +1106,7 @@ function openPayModalCommon() {
   document.getElementById('payModalSub').textContent = `أوردر #${o.orderNumber} — ${loc}`;
   document.getElementById('discountVal').value = '';
   document.getElementById('paidAmount').value = '';
+  document.querySelectorAll('.disc-preset').forEach(b => b.classList.remove('active'));
   document.getElementById('changeDisplay').style.display = 'none';
   selectedDiscountedTotal = o.total;
   document.getElementById('discountedTotal').textContent = `الإجمالي: ${o.total} ج`;
@@ -1119,6 +1133,14 @@ function selectPayMethod(method, el) {
   document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
   document.getElementById('cashAmountSection').style.display = method === 'cash' ? 'block' : 'none';
+}
+
+function applyDiscountPreset(val, type, btn) {
+  document.getElementById('discountVal').value = val || '';
+  document.getElementById('discountType').value = type;
+  document.querySelectorAll('.disc-preset').forEach(b => b.classList.remove('active'));
+  if (val) btn.classList.add('active');
+  calcDiscount();
 }
 
 function calcDiscount() {
@@ -1343,6 +1365,12 @@ function renderCashierCats() {
     btn.onclick = function(){ selectCashierCat(id, this); };
     tabs.appendChild(btn);
   });
+  const plansBtn = document.createElement('button');
+  plansBtn.className = 'cat-tab';
+  plansBtn.id = 'cat-tab-plans';
+  plansBtn.textContent = '📦 الباقات';
+  plansBtn.onclick = function(){ selectCashierCat('__plans__', this); };
+  tabs.appendChild(plansBtn);
 }
 
 function selectCashierCat(catId, btn) {
@@ -1363,6 +1391,35 @@ function renderCashierMenu(catId, btn, searchQ) {
   }
   const grid = document.getElementById('cashierMenuGrid');
   grid.innerHTML = '';
+
+  // Plans tab
+  if (catId === '__plans__') {
+    const activePlans = PLAN_DEFS.filter(p => {
+      const pd = plansData[p.id] || {};
+      return pd.active !== false;
+    });
+    if (!activePlans.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);font-size:13px;">لا توجد باقات متاحة</div>';
+      return;
+    }
+    activePlans.forEach(p => {
+      const pd = plansData[p.id] || {};
+      const price = pd.price;
+      const hasPrice = price !== undefined && price !== null;
+      const planFullName = p.nameAr + ' ' + p.period;
+      const div = document.createElement('div');
+      div.className = 'menu-item-c';
+      div.innerHTML = `<div class="mic-name">${escapeHtml(planFullName)}</div><div class="mic-price">${hasPrice ? price + ' ج' : '—'}</div>`;
+      if (hasPrice) {
+        div.onclick = () => addToCashierCart('__plan__' + p.id, { name: planFullName, singlePrice: price }, null, price);
+      } else {
+        div.style.opacity = '0.5';
+        div.style.cursor = 'default';
+      }
+      grid.appendChild(div);
+    });
+    return;
+  }
   const items = Object.entries(menuData.items||{})
     .filter(([,i]) => {
       if (i.active === false) return false;
@@ -1660,6 +1717,33 @@ function addCustomItem() {
   renderCashierCart();
   closeCustomItemModal();
   showToast(`تمت إضافة "${name}" ✓`);
+}
+
+/* ═══════════════════════════════════════════════
+   PLANS (الباقات والتتبيلات) — ORDER MENU
+═══════════════════════════════════════════════ */
+const PLAN_DEFS = [
+  { id:'weekly',        nameAr:'الاشتراك الأسبوعي',       period:'/ أسبوع'    },
+  { id:'monthly',       nameAr:'الاشتراك نصف الشهري',     period:'/ 15 يوم'  },
+  { id:'fitness',       nameAr:'الاشتراك الشهري',          period:'/ شهر'     },
+  { id:'tatbela-week',  nameAr:'تتبيلة الأسبوع',           period:'/ أسبوع'   },
+  { id:'tatbela-2weeks',nameAr:'تتبيلة نصف الشهري',       period:'/ نصف شهر' },
+  { id:'tatbela-month', nameAr:'تتبيلة الشهري',            period:'/ شهر'     },
+];
+let plansData = {};
+
+function loadPlans() {
+  const _plansRef = db.ref('settings/plans');
+  registerCleanup(() => _plansRef.off());
+  _plansRef.on('value', snap => {
+    plansData = snap.val() || {};
+    renderCashierCats();
+    // Re-render if currently on plans tab
+    const plansTab = document.getElementById('cat-tab-plans');
+    if (plansTab && plansTab.classList.contains('active')) {
+      renderCashierMenu('__plans__', null, '');
+    }
+  });
 }
 </script>
 </body>

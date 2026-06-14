@@ -122,7 +122,8 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
 }
 .food-card:hover{transform:translateY(-3px);box-shadow:var(--e2);border-color:var(--s2)}
 .food-card.in-cart{border-color:var(--g2);box-shadow:0 0 0 2px rgba(46,125,50,.15)}
-.food-card-body{padding:12px 13px 14px;flex:1;display:flex;flex-direction:column}
+
+.food-card-body{padding:10px 11px 12px;flex:1;display:flex;flex-direction:column}
 .food-card-name{font-size:13px;font-weight:800;color:var(--ink);line-height:1.25;margin-bottom:2px}
 .food-card-desc{font-size:10px;color:var(--mute);line-height:1.4;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .food-card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;gap:6px}
@@ -146,10 +147,10 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
 .qty-n{font-size:13px;font-weight:800;min-width:18px;text-align:center;color:var(--ink);font-family:var(--fe)}
 /* New badge */
 .new-tag{
-  position:absolute;top:7px;right:7px;
+  display:inline-block;vertical-align:middle;
   background:var(--o);color:#fff;border-radius:6px;
   font-size:9px;font-weight:800;padding:2px 6px;letter-spacing:.3px;
-  text-transform:uppercase;
+  margin-right:5px;
 }
 /* Sizes list */
 .size-row{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
@@ -310,8 +311,8 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
 
 <!-- ── TYPE ── -->
 <div class="type-bar">
-  <button class="type-pill active" id="tp-delivery" onclick="quickSetType('delivery')">🛵 توصيل</button>
-  <button class="type-pill" id="tp-pickup" onclick="quickSetType('pickup')">🏪 استلام</button>
+  <button class="type-pill active" id="tp-delivery" onclick="quickSetType('delivery')">🛵 Delivery</button>
+  <button class="type-pill" id="tp-pickup" onclick="quickSetType('pickup')">🏪 Pickup</button>
 </div>
 
 <!-- ── CAT TABS ── -->
@@ -336,7 +337,7 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
   <div class="float-cart-inner">
     <div class="float-cart-info">
       <div class="float-cart-count" id="floatCount">0 أيتم</div>
-      <div class="float-cart-total" id="floatTotal">0 ج</div>
+      <div class="float-cart-total" id="floatTotal">0 EGP</div>
     </div>
     <button class="float-cart-btn" onclick="openCheckout()">
       تأكيد الطلب ←
@@ -361,8 +362,8 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
       <div class="sheet-section">
         <div class="sheet-section-title">نوع الطلب</div>
         <div class="type-switch">
-          <button class="type-switch-btn active" id="cs-delivery" onclick="setCheckoutType('delivery')">🛵 توصيل</button>
-          <button class="type-switch-btn" id="cs-pickup" onclick="setCheckoutType('pickup')">🏪 استلام من المطعم</button>
+          <button class="type-switch-btn active" id="cs-delivery" onclick="setCheckoutType('delivery')">🛵 Delivery</button>
+          <button class="type-switch-btn" id="cs-pickup" onclick="setCheckoutType('pickup')">🏪 Pickup</button>
         </div>
       </div>
 
@@ -401,7 +402,7 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
 
       <div class="checkout-total" id="checkoutTotal">
         <span>الإجمالي</span>
-        <span style="color:var(--g1);font-family:var(--fe)">0 ج</span>
+        <span style="color:var(--g1);font-family:var(--fe)">0 EGP</span>
       </div>
 
       <button class="checkout-submit" id="checkoutSubmitBtn" onclick="submitOnlineOrder()" style="margin-top:18px">
@@ -505,7 +506,7 @@ function updateUI() {
   badge.textContent = count;
   badge.classList.toggle('show', count>0);
   document.getElementById('floatCount').textContent = count + ' أيتم';
-  document.getElementById('floatTotal').textContent = total.toLocaleString() + ' ج';
+  document.getElementById('floatTotal').textContent = total.toLocaleString() + ' EGP';
   document.getElementById('floatCart').classList.toggle('show', count>0);
   // Update add buttons
   document.querySelectorAll('.food-card').forEach(c => {
@@ -590,7 +591,7 @@ function openCheckout() {
     </div>`).join('');
   document.getElementById('checkoutTotal').innerHTML = `
     <span style="font-size:17px;font-weight:900">الإجمالي</span>
-    <span style="font-size:20px;font-weight:900;color:var(--g1);font-family:var(--fe)">${total.toLocaleString()} ج</span>`;
+    <span style="font-size:20px;font-weight:900;color:var(--g1);font-family:var(--fe)">${total.toLocaleString()} EGP</span>`;
   document.getElementById('checkoutOverlay').classList.add('open');
   document.getElementById('addressField').style.display = orderType==='delivery' ? '' : 'none';
 }
@@ -653,8 +654,34 @@ let _allItems = [];
 
 window.addEventListener('load', ()=>{
   if (typeof db==='undefined') return;
-  db.ref('menu').once('value').then(snap=>{
-    menuData = snap.val()||{categories:{},items:{}};
+  Promise.all([
+    db.ref('menu').once('value'),
+    db.ref('settings/plans').once('value')
+  ]).then(([menuSnap, plansSnap])=>{
+    menuData = menuSnap.val()||{categories:{},items:{}};
+    // inject plans as a synthetic category
+    const plansObj = plansSnap.val();
+    if (plansObj) {
+      menuData.categories['__plans__'] = {name:'Monthly Plans', nameAr:'Monthly Plans', order:9999, active:true};
+      Object.entries(plansObj).forEach(([pid, plan])=>{
+        if (plan.active===false) return;
+        const descItems = plan.itemsEn || plan.itemsAr || [];
+        const periodMap = {'/ شهر':'/ month','/ أسبوع':'/ week','/ 15 يوم':'/ 15 days','/ نصف شهر':'/ 2 weeks','/ نصف':'/ 2 weeks','أسبوع':'week','شهر':'month'};
+        const rawPeriod = plan.period||'';
+        const engPeriod = periodMap[rawPeriod] || rawPeriod.replace('شهر','month').replace('أسبوع','week').replace('يوم','days');
+        menuData.items['__plan__'+pid] = {
+          name: plan.nameEn||plan.nameAr||plan.name||'Plan',
+          nameAr: '',
+          description: descItems.join(' • '),
+          singlePrice: plan.price||0,
+          period: engPeriod,
+          calories: null,
+          categoryId: '__plans__',
+          active: true,
+          isPlan: true,
+        };
+      });
+    }
     buildCatTabs();
     renderMenu(null, '');
   }).catch(()=>{
@@ -668,7 +695,7 @@ function buildCatTabs() {
     .filter(([,c])=>c.active!==false).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
   const row = document.getElementById('catTabs');
   row.innerHTML = '<button class="cat-tab active" data-cat="all" onclick="filterCat(null,this)">🍴 الكل</button>';
-  cats.slice(0,14).forEach(([id,c])=>{
+  cats.forEach(([id,c])=>{
     const b = document.createElement('button');
     b.className = 'cat-tab';
     b.dataset.cat = id;
@@ -728,40 +755,82 @@ function renderMenu(catId, search) {
   let idx = 0;
   function renderNext() {
     if (idx >= sections.length) { updateUI(); return; }
-    const {cat, items} = sections[idx++];
+    const {cat, cid, items} = sections[idx++];
     const sec = document.createElement('div');
     sec.innerHTML =
       `<div class="cat-section-title">${cat.name||cat.nameAr}</div>` +
-      `<div class="items-grid">${items.map(([iid,item])=>buildFoodCard(iid,item)).join('')}</div>`;
+      `<div class="items-grid">${items.map(([iid,item])=>item.isPlan?buildPlanCard(iid,item):buildFoodCard(iid,item)).join('')}</div>`;
     cont.appendChild(sec);
     requestAnimationFrame(renderNext);
   }
   requestAnimationFrame(renderNext);
 }
 
+function buildPlanCard(iid, item) {
+  const ci = cart.find(x=>x.iid===iid && !x.size);
+  const qty = ci ? ci.qty : 0;
+  const priceLabel = item.period ? `${item.singlePrice} ج ${item.period}` : `${item.singlePrice} ج`;
+  return `<div class="food-card${qty>0?' in-cart':''}" data-iid="${iid}" data-size="" onclick="showPlanModal('${iid}')">
+    <div class="food-card-body">
+      <div class="food-card-name">${item.name}</div>
+      <div class="food-card-desc" style="-webkit-line-clamp:3">${item.description||''}</div>
+      <div class="food-card-foot" style="margin-top:8px">
+        <div class="food-card-price">${priceLabel}</div>
+        <button class="add-btn" onclick="event.stopPropagation();addItem('${iid}','${item.name}',${item.singlePrice||0},null,0)" style="${qty>0?'display:none':''}">+</button>
+        <div class="qty-ctrl" style="${qty>0?'display:flex':'display:none'}">
+          <button class="qty-btn minus" onclick="event.stopPropagation();changeQty('${iid}',null,-1)">−</button>
+          <span class="qty-n">${qty}</span>
+          <button class="qty-btn plus" onclick="event.stopPropagation();changeQty('${iid}',null,1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function showPlanModal(iid) {
+  const item = menuData.items[iid];
+  if (!item) return;
+  const priceLabel = item.period ? `${item.singlePrice} ج ${item.period}` : `${item.singlePrice} ج`;
+  const bullets = item.description ? item.description.split(' • ').map(b=>`<div style="padding:6px 0;border-bottom:1px solid var(--bd);font-size:13px;color:var(--ink)">✓ ${b}</div>`).join('') : '';
+  let m = document.getElementById('planModal');
+  if (!m) {
+    m = document.createElement('div');
+    m.id = 'planModal';
+    m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:flex-end;justify-content:center';
+    m.onclick = function(e){ if(e.target===m) m.remove(); };
+    document.body.appendChild(m);
+  }
+  m.innerHTML = `<div style="background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto">
+    <div style="width:40px;height:4px;background:#ddd;border-radius:4px;margin:0 auto 16px"></div>
+    <div style="font-size:18px;font-weight:900;color:var(--ink);margin-bottom:4px;text-align:center">${item.name}</div>
+    <div style="font-size:20px;font-weight:900;color:var(--g1);text-align:center;margin-bottom:16px">${priceLabel}</div>
+    <div style="margin-bottom:20px">${bullets}</div>
+    <button onclick="event.stopPropagation();addItem('${iid}','${item.name}',${item.singlePrice||0},null,0);document.getElementById('planModal').remove()"
+      style="width:100%;padding:14px;background:var(--g1);color:#fff;border-radius:14px;font-size:15px;font-weight:900;font-family:inherit;cursor:pointer;border:none">
+      + أضف للطلب — ${priceLabel}
+    </button>
+  </div>`;
+  document.body.appendChild(m);
+}
+
 function buildFoodCard(iid, item) {
   const hasSizes = item.sizes && Object.keys(item.sizes).length>0;
   const minP = hasSizes ? Math.min(...Object.values(item.sizes).map(s=>s.price)) : (item.singlePrice||0);
-  const priceStr = hasSizes ? 'من '+minP : minP;
+  const priceStr = hasSizes ? 'from '+minP : minP;
   const cal = item.sizes?.M?.calories||item.calories||'';
   const ci = cart.find(x=>x.iid===iid && !x.size);
   const qty = ci ? ci.qty : 0;
-  const safeIid = escapeHtml(iid);
-  const safeName = sanitizeText(item.name, 100);
-  const safeNameAr = sanitizeText(item.nameAr, 100);
-  const displayName = escapeHtml(item.name||item.nameAr||'');
-  const displayNameAr = escapeHtml(item.nameAr||'');
-  const displayDesc = escapeHtml(item.description||'');
-  return `<div class="food-card${qty>0?' in-cart':''}" data-iid="${safeIid}" data-size="">
+  const priceLabel = item.period ? `${priceStr} EGP ${item.period}` : `${priceStr} EGP`;
+  return `<div class="food-card${qty>0?' in-cart':''}" data-iid="${iid}" data-size="">
     <div class="food-card-body">
-      <div class="food-card-name">${displayName}${item.isNew?' <span class="new-tag" style="font-size:9px;padding:1px 5px;vertical-align:middle">جديد</span>':''}</div>
-      ${item.nameAr&&item.name!==item.nameAr?`<div style="font-size:10px;color:var(--mute);margin-bottom:3px">${displayNameAr}</div>`:''}
-      ${item.description?`<div class="food-card-desc">${displayDesc}</div>`:''}
-      ${hasSizes ? `<div class="size-row">${Object.entries(item.sizes).map(([s,d])=>`<button class="size-pill" onclick="event.stopPropagation();addItem('${safeIid}','${sanitizeText(item.name+' '+s,110)}',${+d.price},'${sanitizeText(s,10)}',${+(d.calories||0)})">${escapeHtml(s)}: ${+d.price}ج</button>`).join('')}</div>` : ''}
+      <div class="food-card-name">${item.isNew?'<span class="new-tag">جديد</span>':''}${item.name||item.nameAr}</div>
+      ${item.nameAr&&item.name!==item.nameAr?`<div style="font-size:10px;color:var(--mute);margin-bottom:3px">${item.nameAr}</div>`:''}
+      ${item.description?`<div class="food-card-desc">${item.description}</div>`:''}
+      ${hasSizes ? `<div class="size-row">${Object.entries(item.sizes).map(([s,d])=>`<button class="size-pill" onclick="event.stopPropagation();addItem('${iid}','${item.name} ${s}',${d.price},'${s}',${d.calories||0})">${s}: ${d.price} EGP</button>`).join('')}</div>` : ''}
       <div class="food-card-foot" style="margin-top:8px">
         <div>
-          <div class="food-card-price">${priceStr} ج</div>
-          ${cal?`<div class="food-card-cal">${cal} ك</div>`:''}
+          <div class="food-card-price">${priceLabel}</div>
+          ${cal?`<div class="food-card-cal">${cal} cal</div>`:''}
         </div>
         ${hasSizes ? '' : `
           <button class="add-btn" onclick="addItem('${safeIid}','${safeName||safeNameAr}',${+(item.singlePrice||0)},null,${+(item.calories||0)})" style="${qty>0?'display:none':''}">+</button>
