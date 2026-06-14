@@ -446,40 +446,37 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
 
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-  <script>
-    // Direct Firebase init — no dependency on firebase-config.js
-    if (!firebase.apps.length) {
-      firebase.initializeApp({
-        apiKey: "AIzaSyDXVIFKaiLP4ty0GHOhznN4O6FEbFFhzVo",
-        authDomain: "tucomida-pos.firebaseapp.com",
-        databaseURL: "https://tucomida-pos-default-rtdb.firebaseio.com",
-        projectId: "tucomida-pos",
-        storageBucket: "tucomida-pos.firebasestorage.app",
-        messagingSenderId: "698661717103",
-        appId: "1:698661717103:web:69e9100e49ac2669b9799a"
-      });
-    }
-    var db = firebase.database();
-    function getDayId(){ return new Date().toISOString().split('T')[0]; }
-    function sanitizeText(s,n){ return s ? String(s).replace(/[<>&"'`]/g,'').trim().substring(0,n||300) : ''; }
-    function escapeHtml(s){ return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;') : ''; }
-    function sanitizePhone(s){
-      if(!s) return '';
-      // Convert Arabic-Indic + Persian numerals to Western digits
-      return String(s)
-        .replace(/[٠-٩]/g, function(d){ return d.charCodeAt(0)-0x0660; })
-        .replace(/[۰-۹]/g, function(d){ return d.charCodeAt(0)-0x06F0; })
-        .replace(/\D/g,'').substring(0,15);
-    }
-    function getNextOnlineOrderNumber(){
-      var ref = db.ref('settings/onlineOrderCounter');
-      return ref.transaction(function(n){ return (n||5000)+1; }).then(function(r){ return r.snapshot.val(); });
-    }
-  </script>
-
 <script>
+/* ── FIREBASE INIT ── */
+if (!firebase.apps.length) {
+  firebase.initializeApp({
+    apiKey: "AIzaSyDXVIFKaiLP4ty0GHOhznN4O6FEbFFhzVo",
+    authDomain: "tucomida-pos.firebaseapp.com",
+    databaseURL: "https://tucomida-pos-default-rtdb.firebaseio.com",
+    projectId: "tucomida-pos",
+    storageBucket: "tucomida-pos.firebasestorage.app",
+    messagingSenderId: "698661717103",
+    appId: "1:698661717103:web:69e9100e49ac2669b9799a"
+  });
+}
+var db = firebase.database();
+function getDayId(){ return new Date().toISOString().split('T')[0]; }
+function sanitizeText(s,n){ return s ? String(s).replace(/[<>&"'`]/g,'').trim().substring(0,n||300) : ''; }
+function escapeHtml(s){ return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;') : ''; }
+function sanitizePhone(s){
+  if(!s) return '';
+  return String(s)
+    .replace(/[٠-٩]/g, function(d){ return d.charCodeAt(0)-0x0660; })
+    .replace(/[۰-۹]/g, function(d){ return d.charCodeAt(0)-0x06F0; })
+    .replace(/\D/g,'').substring(0,15);
+}
+function getNextOnlineOrderNumber(){
+  var ref = db.ref('settings/onlineOrderCounter');
+  return ref.transaction(function(n){ return (n||5000)+1; }).then(function(r){ return r.snapshot.val(); });
+}
+
 /* ════════════════════════════════════
-   NEW ORDER.HTML STATE
+   APP STATE
 ════════════════════════════════════ */
 let orderType = 'delivery';
 let menuData = {categories:{}, items:{}};
@@ -652,8 +649,7 @@ async function submitOnlineOrder() {
 let _activeCat = null;
 let _allItems = [];
 
-window.addEventListener('load', ()=>{
-  if (typeof db==='undefined') return;
+function loadMenu() {
   Promise.all([
     db.ref('menu').once('value'),
     db.ref('settings/plans').once('value')
@@ -684,11 +680,12 @@ window.addEventListener('load', ()=>{
     }
     buildCatTabs();
     renderMenu(null, '');
-  }).catch(()=>{
+  }).catch((err)=>{
+    console.error('Menu load error:', err);
     document.getElementById('menuContainer').innerHTML =
       '<div class="empty-menu"><p>تعذّر تحميل المنيو — <a href="/order.html" style="color:var(--g1)">أعد المحاولة</a></p></div>';
   });
-});
+}
 
 function buildCatTabs() {
   const cats = Object.entries(menuData.categories||{})
@@ -854,6 +851,7 @@ function showToast(msg) {
 // Init
 quickSetType('delivery');
 updateUI();
+loadMenu();
 </script>
 </body>
 </html>
