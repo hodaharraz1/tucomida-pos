@@ -690,7 +690,7 @@ function buildCatTabs() {
     .filter(([,c])=>c.active!==false).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
   const row = document.getElementById('catTabs');
   row.innerHTML = '<button class="cat-tab active" data-cat="all" onclick="filterCat(null,this)">🍴 الكل</button>';
-  cats.slice(0,14).forEach(([id,c])=>{
+  cats.forEach(([id,c])=>{
     const b = document.createElement('button');
     b.className = 'cat-tab';
     b.dataset.cat = id;
