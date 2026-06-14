@@ -395,6 +395,23 @@
     .exp-cal-day.selected .exp-cal-day-amt { color:#fff; }
     .exp-cal-day-detail { margin-top:12px; }
 
+    /* ══ EXPENSE YEAR ══ */
+    .exp-year-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
+    .exp-year-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px 10px; text-align:center; cursor:pointer; transition:all .15s; }
+    .exp-year-card:hover { border-color:var(--accent); }
+    .exp-year-card.selected { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .exp-year-card-month { font-size:12px; font-weight:700; margin-bottom:4px; }
+    .exp-year-card-exp { font-size:14px; font-weight:900; color:var(--accent); font-family:var(--font-en); }
+    .exp-year-card.selected .exp-year-card-exp { color:#fff; }
+    .exp-year-card-profit { font-size:10px; font-weight:700; margin-top:2px; }
+    .exp-year-totals { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
+    /* ══ EXPENSE CATS ══ */
+    .exp-cat-row { display:flex; align-items:center; gap:10px; padding:12px 14px; background:var(--card); border-radius:10px; margin-bottom:8px; border:1px solid var(--border); }
+    .exp-cat-bar-wrap { flex:1; background:var(--card2); border-radius:4px; height:8px; overflow:hidden; }
+    .exp-cat-bar-fill { height:100%; background:var(--accent); border-radius:4px; transition:width .4s; }
+    .exp-cat-name { font-size:13px; font-weight:700; color:var(--text); min-width:100px; }
+    .exp-cat-amt { font-size:14px; font-weight:800; color:var(--accent); font-family:var(--font-en); min-width:70px; text-align:left; }
+    .exp-cat-pct { font-size:11px; color:var(--muted); min-width:36px; text-align:left; }
     /* ══ INVENTORY ══ */
     .inv-alert-bar { background:rgba(229,57,53,.1); border:1px solid rgba(229,57,53,.25); border-radius:12px; padding:12px 14px; margin-bottom:14px; display:none; }
     .inv-alert-bar.show { display:block; }
@@ -883,10 +900,13 @@
     <div class="sec-title" style="margin-bottom:14px">💸 المصروفات</div>
 
     <!-- Summary tabs -->
-    <div class="exp-tabs">
+    <div class="exp-tabs" style="flex-wrap:wrap">
       <button class="exp-tab active" id="etab-day"      onclick="expSetTab('day')">اليوم</button>
       <button class="exp-tab"        id="etab-month"    onclick="expSetTab('month')">الشهر</button>
-      <button class="exp-tab"        id="etab-calendar" onclick="expSetTab('calendar')">📅 التقويم</button>
+      <button class="exp-tab"        id="etab-calendar" onclick="expSetTab('calendar')">📅 شهري</button>
+      <button class="exp-tab"        id="etab-year"     onclick="expSetTab('year')">📊 سنوي</button>
+      <button class="exp-tab"        id="etab-cats"     onclick="expSetTab('cats')">🍕 الفئات</button>
+      <button class="exp-tab"        onclick="exportExpensesCSV()" style="background:rgba(46,125,50,.1);color:var(--green);border-color:rgba(46,125,50,.3)">⬇ تصدير</button>
     </div>
 
     <!-- Summary cards -->
@@ -938,6 +958,10 @@
 
     <!-- Calendar view (hidden by default) -->
     <div id="expCalendarContainer" style="display:none"></div>
+    <!-- Year view -->
+    <div id="expYearContainer" style="display:none"></div>
+    <!-- Category breakdown -->
+    <div id="expCatsContainer" style="display:none"></div>
 
     <!-- Expenses list -->
     <div id="expListContainer">
@@ -3136,14 +3160,16 @@ let _expCalSelected = null;
 
 function expSetTab(t) {
   expTab = t;
-  document.querySelectorAll('.exp-tab').forEach(b => b.classList.remove('active'));
-  document.getElementById('etab-' + t).classList.add('active');
-  const isCal = t === 'calendar';
-  document.getElementById('expSummaryCards').style.display = isCal ? 'none' : '';
-  document.getElementById('expCalendarContainer').style.display = isCal ? '' : 'none';
-  document.getElementById('expListContainer').style.display = isCal ? 'none' : '';
-  if (isCal) renderExpCalendar();
-  else renderExpenses();
+  document.querySelectorAll('.exp-tab[id^="etab-"]').forEach(b => b.classList.remove('active'));
+  if (document.getElementById('etab-' + t)) document.getElementById('etab-' + t).classList.add('active');
+  const show = id => { const el=document.getElementById(id); if(el) el.style.display=''; };
+  const hide = id => { const el=document.getElementById(id); if(el) el.style.display='none'; };
+  // hide all panels
+  ['expSummaryCards','expCalendarContainer','expYearContainer','expCatsContainer','expListContainer'].forEach(hide);
+  if (t === 'calendar') { show('expCalendarContainer'); renderExpCalendar(); }
+  else if (t === 'year') { show('expYearContainer'); renderExpYear(); }
+  else if (t === 'cats') { show('expCatsContainer'); renderExpCats(); }
+  else { show('expSummaryCards'); show('expListContainer'); renderExpenses(); }
 }
 
 function expGetDateRange() {
@@ -3161,6 +3187,8 @@ function listenExpenses() {
   db.ref('expenses').on('value', snap => {
     expData = snap.val() || {};
     if (expTab === 'calendar') renderExpCalendar();
+    else if (expTab === 'year') renderExpYear();
+    else if (expTab === 'cats') renderExpCats();
     else renderExpenses();
     _checkExpDot();
   });
@@ -3277,6 +3305,140 @@ function renderExpCalendar() {
   }
 
   document.getElementById('expCalendarContainer').innerHTML = html;
+}
+
+// ── YEAR VIEW ──────────────────────────────────
+let _expYearYear = new Date().getFullYear();
+let _expYearSelMonth = null;
+
+async function renderExpYear() {
+  const y = _expYearYear;
+  const MONTHS_AR = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+
+  // Sum expenses per month
+  const monthTotals = {};
+  Object.values(expData).forEach(e => {
+    if (!e.dayId || !e.dayId.startsWith(String(y))) return;
+    const mk = e.dayId.substring(0,7);
+    monthTotals[mk] = (monthTotals[mk]||0) + (e.amount||0);
+  });
+
+  const yearTotalExp = Object.values(monthTotals).reduce((s,v)=>s+v, 0);
+
+  // Load year revenue from orders
+  let yearRevenue = 0;
+  try {
+    const snap = await db.ref('orders').orderByChild('dayId').startAt(`${y}-01-01`).endAt(`${y}-12-31`).once('value');
+    const orders = snap.val() || {};
+    yearRevenue = Object.values(orders).filter(o=>o.status==='done'||o.status==='paid').reduce((s,o)=>s+(o.total||0),0);
+  } catch(e){}
+
+  const yearProfit = yearRevenue - yearTotalExp;
+
+  let html = `<div class="exp-cal" style="margin-bottom:12px">
+    <div class="exp-cal-header">
+      <button class="exp-cal-nav" onclick="_expYearYear--;renderExpYear()">‹</button>
+      <div class="exp-cal-title">📊 ${y}</div>
+      <button class="exp-cal-nav" onclick="_expYearYear++;renderExpYear()">›</button>
+    </div>
+    <div class="exp-year-totals">
+      <div class="exp-sum-card"><div class="exp-sum-val">${yearTotalExp.toLocaleString()}</div><div class="exp-sum-lbl">إجمالي المصروفات (ج)</div></div>
+      <div class="exp-sum-card"><div class="exp-sum-val">${yearRevenue.toLocaleString()}</div><div class="exp-sum-lbl">المبيعات (ج)</div></div>
+      <div class="exp-sum-card"><div class="exp-sum-val" style="color:${yearProfit>=0?'var(--green)':'#EF5350'}">${yearProfit.toLocaleString()}</div><div class="exp-sum-lbl">صافي الربح (ج)</div></div>
+    </div>
+    <div class="exp-year-grid">`;
+
+  for (let m = 0; m < 12; m++) {
+    const mk = `${y}-${String(m+1).padStart(2,'0')}`;
+    const exp = monthTotals[mk] || 0;
+    const isSel = _expYearSelMonth === mk;
+    html += `<div class="exp-year-card${isSel?' selected':''}" onclick="expYearSelectMonth('${mk}')">
+      <div class="exp-year-card-month">${MONTHS_AR[m]}</div>
+      <div class="exp-year-card-exp">${exp > 0 ? exp.toLocaleString() : '—'}</div>
+      <div class="exp-year-card-profit" style="color:${isSel?'rgba(255,255,255,.8)':'var(--muted)'}">ج</div>
+    </div>`;
+  }
+  html += `</div></div>`;
+
+  // Selected month detail
+  if (_expYearSelMonth) {
+    const items = Object.entries(expData).filter(([,e])=>e.dayId&&e.dayId.startsWith(_expYearSelMonth)).sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));
+    const tot = items.reduce((s,[,e])=>s+(e.amount||0),0);
+    const mIdx = parseInt(_expYearSelMonth.split('-')[1])-1;
+    html += `<div style="font-size:13px;font-weight:800;color:var(--muted);margin-bottom:10px">📅 ${MONTHS_AR[mIdx]} — إجمالي: <span style="color:var(--accent)">${tot.toLocaleString()} ج</span></div>`;
+    if (items.length) {
+      html += items.map(([id,e])=>`
+        <div class="exp-list-item">
+          <div class="exp-item-info">
+            <div class="exp-item-name">${escapeHtml(e.name||'')}</div>
+            <div class="exp-item-meta"><span class="exp-cat-badge">${escapeHtml(e.category||'')}</span><span style="margin-right:6px;font-size:11px">${e.dayId||''}</span></div>
+          </div>
+          <div class="exp-item-amount">${(e.amount||0).toLocaleString()} ج</div>
+          <button class="exp-del-btn" onclick="deleteExpense('${escapeHtml(id)}')">حذف</button>
+        </div>`).join('');
+    } else {
+      html += `<div style="text-align:center;padding:16px;color:var(--muted);font-size:13px">لا توجد مصروفات</div>`;
+    }
+  }
+
+  document.getElementById('expYearContainer').innerHTML = html;
+}
+
+function expYearSelectMonth(mk) {
+  _expYearSelMonth = _expYearSelMonth === mk ? null : mk;
+  renderExpYear();
+}
+
+// ── CATEGORY BREAKDOWN ──────────────────────────
+function renderExpCats() {
+  const { start, end } = expGetDateRange();
+  // Use all data for cats view (month scope)
+  const now = new Date();
+  const y = now.getFullYear(), mo = String(now.getMonth()+1).padStart(2,'0');
+  const mk = `${y}-${mo}`;
+
+  const catTotals = {};
+  Object.values(expData).forEach(e => {
+    if (!e.dayId || !e.dayId.startsWith(mk)) return;
+    const cat = e.category || 'أخرى';
+    catTotals[cat] = (catTotals[cat]||0) + (e.amount||0);
+  });
+
+  const total = Object.values(catTotals).reduce((s,v)=>s+v,0);
+  const sorted = Object.entries(catTotals).sort((a,b)=>b[1]-a[1]);
+
+  let html = `<div style="font-size:13px;font-weight:800;color:var(--muted);margin-bottom:14px">🍕 توزيع المصروفات — ${y}/${mo}<br><span style="font-size:11px;font-weight:500">إجمالي: ${total.toLocaleString()} ج</span></div>`;
+
+  if (!sorted.length) {
+    html += `<div class="empty-state-o"><span>📊</span><p>لا توجد مصروفات هذا الشهر</p></div>`;
+  } else {
+    sorted.forEach(([cat, amt]) => {
+      const pct = total > 0 ? Math.round(amt/total*100) : 0;
+      html += `<div class="exp-cat-row">
+        <div class="exp-cat-name">${escapeHtml(cat)}</div>
+        <div class="exp-cat-bar-wrap"><div class="exp-cat-bar-fill" style="width:${pct}%"></div></div>
+        <div class="exp-cat-pct">${pct}%</div>
+        <div class="exp-cat-amt">${amt.toLocaleString()} ج</div>
+      </div>`;
+    });
+  }
+  document.getElementById('expCatsContainer').innerHTML = html;
+}
+
+// ── EXPORT CSV ──────────────────────────────────
+function exportExpensesCSV() {
+  const rows = [['التاريخ','اسم المصروف','الفئة','المبلغ (ج)']];
+  Object.values(expData).sort((a,b)=>(a.dayId||'').localeCompare(b.dayId||'')).forEach(e => {
+    rows.push([e.dayId||'', e.name||'', e.category||'', e.amount||0]);
+  });
+  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const bom = '﻿';
+  const blob = new Blob([bom+csv], {type:'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `tucomida-expenses-${getDayId()}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+  showToastO('✅ تم تصدير المصروفات');
 }
 
 function expCalNav(dir) {
