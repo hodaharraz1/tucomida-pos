@@ -1414,9 +1414,8 @@ body.lang-en .wa{left:auto;right:24px}
       </a>
     </div>
     <!-- Dynamic menu from Firebase (hidden until loaded) -->
-    <div id="menuTabsRow" style="display:none;flex-wrap:wrap;gap:8px;margin-bottom:18px;justify-content:center"></div>
-    <input id="menuSearch" type="search" placeholder="ابحث في المنيو..." oninput="filterMenuSearch(this.value)"
-           style="display:none;width:100%;max-width:420px;margin:0 auto 20px;padding:11px 18px;border-radius:30px;border:1.5px solid #D8EDD8;font-size:14px;font-family:inherit;outline:none;box-sizing:border-box;display:none">
+    <div id="menuTabsRow" style="display:none"></div>
+    <div id="menuSearch" style="display:none"></div>
     <div id="menuItemsGrid" style="display:none"></div>
   </div>
 </section>
@@ -1704,28 +1703,10 @@ document.querySelectorAll('.fi').forEach(el => observer.observe(el));
 const TAB_STYLE = 'padding:8px 18px;border-radius:20px;border:1.5px solid #D8EDD8;background:#fff;color:#5A6A5A;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .2s';
 const TAB_ACTIVE = 'background:#2A6041;border-color:#2A6041;color:#fff';
 
-// ── Load Menu from Firebase ─────────────────────
-window.addEventListener('load', () => {
-  if (typeof db === 'undefined') return;
-  db.ref('menu').once('value').then(snap => {
-    const data = snap.val() || {categories:{},items:{}};
-    const hasItems = data.items && Object.keys(data.items).length > 0;
-    if (!hasItems) return; // keep static fallback if DB empty
-    // hide static cats-grid and show dynamic sections
-    const staticGrid = document.querySelector('.cats-grid');
-    if (staticGrid) staticGrid.style.display = 'none';
-    const row = document.getElementById('menuTabsRow');
-    const search = document.getElementById('menuSearch');
-    const grid = document.getElementById('menuItemsGrid');
-    row.style.display = 'flex';
-    search.style.display = 'block';
-    grid.style.display = 'block';
-    buildMenuTabs(data);
-    renderMenuItems(data, null);
-  }).catch(() => {
-    // static grid remains visible on error — no change needed
-  });
-});
+// ── Menu Firebase hooks (unused on homepage, kept for future use) ─────────────────────
+function buildMenuTabs() {}
+function renderMenuItems() {}
+function filterMenuSearch() {}
 
 let _activeCat = null;
 let _menuData = {};
