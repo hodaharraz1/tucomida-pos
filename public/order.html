@@ -660,12 +660,12 @@ window.addEventListener('load', ()=>{
     // inject plans as a synthetic category
     const plansObj = plansSnap.val();
     if (plansObj) {
-      menuData.categories['__plans__'] = {name:'الباقات الشهرية', nameAr:'الباقات الشهرية', order:-1, active:true};
+      menuData.categories['__plans__'] = {name:'Monthly Plans', nameAr:'Monthly Plans', order:9999, active:true};
       Object.entries(plansObj).forEach(([pid, plan])=>{
         if (plan.active===false) return;
-        const descItems = plan.itemsAr || plan.itemsEn || [];
+        const descItems = plan.itemsEn || plan.itemsAr || [];
         menuData.items['__plan__'+pid] = {
-          name: plan.nameAr||plan.nameEn||plan.name||'باقة',
+          name: plan.nameEn||plan.nameAr||plan.name||'Plan',
           nameAr: '',
           description: descItems.join(' • '),
           singlePrice: plan.price||0,
