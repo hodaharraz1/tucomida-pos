@@ -1413,9 +1413,10 @@ body.lang-en .wa{left:auto;right:24px}
         <span class="en">🍽 View Full Menu & Order Now →</span>
       </a>
     </div>
-    <!-- hidden elements needed by JS (don't remove) -->
-    <div id="menuTabsRow" style="display:none"></div>
-    <div id="menuSearch" style="display:none"></div>
+    <!-- Dynamic menu from Firebase (hidden until loaded) -->
+    <div id="menuTabsRow" style="display:none;flex-wrap:wrap;gap:8px;margin-bottom:18px;justify-content:center"></div>
+    <input id="menuSearch" type="search" placeholder="ابحث في المنيو..." oninput="filterMenuSearch(this.value)"
+           style="display:none;width:100%;max-width:420px;margin:0 auto 20px;padding:11px 18px;border-radius:30px;border:1.5px solid #D8EDD8;font-size:14px;font-family:inherit;outline:none;box-sizing:border-box;display:none">
     <div id="menuItemsGrid" style="display:none"></div>
   </div>
 </section>
@@ -1708,11 +1709,21 @@ window.addEventListener('load', () => {
   if (typeof db === 'undefined') return;
   db.ref('menu').once('value').then(snap => {
     const data = snap.val() || {categories:{},items:{}};
+    const hasItems = data.items && Object.keys(data.items).length > 0;
+    if (!hasItems) return; // keep static fallback if DB empty
+    // hide static cats-grid and show dynamic sections
+    const staticGrid = document.querySelector('.cats-grid');
+    if (staticGrid) staticGrid.style.display = 'none';
+    const row = document.getElementById('menuTabsRow');
+    const search = document.getElementById('menuSearch');
+    const grid = document.getElementById('menuItemsGrid');
+    row.style.display = 'flex';
+    search.style.display = 'block';
+    grid.style.display = 'block';
     buildMenuTabs(data);
     renderMenuItems(data, null);
   }).catch(() => {
-    document.getElementById('menuItemsGrid').innerHTML =
-      '<div style="grid-column:1/-1;text-align:center;padding:24px;color:#5A6A5A;font-size:14px">تعذّر تحميل المنيو حالياً — <a href="/order.html" style="color:#2A6041;font-weight:700">اطلب من هنا</a></div>';
+    // static grid remains visible on error — no change needed
   });
 });
 
@@ -1728,7 +1739,7 @@ function buildMenuTabs(data) {
   allBtn.innerHTML = '<span>الكل</span>';
   allBtn.onclick = function(){ _activeCat=null; setActiveTab(this); document.getElementById('menuSearch').value=''; renderMenuItems(data,null); };
   row.appendChild(allBtn);
-  cats.slice(0,10).forEach(([id,c]) => {
+  cats.forEach(([id,c]) => {
     const b = document.createElement('button');
     b.style.cssText = TAB_STYLE;
     b.textContent = c.nameAr || c.name;
