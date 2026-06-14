@@ -651,6 +651,7 @@ async function submitOnlineOrder() {
 /* ── MENU LOADING ── */
 let _activeCat = null;
 let _allItems = [];
+let menuData = {categories:{}, items:{}};
 
 window.addEventListener('load', ()=>{
   if (typeof db==='undefined') return;
@@ -821,23 +822,24 @@ function buildFoodCard(iid, item) {
   const ci = cart.find(x=>x.iid===iid && !x.size);
   const qty = ci ? ci.qty : 0;
   const priceLabel = item.period ? `${priceStr} EGP ${item.period}` : `${priceStr} EGP`;
+  const name = (item.name||item.nameAr||'').replace(/'/g,"\\'");
   return `<div class="food-card${qty>0?' in-cart':''}" data-iid="${iid}" data-size="">
     <div class="food-card-body">
       <div class="food-card-name">${item.isNew?'<span class="new-tag">جديد</span>':''}${item.name||item.nameAr}</div>
       ${item.nameAr&&item.name!==item.nameAr?`<div style="font-size:10px;color:var(--mute);margin-bottom:3px">${item.nameAr}</div>`:''}
       ${item.description?`<div class="food-card-desc">${item.description}</div>`:''}
-      ${hasSizes ? `<div class="size-row">${Object.entries(item.sizes).map(([s,d])=>`<button class="size-pill" onclick="event.stopPropagation();addItem('${iid}','${item.name} ${s}',${d.price},'${s}',${d.calories||0})">${s}: ${d.price} EGP</button>`).join('')}</div>` : ''}
+      ${hasSizes ? `<div class="size-row">${Object.entries(item.sizes).map(([s,d])=>`<button class="size-pill" onclick="event.stopPropagation();addItem('${iid}','${name} ${s}',${d.price},'${s}',${d.calories||0})">${s}: ${d.price} EGP</button>`).join('')}</div>` : ''}
       <div class="food-card-foot" style="margin-top:8px">
         <div>
           <div class="food-card-price">${priceLabel}</div>
           ${cal?`<div class="food-card-cal">${cal} cal</div>`:''}
         </div>
         ${hasSizes ? '' : `
-          <button class="add-btn" onclick="addItem('${safeIid}','${safeName||safeNameAr}',${+(item.singlePrice||0)},null,${+(item.calories||0)})" style="${qty>0?'display:none':''}">+</button>
+          <button class="add-btn" onclick="addItem('${iid}','${name}',${+(item.singlePrice||0)},null,${+(item.calories||0)})" style="${qty>0?'display:none':''}">+</button>
           <div class="qty-ctrl" style="${qty>0?'display:flex':'display:none'}">
-            <button class="qty-btn minus" onclick="changeQty('${safeIid}',null,-1)">−</button>
+            <button class="qty-btn minus" onclick="changeQty('${iid}',null,-1)">−</button>
             <span class="qty-n">${qty}</span>
-            <button class="qty-btn plus" onclick="changeQty('${safeIid}',null,1)">+</button>
+            <button class="qty-btn plus" onclick="changeQty('${iid}',null,1)">+</button>
           </div>`}
       </div>
     </div>
