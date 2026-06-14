@@ -752,12 +752,9 @@ function renderMenu(catId, search) {
     if (idx >= sections.length) { updateUI(); return; }
     const {cat, cid, items} = sections[idx++];
     const sec = document.createElement('div');
-    const isPlans = cid === '__plans__';
     sec.innerHTML =
       `<div class="cat-section-title">${cat.name||cat.nameAr}</div>` +
-      (isPlans
-        ? `<div style="display:flex;flex-direction:column;gap:10px">${items.map(([iid,item])=>buildPlanCard(iid,item)).join('')}</div>`
-        : `<div class="items-grid">${items.map(([iid,item])=>buildFoodCard(iid,item)).join('')}</div>`);
+      `<div class="items-grid">${items.map(([iid,item])=>item.isPlan?buildPlanCard(iid,item):buildFoodCard(iid,item)).join('')}</div>`;
     cont.appendChild(sec);
     requestAnimationFrame(renderNext);
   }
@@ -768,23 +765,47 @@ function buildPlanCard(iid, item) {
   const ci = cart.find(x=>x.iid===iid && !x.size);
   const qty = ci ? ci.qty : 0;
   const priceLabel = item.period ? `${item.singlePrice} ج ${item.period}` : `${item.singlePrice} ج`;
-  const bullets = item.description ? item.description.split(' • ').map(b=>`<span style="display:block;padding:2px 0;font-size:11px;color:var(--mute)">• ${b}</span>`).join('') : '';
-  return `<div class="food-card${qty>0?' in-cart':''}" data-iid="${iid}" data-size=""
-    style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:16px">
-    <div style="flex:1;min-width:0">
-      <div style="font-size:14px;font-weight:900;color:var(--ink);margin-bottom:6px">${item.name}</div>
-      <div>${bullets}</div>
-    </div>
-    <div style="text-align:left;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-      <div style="font-size:15px;font-weight:900;color:var(--g1);white-space:nowrap">${priceLabel}</div>
-      <button class="add-btn" onclick="addItem('${iid}','${item.name}',${item.singlePrice||0},null,0)" style="${qty>0?'display:none':''}">+</button>
-      <div class="qty-ctrl" style="${qty>0?'display:flex':'display:none'}">
-        <button class="qty-btn minus" onclick="changeQty('${iid}',null,-1)">−</button>
-        <span class="qty-n">${qty}</span>
-        <button class="qty-btn plus" onclick="changeQty('${iid}',null,1)">+</button>
+  return `<div class="food-card${qty>0?' in-cart':''}" data-iid="${iid}" data-size="" onclick="showPlanModal('${iid}')">
+    <div class="food-card-body">
+      <div class="food-card-name">${item.name}</div>
+      <div class="food-card-desc" style="-webkit-line-clamp:3">${item.description||''}</div>
+      <div class="food-card-foot" style="margin-top:8px">
+        <div class="food-card-price">${priceLabel}</div>
+        <button class="add-btn" onclick="event.stopPropagation();addItem('${iid}','${item.name}',${item.singlePrice||0},null,0)" style="${qty>0?'display:none':''}">+</button>
+        <div class="qty-ctrl" style="${qty>0?'display:flex':'display:none'}">
+          <button class="qty-btn minus" onclick="event.stopPropagation();changeQty('${iid}',null,-1)">−</button>
+          <span class="qty-n">${qty}</span>
+          <button class="qty-btn plus" onclick="event.stopPropagation();changeQty('${iid}',null,1)">+</button>
+        </div>
       </div>
     </div>
   </div>`;
+}
+
+function showPlanModal(iid) {
+  const item = menuData.items[iid];
+  if (!item) return;
+  const priceLabel = item.period ? `${item.singlePrice} ج ${item.period}` : `${item.singlePrice} ج`;
+  const bullets = item.description ? item.description.split(' • ').map(b=>`<div style="padding:6px 0;border-bottom:1px solid var(--bd);font-size:13px;color:var(--ink)">✓ ${b}</div>`).join('') : '';
+  let m = document.getElementById('planModal');
+  if (!m) {
+    m = document.createElement('div');
+    m.id = 'planModal';
+    m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:flex-end;justify-content:center';
+    m.onclick = function(e){ if(e.target===m) m.remove(); };
+    document.body.appendChild(m);
+  }
+  m.innerHTML = `<div style="background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto">
+    <div style="width:40px;height:4px;background:#ddd;border-radius:4px;margin:0 auto 16px"></div>
+    <div style="font-size:18px;font-weight:900;color:var(--ink);margin-bottom:4px;text-align:center">${item.name}</div>
+    <div style="font-size:20px;font-weight:900;color:var(--g1);text-align:center;margin-bottom:16px">${priceLabel}</div>
+    <div style="margin-bottom:20px">${bullets}</div>
+    <button onclick="event.stopPropagation();addItem('${iid}','${item.name}',${item.singlePrice||0},null,0);document.getElementById('planModal').remove()"
+      style="width:100%;padding:14px;background:var(--g1);color:#fff;border-radius:14px;font-size:15px;font-weight:900;font-family:inherit;cursor:pointer;border:none">
+      + أضف للطلب — ${priceLabel}
+    </button>
+  </div>`;
+  document.body.appendChild(m);
 }
 
 function buildFoodCard(iid, item) {
