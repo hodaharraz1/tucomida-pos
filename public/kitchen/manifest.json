@@ -1,0 +1,17 @@
+{
+  "name": "TuComida — Kitchen",
+  "short_name": "TC Kitchen",
+  "description": "TuComida Kitchen Display",
+  "start_url": "/kitchen/",
+  "scope": "/kitchen/",
+  "display": "standalone",
+  "background_color": "#1A0800",
+  "theme_color": "#BF360C",
+  "orientation": "any",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    { "src": "/icons/icon-kitchen-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-kitchen-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

@@ -1,4 +1,19 @@
 // ==========================================
+// TuComida App Configuration
+// ==========================================
+
+const TC_CONFIG = {
+  RESTAURANT_NAME: 'TuComida',
+  SLOGAN: 'fresh & healthy',
+  ADDRESS: 'دمياط الجديدة',
+  PHONE: '01102708550',
+  FEATURES: {
+    AUTO_LOGOUT: true,
+  },
+  INACTIVITY_TIMEOUT_MS: 45 * 60 * 1000, // 45 minutes
+};
+
+// ==========================================
 // TuComida Firebase Configuration
 // ==========================================
 

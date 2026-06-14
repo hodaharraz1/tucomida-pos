@@ -7,7 +7,7 @@ redirects = []
 [functions."*"]
 
 [build]
-publish = "netlify-site"
+publish = "/home/user/tucomida-pos"
 publishOrigin = "default"
 
 [build.environment]
