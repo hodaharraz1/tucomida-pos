@@ -658,17 +658,29 @@ function loadMenu() {
     // inject plans as a synthetic category
     const plansObj = plansSnap.val();
     if (plansObj) {
+      // Static plan metadata (names + periods) — mirrors owner PLAN_DEFS.
+      // Owner only stores price/components/active in the DB, so names & periods live here.
+      const PLAN_META = {
+        'weekly':         { name:'Weekly Plan',          period:'/ week' },
+        'monthly':        { name:'Half Monthly Plan',    period:'/ 15 days' },
+        'fitness':        { name:'Monthly Plan',         period:'/ month' },
+        'tatbela-week':   { name:'Weekly Marinade',      period:'/ week' },
+        'tatbela-2weeks': { name:'Half Monthly Marinade',period:'/ 2 weeks' },
+        'tatbela-month':  { name:'Monthly Marinade',     period:'/ month' },
+      };
+      const periodMap = {'/ شهر':'/ month','/ أسبوع':'/ week','/ 15 يوم':'/ 15 days','/ نصف شهر':'/ 2 weeks','/ نصف':'/ 2 weeks','أسبوع':'week','شهر':'month'};
       menuData.categories['__plans__'] = {name:'Monthly Plans', nameAr:'Monthly Plans', order:9999, active:true};
       Object.entries(plansObj).forEach(([pid, plan])=>{
         if (plan.active===false) return;
-        const descItems = plan.itemsEn || plan.itemsAr || [];
-        const periodMap = {'/ شهر':'/ month','/ أسبوع':'/ week','/ 15 يوم':'/ 15 days','/ نصف شهر':'/ 2 weeks','/ نصف':'/ 2 weeks','أسبوع':'week','شهر':'month'};
+        const meta = PLAN_META[pid] || {};
+        // Owner saves `components`; keep itemsEn/itemsAr as legacy fallback
+        const descItems = plan.components || plan.itemsEn || plan.itemsAr || [];
         const rawPeriod = plan.period||'';
-        const engPeriod = periodMap[rawPeriod] || rawPeriod.replace('شهر','month').replace('أسبوع','week').replace('يوم','days');
+        const engPeriod = meta.period || periodMap[rawPeriod] || rawPeriod.replace('شهر','month').replace('أسبوع','week').replace('يوم','days');
         menuData.items['__plan__'+pid] = {
-          name: plan.nameEn||plan.nameAr||plan.name||'Plan',
+          name: plan.nameEn || meta.name || plan.nameAr || plan.name || 'Plan',
           nameAr: '',
-          description: descItems.join(' • '),
+          description: (Array.isArray(descItems)?descItems:[]).join(' • '),
           singlePrice: plan.price||0,
           period: engPeriod,
           calories: null,
