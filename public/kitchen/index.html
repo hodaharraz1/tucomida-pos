@@ -1012,7 +1012,7 @@ function formatTime(ts) {
 // ── PREP TIME MODAL ─────────────────────────────────
 function openPrepModal(id, isOnline, phone, orderNum, orderType) {
   acceptingId = id;
-  acceptingIsOnline = isOnline;
+  acceptingIsOnline = isOnline === true || isOnline === 'true';
   acceptingPhone = phone || '';
   acceptingOrderNum = orderNum;
   acceptingOrderType = orderType;
@@ -1073,6 +1073,7 @@ async function confirmAccept(mins) {
 
 // ── BUMP ORDER ─────────────────────────────────────
 async function bumpOrder(id, isOnline, phone, orderNum, orderType) {
+  isOnline = isOnline === true || isOnline === 'true';
   const tk = document.getElementById(`tk-${id}`);
   const btn = tk?.querySelector('.btn-bump');
   if (!btn || btn.disabled) return;

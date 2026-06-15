@@ -29,6 +29,7 @@
       --text:#0D1A0D; --text2:#374937; --muted:#6B7A6B; --muted2:#9AAA9A;
       --sidebar-bg:#0F2E15; --sidebar-border:rgba(255,255,255,.07);
       --font-ar:'Cairo',sans-serif; --font-en:'Inter',sans-serif;
+      --green-mid:#43A047; --green-dark:#1B5E20; --green:#43A047; --orange:#E67B20;
     }
     body { background:var(--bg); color:var(--text); font-family:var(--font-ar); display:flex; height:100vh; overflow:hidden; }
 
@@ -1148,9 +1149,9 @@ function calcDiscount() {
   const val = parseFloat(document.getElementById('discountVal').value) || 0;
   const type = document.getElementById('discountType').value;
   const sub = payOrderData.total;
-  let discount = type === 'percent' ? (sub * val / 100) : val;
+  let discount = type === 'percent' ? Math.round(sub * val) / 100 : val;
   discount = Math.min(discount, sub);
-  selectedDiscountedTotal = Math.max(0, sub - discount);
+  selectedDiscountedTotal = Math.round(Math.max(0, sub - discount) * 100) / 100;
   document.getElementById('discountedTotal').textContent =
     discount > 0
       ? `الإجمالي بعد الخصم: ${selectedDiscountedTotal} ج  (خصم ${discount} ج)`
@@ -1204,7 +1205,7 @@ async function confirmPayment() {
       await db.ref(`tables/${payOrderData.tableId}/status`).set('available');
     }
 
-    await logActivity(currentUser.uid, 'cashier', 'payment', {
+    await logActivity(currentUser.uid, currentRole||'cashier', 'payment', {
       orderId: payOrderId, orderNumber: payOrderData.orderNumber,
       total: selectedDiscountedTotal, method: selectedPayMethod
     });
@@ -1288,7 +1289,7 @@ function loadTables() {
     /* Auto-fix stale occupied status: fetch today's active orders once */
     let occupiedByOrder = new Set();
     try {
-      const today = new Date().toISOString().slice(0,10).replace(/-/g,'');
+      const today = getDayId();
       const ordSnap = await db.ref('orders').orderByChild('dayId').equalTo(today).once('value');
       ordSnap.forEach(o => {
         const d = o.val();
@@ -1457,13 +1458,9 @@ function openSizeC(itemId, item) {
     d.className = 'size-opt-c';
     d.innerHTML = `<div class="size-opt-label-c">${escapeHtml(size)}</div><div class="size-opt-price-c">${escapeHtml(String(data.price||0))} ج</div>`;
     d.onclick = () => {
-      // تحديد بصري
       document.querySelectorAll('.size-opt-c').forEach(o => o.classList.remove('sel'));
       d.classList.add('sel');
       selectedSizeC = { size, ...data };
-      // إضافة فورية للأوردر وإغلاق الموديل
-      addToCashierCart(itemId, item, size, data.price);
-      setTimeout(() => closeSizeC(), 120); // تأخير بسيط لرؤية الاختيار
     };
     opts.appendChild(d);
   });
@@ -1662,7 +1659,7 @@ async function confirmEndDay() {
   await db.ref(`sessions/${newSessionId}`).set({ dayId:newDayId, startedAt:Date.now(), endedAt:null, active:true, totalSales:0, totalOrders:0 });
   await db.ref('settings').update({ currentSession:newSessionId, currentDayId:newDayId });
 
-  await logActivity(currentUser.uid, 'cashier', 'end_day', { dayId, totalSales, totalOrders, dineOrders:dineOrders.length, onlineOrders:onlineOrders.length });
+  await logActivity(currentUser.uid, currentRole||'cashier', 'end_day', { dayId, totalSales, totalOrders, dineOrders:dineOrders.length, onlineOrders:onlineOrders.length });
   showToast(`✅ تم إنهاء اليوم — ${totalOrders} أوردر / ${totalSales.toLocaleString()} ج`);
   loadReports();
 }

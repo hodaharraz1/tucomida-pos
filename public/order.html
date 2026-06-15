@@ -795,7 +795,6 @@ function showPlanModal(iid) {
     m.id = 'planModal';
     m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:flex-end;justify-content:center';
     m.onclick = function(e){ if(e.target===m) m.remove(); };
-    document.body.appendChild(m);
   }
   m.innerHTML = `<div style="background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto">
     <div style="width:40px;height:4px;background:#ddd;border-radius:4px;margin:0 auto 16px"></div>
