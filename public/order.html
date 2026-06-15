@@ -649,64 +649,84 @@ async function submitOnlineOrder() {
 let _activeCat = null;
 let _allItems = [];
 
-function loadMenu() {
-  Promise.all([
-    db.ref('menu').once('value'),
-    db.ref('settings/plans').once('value')
-  ]).then(([menuSnap, plansSnap])=>{
-    menuData = menuSnap.val()||{categories:{},items:{}};
-    // inject plans as a synthetic category
-    const plansObj = plansSnap.val();
-    if (plansObj) {
-      // Static plan metadata (names + periods) — mirrors owner PLAN_DEFS.
-      // Owner only stores price/components/active in the DB, so names & periods live here.
-      const PLAN_META = {
-        'weekly':         { name:'Weekly Plan',          period:'/ week' },
-        'monthly':        { name:'Half Monthly Plan',    period:'/ 15 days' },
-        'fitness':        { name:'Monthly Plan',         period:'/ month' },
-        'tatbela-week':   { name:'Weekly Marinade',      period:'/ week' },
-        'tatbela-2weeks': { name:'Half Monthly Marinade',period:'/ 2 weeks' },
-        'tatbela-month':  { name:'Monthly Marinade',     period:'/ month' },
+let _menuRaw = null, _plansRaw = null, _menuReady = false;
+
+function _rebuildMenu() {
+  menuData = _menuRaw ? JSON.parse(JSON.stringify(_menuRaw)) : {categories:{},items:{}};
+  if (!menuData.categories) menuData.categories = {};
+  if (!menuData.items) menuData.items = {};
+  // inject plans as a synthetic category
+  const plansObj = _plansRaw;
+  if (plansObj) {
+    // Static plan metadata (names + periods) — mirrors owner PLAN_DEFS.
+    // Owner only stores price/components/active in the DB, so names & periods live here.
+    const PLAN_META = {
+      'weekly':         { name:'Weekly Plan',          period:'/ week' },
+      'monthly':        { name:'Half Monthly Plan',    period:'/ 15 days' },
+      'fitness':        { name:'Monthly Plan',         period:'/ month' },
+      'tatbela-week':   { name:'Weekly Marinade',      period:'/ week' },
+      'tatbela-2weeks': { name:'Half Monthly Marinade',period:'/ 2 weeks' },
+      'tatbela-month':  { name:'Monthly Marinade',     period:'/ month' },
+    };
+    const periodMap = {'/ شهر':'/ month','/ أسبوع':'/ week','/ 15 يوم':'/ 15 days','/ نصف شهر':'/ 2 weeks','/ نصف':'/ 2 weeks','أسبوع':'week','شهر':'month'};
+    let anyActive = false;
+    Object.entries(plansObj).forEach(([pid, plan])=>{
+      if (plan.active===false) return;
+      anyActive = true;
+      const meta = PLAN_META[pid] || {};
+      // Owner saves `components`; keep itemsEn/itemsAr as legacy fallback
+      const descItems = plan.components || plan.itemsEn || plan.itemsAr || [];
+      const rawPeriod = plan.period||'';
+      const engPeriod = meta.period || periodMap[rawPeriod] || rawPeriod.replace('شهر','month').replace('أسبوع','week').replace('يوم','days');
+      menuData.items['__plan__'+pid] = {
+        name: plan.nameEn || meta.name || plan.nameAr || plan.name || 'Plan',
+        nameAr: '',
+        description: (Array.isArray(descItems)?descItems:[]).join(' • '),
+        singlePrice: plan.price||0,
+        period: engPeriod,
+        calories: null,
+        categoryId: '__plans__',
+        active: true,
+        isPlan: true,
       };
-      const periodMap = {'/ شهر':'/ month','/ أسبوع':'/ week','/ 15 يوم':'/ 15 days','/ نصف شهر':'/ 2 weeks','/ نصف':'/ 2 weeks','أسبوع':'week','شهر':'month'};
+    });
+    // Only show the Monthly Plans tab if at least one plan is visible
+    if (anyActive) {
       menuData.categories['__plans__'] = {name:'Monthly Plans', nameAr:'Monthly Plans', order:9999, active:true};
-      Object.entries(plansObj).forEach(([pid, plan])=>{
-        if (plan.active===false) return;
-        const meta = PLAN_META[pid] || {};
-        // Owner saves `components`; keep itemsEn/itemsAr as legacy fallback
-        const descItems = plan.components || plan.itemsEn || plan.itemsAr || [];
-        const rawPeriod = plan.period||'';
-        const engPeriod = meta.period || periodMap[rawPeriod] || rawPeriod.replace('شهر','month').replace('أسبوع','week').replace('يوم','days');
-        menuData.items['__plan__'+pid] = {
-          name: plan.nameEn || meta.name || plan.nameAr || plan.name || 'Plan',
-          nameAr: '',
-          description: (Array.isArray(descItems)?descItems:[]).join(' • '),
-          singlePrice: plan.price||0,
-          period: engPeriod,
-          calories: null,
-          categoryId: '__plans__',
-          active: true,
-          isPlan: true,
-        };
-      });
     }
-    buildCatTabs();
-    renderMenu(null, '');
-  }).catch((err)=>{
+  }
+  buildCatTabs();
+  // preserve current filter/search if the user already interacted
+  const searchVal = (document.getElementById('menuSearch')||{}).value || '';
+  renderMenu(_activeCat, searchVal.trim().toLowerCase());
+}
+
+function loadMenu() {
+  // Real-time listeners — any owner change (price, components, hide/show)
+  // reflects on the website without a refresh.
+  db.ref('menu').on('value', snap => {
+    _menuRaw = snap.val() || {categories:{},items:{}};
+    _menuReady = true;
+    _rebuildMenu();
+  }, err => {
     console.error('Menu load error:', err);
     document.getElementById('menuContainer').innerHTML =
       '<div class="empty-menu"><p>تعذّر تحميل المنيو — <a href="/order.html" style="color:var(--g1)">أعد المحاولة</a></p></div>';
   });
+  db.ref('settings/plans').on('value', snap => {
+    _plansRaw = snap.val();
+    if (_menuReady) _rebuildMenu();
+  }, () => {});
 }
 
 function buildCatTabs() {
   const cats = Object.entries(menuData.categories||{})
     .filter(([,c])=>c.active!==false).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
   const row = document.getElementById('catTabs');
-  row.innerHTML = '<button class="cat-tab active" data-cat="all" onclick="filterCat(null,this)">🍴 All</button>';
+  row.innerHTML = '<button class="cat-tab'+(_activeCat?'':' active')+'" data-cat="all" onclick="filterCat(null,this)">🍴 All</button>';
   cats.forEach(([id,c])=>{
     const b = document.createElement('button');
-    b.className = 'cat-tab';
+    b.className = 'cat-tab' + (_activeCat===id?' active':'');
     b.dataset.cat = id;
     b.textContent = c.name||c.nameAr;
     b.onclick = function(){ filterCat(id, this); };
