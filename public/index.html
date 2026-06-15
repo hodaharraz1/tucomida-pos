@@ -2022,12 +2022,15 @@ function _syncPricesFromFirebase() {
       }
     });
 
-    /* ── Plan prices — separate listener (public readable path) ── */
+    /* ── Plan prices + visibility — separate listener (public readable path) ── */
     db2.ref('settings/plans').on('value', pSnap => {
       const plans = pSnap.val() || {};
       Object.entries(plans).forEach(([planId, plan]) => {
         const el = document.querySelector(`[data-plan="${planId}"]`);
         if (!el) return;
+        // Hide/show the whole plan card when owner toggles `active`
+        const card = el.closest('.pcard');
+        if (card) card.style.display = (plan.active === false) ? 'none' : '';
         const price = plan.price ?? plan;
         if (price == null || price === '') return;
         const n = Number(price);
