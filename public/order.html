@@ -555,7 +555,7 @@ function openSizePicker(iid, item) {
     const div = document.createElement('div');
     div.className = 'size-opt';
     div.innerHTML = `<div class="size-opt-lbl">${sz}</div>
-      <div class="size-opt-price">${d.price} ج</div>
+      <div class="size-opt-price">${d.price} EGP</div>
       ${d.calories?`<div class="size-opt-cal">${d.calories} ك</div>`:''}`;
     div.onclick = ()=>{
       document.querySelectorAll('.size-opt').forEach(o=>o.classList.remove('sel'));
@@ -584,7 +584,7 @@ function openCheckout() {
   cont.innerHTML = cart.map(ci=>`
     <div class="checkout-item-row">
       <span style="font-size:14px;font-weight:700">${ci.qty}× ${ci.name}${ci.size?` (${ci.size})`:''}</span>
-      <span style="font-size:14px;font-weight:700;color:var(--g1);font-family:var(--fe)">${(ci.price*ci.qty).toLocaleString()} ج</span>
+      <span style="font-size:14px;font-weight:700;color:var(--g1);font-family:var(--fe)">${(ci.price*ci.qty).toLocaleString()} EGP</span>
     </div>`).join('');
   document.getElementById('checkoutTotal').innerHTML = `
     <span style="font-size:17px;font-weight:900">الإجمالي</span>
@@ -801,7 +801,7 @@ function renderMenu(catId, search) {
 function buildPlanCard(iid, item) {
   const ci = cart.find(x=>x.iid===iid && !x.size);
   const qty = ci ? ci.qty : 0;
-  const priceLabel = item.period ? `${item.singlePrice} ج ${item.period}` : `${item.singlePrice} ج`;
+  const priceLabel = item.period ? `${item.singlePrice} EGP ${item.period}` : `${item.singlePrice} EGP`;
   return `<div class="food-card${qty>0?' in-cart':''}" data-iid="${iid}" data-size="" onclick="showPlanModal('${iid}')">
     <div class="food-card-body">
       <div class="food-card-name">${item.name}</div>
@@ -822,7 +822,7 @@ function buildPlanCard(iid, item) {
 function showPlanModal(iid) {
   const item = menuData.items[iid];
   if (!item) return;
-  const priceLabel = item.period ? `${item.singlePrice} ج ${item.period}` : `${item.singlePrice} ج`;
+  const priceLabel = item.period ? `${item.singlePrice} EGP ${item.period}` : `${item.singlePrice} EGP`;
   const bullets = item.description ? item.description.split(' • ').map(b=>`<div style="padding:6px 0;border-bottom:1px solid var(--bd);font-size:13px;color:var(--ink)">✓ ${b}</div>`).join('') : '';
   let m = document.getElementById('planModal');
   if (!m) {
