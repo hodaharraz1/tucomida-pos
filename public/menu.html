@@ -409,6 +409,7 @@ body{font-family:'Nunito',sans-serif;background:#e8e8e8;min-height:100vh;display
   <button class="cat-btn active" onclick="showCat('healthy')" id="cat-btn-healthy">🥗 Healthy</button>
   <button class="cat-btn" onclick="showCat('special')" id="cat-btn-special">⭐ Special</button>
   <button class="cat-btn" onclick="showCat('tatbela')" id="cat-btn-tatbela">🔥 Tatbela</button>
+  <button class="cat-btn" onclick="showCat('plans')" id="cat-btn-plans">📦 Plans</button>
 </div>
 <div class="tab-grid" id="tabs-healthy">
   <button class="tpill active" onclick="showTab('breakfast','healthy')">Breakfast</button>
@@ -442,6 +443,21 @@ body{font-family:'Nunito',sans-serif;background:#e8e8e8;min-height:100vh;display
   <div class="item"><div class="item-top"><span class="item-name">Luddite Tor</span><span class="item-price">135</span></div><div class="item-desc">تورتيلا صحي محشي بيض وهوت دوج وجبن مع فرايز وسالاد</div><div class="item-macros"><span class="macro-tag">416 Cal</span><span class="macro-tag">Protein 21g</span></div></div>
   <div class="item"><div class="item-top"><span class="item-name">Buffalo Fast <span class="badge-star">★</span></span><span class="item-price">165</span></div><div class="item-desc">اومليت وهوت دوج بالباريكيو والبصل المكرمل والمشروم يقدم مع سالاد وتورتيلا</div><div class="item-macros"><span class="macro-tag">676 Cal</span><span class="macro-tag">Protein 28g</span></div></div>
   <div class="item"><div class="item-top"><span class="item-name">Smoke Me Up <span class="badge-star">★</span></span><span class="item-price">185</span></div><div class="item-desc">تورتيلا محشي اومليت وتركي مدخن ومشروم فريش وجبن محمص مع سالاد</div><div class="item-macros"><span class="macro-tag">612 Cal</span><span class="macro-tag">Protein 30g</span></div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Tuna Sandwich</span><span class="item-price">60</span></div><div class="item-desc">توست رده مع تونه بخلطتنا المميزة</div><div class="item-macros"><span class="macro-tag">260 Cal</span><span class="macro-tag">Protein 23g</span></div></div>
+  <div class="cat-badge">Salty Croissant</div>
+  <div class="item"><div class="item-top"><span class="item-name">Salty Croissant Cheese</span><span class="item-price">80</span></div><div class="item-desc">كرواسون محشي جبن</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Salty Croissant Turkish</span><span class="item-price">95</span></div><div class="item-desc">كرواسون تركي مدخن وتشيز</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Salty Croissant Roast Beef</span><span class="item-price">95</span></div><div class="item-desc">كرواسون روز بيف وتشيز</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Salty Croissant Salami</span><span class="item-price">95</span></div><div class="item-desc">كرواسون سلامي وتشيز</div></div>
+  <div class="cat-badge">Omelet Croissant</div>
+  <div class="item"><div class="item-top"><span class="item-name">Omelet Croissant Salami</span><span class="item-price">120</span></div><div class="item-desc">كرواسون أوملييت وسلامي وتشيز</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Omelet Croissant Turkish</span><span class="item-price">140</span></div><div class="item-desc">كرواسون أوملييت وتركي مدخن وتشيز</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Omelet Croissant Roast Beef</span><span class="item-price">140</span></div><div class="item-desc">كرواسون أوملييت وروز بيف وتشيز</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Omelet Croissant Salami Plain</span><span class="item-price">140</span></div><div class="item-desc">كرواسون أوملييت سلامي وتشيز</div></div>
+  <div class="cat-badge">Luddite Pie</div>
+  <div class="item"><div class="item-top"><span class="item-name">Luddite Pie Hot Dog</span><span class="item-price">170</span></div><div class="item-desc">فطير محشي بيض وهوت دوج وتشيز مع فرايز</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Luddite Pie Sausage</span><span class="item-price">170</span></div><div class="item-desc">فطير محشي بيض وسجق وتشيز مع فرايز</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Luddite Pie Turkish</span><span class="item-price">185</span></div><div class="item-desc">فطير محشي بيض تركي مدخن ومشروم وتشيز مع فرايز</div></div>
 </div>
 
 <!-- BIG WRAP -->
@@ -459,7 +475,7 @@ body{font-family:'Nunito',sans-serif;background:#e8e8e8;min-height:100vh;display
   <div class="section-hero"><div class="section-title">Meals</div><div class="section-sub">Your way to a better healthy life</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Burgerlicious</span><span class="item-price">180</span></div><div class="item-desc">توست صحي مع برجر اللحم والخس والخضار وصوص مع سلطه خضراء</div><div class="item-macros"><span class="macro-tag">429 Cal</span><span class="macro-tag">Protein 42g</span></div></div>
   <div class="item"><div class="item-top"><span class="item-name">Casdia</span><span class="item-price">200</span></div><div class="item-desc">تورتيلا صحي مع شرائح الصدور والمشروم والفلفل والجبن مع سلطه خضراء</div><div class="item-macros"><span class="macro-tag">517 Cal</span><span class="macro-tag">Protein 43g</span></div></div>
-  <div class="item"><div class="item-top"><span class="item-name">Meat Balls</span><span class="item-price">220</span></div><div class="item-desc">كرات اللحم بالصوص أرز بسمتي مبهر أو باستا ريد صوص مع سلطه خضراء</div><div class="item-macros"><span class="macro-tag">525 Cal</span><span class="macro-tag">Protein 37.92g</span></div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Meat Balls Meal</span><span class="item-price">220</span></div><div class="item-desc">كرات اللحم بالصوص أرز بسمتي مبهر أو باستا ريد صوص مع سلطه خضراء</div><div class="item-macros"><span class="macro-tag">525 Cal</span><span class="macro-tag">Protein 37.92g</span></div></div>
   <div class="item"><div class="item-top"><span class="item-name">Zayed Special</span><span class="item-price">210</span></div><div class="item-desc">البطاطس البيوريه مع برجر الدجاج المشوي مع سلطه خضراء</div><div class="item-macros"><span class="macro-tag">463 Cal</span><span class="macro-tag">Protein 37g</span></div></div>
   <div class="item"><div class="item-top"><span class="item-name">Toxic</span><span class="item-price">255</span></div><div class="item-desc">تورتيلا صحي مع سماش برجر والدجاج المشوي والمشروم والبصل المكرمل والفلفل والجبن مع سلطه</div><div class="item-macros"><span class="macro-tag">506 Cal</span><span class="macro-tag">Protein 59.11g</span><span class="macro-tag gold">200g Protein</span></div></div>
   <div class="item"><div class="item-top"><span class="item-name">Barry</span><span class="item-price">200</span></div><div class="item-desc">صدور مشويه بتتبيلة تكوميدا وأرز بسمتي او بطاطس بالزعتر مع سلطه خضراء</div><div class="item-macros"><span class="macro-tag">Rice: 466 Cal · 46.91g</span><span class="macro-tag">Potato: 342 Cal · 44g</span></div></div>
@@ -474,7 +490,7 @@ body{font-family:'Nunito',sans-serif;background:#e8e8e8;min-height:100vh;display
 <!-- MAIN COURSE -->
 <div class="menu-section" id="maincourse">
   <div class="section-hero"><div class="section-title">Main Course</div></div>
-  <div class="item"><div class="item-top"><span class="item-name">Crunchy</span><span class="item-price">190</span></div><div class="item-desc">استربس و رز وبطاطس وصوص</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Crunchy Main</span><span class="item-price">190</span></div><div class="item-desc">استربس و رز وبطاطس وصوص</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Chiky Beef</span><span class="item-price">210</span></div><div class="item-desc">كفته لحم وشيش طاووق وأرز وفرايز وصوص</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Shish Lovers</span><span class="item-price">220</span></div><div class="item-desc">شيش طاووق وأرز وفرايز وسلطه وطحينه</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Mix Grill</span><span class="item-price">230</span></div><div class="item-desc">شيش طاووق وكفته الدجاج وكفته لحم أرز وفرايز وطحينه</div></div>
@@ -505,7 +521,7 @@ body{font-family:'Nunito',sans-serif;background:#e8e8e8;min-height:100vh;display
   <div class="item"><div class="item-top"><span class="item-name">Bolognese</span><span class="item-price">170</span></div><div class="item-desc">الباستا مع صوص الطماطم مع كرات اللحم البقري</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Negresco</span><span class="item-price">180</span></div><div class="item-desc">باستا بنا مع الدجاج المشوي وايت صوص وموزريلا</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Negresco Burger</span><span class="item-price">185</span></div><div class="item-desc">باستا بنا مع برجر لحم وصوص وايت وموزريلا</div></div>
-  <div class="item"><div class="item-top"><span class="item-name">Canton 🌶️</span><span class="item-price">180</span></div><div class="item-desc">الباستا مع صوص سويت اند ساور والخضروات المشويه وشرائح الدجاج او الاستربس</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Canton <span class="badge-star">🌶️</span></span><span class="item-price">180</span></div><div class="item-desc">الباستا مع صوص سويت اند ساور والخضروات المشويه وشرائح الدجاج او الاستربس</div></div>
 </div>
 
 <!-- SALAD -->
@@ -535,7 +551,7 @@ body{font-family:'Nunito',sans-serif;background:#e8e8e8;min-height:100vh;display
   <div class="item"><div class="item-top"><span class="item-name">Chicken</span><span class="item-price">85</span></div><div class="item-desc">صدور مشويه مع أرز بخلطتنا المميزة وصوص باربيكيو</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Fahita Chicken</span><span class="item-price">85</span></div><div class="item-desc">فاهيتا الدجاج المتبله مع أرز بخلطتنا المميزة</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Kofta Chicken</span><span class="item-price">85</span></div><div class="item-desc">كفتة دجاج مشويه مع أرز بسمتي مبهر وصوص ريزو</div></div>
-  <div class="item"><div class="item-top"><span class="item-name">TuComida — تكفي اكيل</span><span class="item-price">140</span></div><div class="item-desc">صدور وبرجر وسجق واستربس وميت بولز مع أرز بخلطتنا المميزة وصوص تكوميدا</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">TuComida</span><span class="item-price">140</span></div><div class="item-desc">تكفي اكيل — صدور وبرجر وسجق واستربس وميت بولز مع أرز بخلطتنا المميزة وصوص تكوميدا</div></div>
 </div>
 
 <!-- TATBELA -->
@@ -546,22 +562,38 @@ body{font-family:'Nunito',sans-serif;background:#e8e8e8;min-height:100vh;display
   <div class="item"><div class="item-top"><span class="item-name">صدور دجاج تندوري</span><span class="item-price">175</span></div><div class="item-desc">شرائح صدور فيليه بتتبيلة التندوري والماسلا</div></div>
   <div class="item"><div class="item-top"><span class="item-name">صدور دجاج بالتم يم</span><span class="item-price">175</span></div><div class="item-desc">شرائح صدور فيليه بمعجون التم يم</div></div>
   <div class="item"><div class="item-top"><span class="item-name">صدور دجاج بالريحان</span><span class="item-price">180</span></div><div class="item-desc">شرائح صدور فيليه بالزبادي والريحان</div></div>
-  <div class="item"><div class="item-top"><span class="item-name">صدور دجاج زبده وزعتر (كيتو)</span><span class="item-price">180</span></div><div class="item-desc">شرائح صدور فيليه بالزبده والزعتر الفريش</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">صدور دجاج زبده وزعتر كيتو</span><span class="item-price">180</span></div><div class="item-desc">شرائح صدور فيليه بالزبده والزعتر الفريش</div></div>
   <div class="item"><div class="item-top"><span class="item-name">صدور بالثوم والعسل</span><span class="item-price">175</span></div><div class="item-desc">شرائح صدور فيليه بالثوم والعسل</div></div>
   <div class="item"><div class="item-top"><span class="item-name">فاهيتا الدجاج</span><span class="item-price">175</span></div><div class="item-desc">مكعبات صدور بتتبيلة الفاهيتا والفلفل الألوان</div></div>
-  <div class="item"><div class="item-top"><span class="item-name">كفته دجاج تركي</span><span class="item-price">175</span></div><div class="item-desc">مفروم الصدور بخلطتنا المميزة</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">كفتة دجاج تركي</span><span class="item-price">175</span></div><div class="item-desc">مفروم الصدور بخلطتنا المميزة</div></div>
   <div class="item"><div class="item-top"><span class="item-name">برجر دجاج</span><span class="item-price">175</span></div><div class="item-desc">مفروم الصدور بخلطه برجر تكوميدا</div></div>
   <div class="item"><div class="item-top"><span class="item-name">شيش طاووق</span><span class="item-price">175</span></div><div class="item-desc">مكعبات شيش وبصل وفلفل ألوان</div></div>
   <div class="cat-badge">Meat — لحوم</div>
-  <div class="item"><div class="item-top"><span class="item-name">كفته حاتي</span><span class="item-price">335</span></div><div class="item-desc">كفته لحم بالبصل وتتبيلتنا المميزة</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">كفته صافي</span><span class="item-price">335</span></div><div class="item-desc">كفته لحم بالبصل وتتبيلتنا المميزة</div></div>
   <div class="item"><div class="item-top"><span class="item-name">برجر لحم</span><span class="item-price">335</span></div></div>
-  <div class="item"><div class="item-top"><span class="item-name">برجر لحم محشي (كيتو)</span><span class="item-price">340</span></div><div class="item-desc">برجر لحمه محشي جبن</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">برجر لحم محشي كيتو</span><span class="item-price">340</span></div><div class="item-desc">برجر لحمه محشي جبن</div></div>
   <div class="item"><div class="item-top"><span class="item-name">ميت بولز</span><span class="item-price">334</span></div><div class="item-desc">كورات لحم بالبصل وتتبيلتنا المميزة</div></div>
-  <div class="item"><div class="item-top"><span class="item-name">سويدش ميت بولز (كيتو)</span><span class="item-price">335</span></div><div class="item-desc">كورات لحم محشيه جبن مميزة</div></div>
-  <div class="item"><div class="item-top"><span class="item-name">تاكو بيف — 3 قطع</span><span class="item-price">300</span></div><div class="item-desc">تورتيلا محشي لحم مفروم متبل</div></div>
-  <div class="item"><div class="item-top"><span class="item-name">فرخه للنووي</span><span class="item-price">340</span></div></div>
-  <div class="item"><div class="item-top"><span class="item-name">أوراك للنووي</span><span class="item-price">160</span></div></div>
+  <div class="item"><div class="item-top"><span class="item-name">سويدش ميت بولز كيتو</span><span class="item-price">335</span></div><div class="item-desc">كورات لحم محشيه جبن مميزة</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">تاكو بيف</span><span class="item-price">300</span></div><div class="item-desc">3 قطع — تورتيلا محشي لحم مفروم متبل</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">فرضه للشوي</span><span class="item-price">340</span></div></div>
+  <div class="item"><div class="item-top"><span class="item-name">أوراك للشوي</span><span class="item-price">160</span></div></div>
   <div class="item"><div class="item-top"><span class="item-name">كوردن بلو</span><span class="item-price">180</span></div></div>
+</div>
+
+<!-- ADD-ONS -->
+<div class="menu-section" id="addons">
+  <div class="section-hero"><div class="section-title">Add-Ons</div><div class="section-sub">إضافات</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Chicken 100g</span><span class="item-price">70</span></div><div class="item-desc">إضافة صدور دجاج مشوي 100 جرام</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Chicken 50g</span><span class="item-price">35</span></div><div class="item-desc">إضافة صدور دجاج مشوي 50 جرام</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Meat 100g</span><span class="item-price">85</span></div><div class="item-desc">إضافة لحم مشوي 100 جرام</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Meat 50g</span><span class="item-price">45</span></div><div class="item-desc">إضافة لحم مشوي 50 جرام</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Rice 100g</span><span class="item-price">20</span></div><div class="item-desc">إضافة أرز بسمتي 100 جرام</div></div>
+</div>
+
+<!-- MONTHLY PLANS (live from owner settings/plans) -->
+<div class="menu-section" id="plans-section">
+  <div class="section-hero"><div class="section-title">Monthly Plans</div><div class="section-sub">باقات شهرية</div></div>
+  <div id="plansContainer"></div>
 </div>
 
 <!-- TACO -->
@@ -569,10 +601,10 @@ body{font-family:'Nunito',sans-serif;background:#e8e8e8;min-height:100vh;display
   <div class="section-hero"><div class="section-title">Taco Bel</div><div class="section-sub">Your way to a happiness</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Taco Beef</span><span class="item-price">90</span></div><div class="item-desc">لحم مفروم متبل مع البصل والفلفل والجبن</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Ola Borito</span><span class="item-price">75</span></div><div class="item-desc">قطع ستربس الغني وفلفل الوان وجبن خضروات</div></div>
-  <div class="item"><div class="item-top"><span class="item-name">Alfredo</span><span class="item-price">80</span></div><div class="item-desc">الدجاج الكريمي والمشروم الفريش والخضروات وجبن</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Alfredo Taco</span><span class="item-price">80</span></div><div class="item-desc">الدجاج الكريمي والمشروم الفريش والخضروات وجبن</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Latchi</span><span class="item-price">65</span></div><div class="item-desc">سوسيس وفلفل وبصل مكرمل وجبن</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Bachi <span class="badge-new">New</span></span><span class="item-price">80</span></div><div class="item-desc">سجق وصدور ومفروم وهوت دوج وميكس جبن</div></div>
-  <div class="item"><div class="item-top"><span class="item-name">Turki <span class="badge-new">New</span></span><span class="item-price">75</span></div><div class="item-desc">كفته فراخ مشويه وفلفل والبصل المكرمل وميكس جبن</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Turki Taco <span class="badge-new">New</span></span><span class="item-price">75</span></div><div class="item-desc">كفته فراخ مشويه وفلفل والبصل المكرمل وميكس جبن</div></div>
 </div>
 
 <!-- JUST POTATO -->
@@ -582,7 +614,7 @@ body{font-family:'Nunito',sans-serif;background:#e8e8e8;min-height:100vh;display
   <div class="item"><div class="item-top"><span class="item-name">Potica</span><span class="item-price">85</span></div><div class="item-desc">فرايز والدجاج والمشروم والجبن والفلفل</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Savory</span><span class="item-price">70</span></div><div class="item-desc">فرايز وسوسيس وفلفل الوان وصوص تيستي</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Vetga</span><span class="item-price">85</span></div><div class="item-desc">فرايز وقطع الاستربس والاضافات وصوص تكساس</div></div>
-  <div class="item"><div class="item-top"><span class="item-name">Tucomida <span class="badge-new">New</span></span><span class="item-price">95</span></div><div class="item-desc">فرايز والبرجر والصدور والسوسيس والفلفل</div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Tucomida Potato <span class="badge-new">New</span></span><span class="item-price">95</span></div><div class="item-desc">فرايز والبرجر والصدور والسوسيس والفلفل</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Puc's <span class="badge-new">New</span></span><span class="item-price">90</span></div><div class="item-desc">فرايز ولحم مفروم والفلفل والجبن</div></div>
 </div>
 
@@ -609,20 +641,20 @@ body{font-family:'Nunito',sans-serif;background:#e8e8e8;min-height:100vh;display
   <div class="item"><div class="item-top"><span class="item-name">باستا وايت صوص</span><span class="item-price">50</span></div></div>
   <div class="item"><div class="item-top"><span class="item-name">باستا ريد صوص</span><span class="item-price">45</span></div></div>
   <div class="item"><div class="item-top"><span class="item-name">بيستو باستا</span><span class="item-price">50</span></div></div>
-  <div class="item"><div class="item-top"><span class="item-name">فرايز ايرفرايز</span><span class="item-price">40</span></div></div>
-  <div class="item"><div class="item-top"><span class="item-name">بطاطس مهروسه</span><span class="item-price">40</span></div></div>
-  <div class="item"><div class="item-top"><span class="item-name">سلطه خضراء</span><span class="item-price">40</span></div></div>
+  <div class="item"><div class="item-top"><span class="item-name">فرايز ايرفراير</span><span class="item-price">40</span></div></div>
+  <div class="item"><div class="item-top"><span class="item-name">بطاطس مهروسة</span><span class="item-price">40</span></div></div>
+  <div class="item"><div class="item-top"><span class="item-name">سلطة خضراء</span><span class="item-price">40</span></div></div>
 </div>
 
 <!-- DESSERT -->
 <div class="menu-section" id="dessert">
   <div class="section-hero"><div class="section-title">Dessert</div></div>
   <div class="item"><div class="item-top"><span class="item-name">Muffin</span><span class="item-price">80</span></div><div class="item-macros"><span class="macro-tag">110 Cal</span><span class="macro-tag">Protein 6g</span></div></div>
-  <div class="item"><div class="item-top"><span class="item-name">Choco Rice Box (3 pcs)</span><span class="item-price">120</span></div><div class="item-macros"><span class="macro-tag">48 Cal</span><span class="macro-tag">Protein 4g</span></div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Choco Rice Box</span><span class="item-price">120</span></div><div class="item-desc">3 pcs</div><div class="item-macros"><span class="macro-tag">48 Cal</span><span class="macro-tag">Protein 4g</span></div></div>
   <div class="item"><div class="item-top"><span class="item-name">Brownie</span><span class="item-price">80</span></div><div class="item-macros"><span class="macro-tag">160 Cal</span><span class="macro-tag">Protein 9g</span></div></div>
   <div class="item"><div class="item-top"><span class="item-name">Sweet Potato</span><span class="item-price">75</span></div><div class="item-macros"><span class="macro-tag">174 Cal</span><span class="macro-tag">Protein 6g</span></div></div>
   <div class="item"><div class="item-top"><span class="item-name">Cheese Cake</span><span class="item-price">110</span></div><div class="item-macros"><span class="macro-tag">210 Cal</span><span class="macro-tag">Protein 10g</span></div></div>
-  <div class="item"><div class="item-top"><span class="item-name">Granola Box (3 pcs)</span><span class="item-price">120</span></div><div class="item-macros"><span class="macro-tag">90 Cal</span><span class="macro-tag">Protein 8g</span></div></div>
+  <div class="item"><div class="item-top"><span class="item-name">Granola Box</span><span class="item-price">120</span></div><div class="item-desc">3 pcs</div><div class="item-macros"><span class="macro-tag">90 Cal</span><span class="macro-tag">Protein 8g</span></div></div>
 </div>
 
 <!-- DRINKS -->
@@ -636,23 +668,32 @@ body{font-family:'Nunito',sans-serif;background:#e8e8e8;min-height:100vh;display
   <div class="item"><div class="item-top"><span class="item-name">Green Juice</span><span class="item-price">99</span></div><div class="item-desc">تفاح أخضر وسبانخ وموز وكيوي ونعناع — فيتامين (A/B/C K/B6)</div><div class="item-macros"><span class="macro-tag">217 Cal</span></div></div>
   <div class="item"><div class="item-top"><span class="item-name">TuComida Juice</span><span class="item-price">115</span></div><div class="item-desc">افوكادو ونعناع ومانجا وماء جوز هند — فيتامين (B6/MG/E/Ca)</div><div class="item-macros"><span class="macro-tag">193 Cal</span></div></div>
 
-  <div class="cat-badge">Mojito</div>
+  <div class="cat-badge gold">Mojito Healthy</div>
   <div class="side-table">
-    <div class="side-row"><span class="side-name">Mint Lemon</span><span class="side-price">65</span></div>
+    <div class="side-row"><span class="side-name">Mint Limon</span><span class="side-price">75</span></div>
     <div class="side-row"><span class="side-name">Strawberry</span><span class="side-price">75</span></div>
     <div class="side-row"><span class="side-name">Mango</span><span class="side-price">75</span></div>
     <div class="side-row"><span class="side-name">Peach</span><span class="side-price">75</span></div>
     <div class="side-row"><span class="side-name">Kiwi</span><span class="side-price">75</span></div>
-    <div class="side-row"><span class="side-name">Watermelon</span><span class="side-price">75</span></div>
-    <div class="side-row"><span class="side-name">Blueberry</span><span class="side-price">75</span></div>
-    <div class="side-row"><span class="side-name">Mixberry</span><span class="side-price">75</span></div>
-    <div class="side-row"><span class="side-name">JellyCola</span><span class="side-price">75</span></div>
-    <div class="side-row"><span class="side-name">Melon &amp; Strawberry</span><span class="side-price">95</span></div>
-    <div class="side-row"><span class="side-name">Melon &amp; Peach</span><span class="side-price">95</span></div>
-    <div class="side-row"><span class="side-name">Mango &amp; Kiwi</span><span class="side-price">95</span></div>
-    <div class="side-row"><span class="side-name">Peach &amp; Mango</span><span class="side-price">95</span></div>
-    <div class="side-row"><span class="side-name">Kiwi &amp; Mint</span><span class="side-price">95</span></div>
-    <div class="side-row"><span class="side-name">Kiwi &amp; Strawberry</span><span class="side-price">95</span></div>
+  </div>
+
+  <div class="cat-badge">Mojito</div>
+  <div class="side-table">
+    <div class="side-row"><span class="side-name">Mint Lemon Mojito</span><span class="side-price">65</span></div>
+    <div class="side-row"><span class="side-name">Strawberrie Mojito</span><span class="side-price">75</span></div>
+    <div class="side-row"><span class="side-name">Mango Mojito</span><span class="side-price">75</span></div>
+    <div class="side-row"><span class="side-name">Peach Mojito</span><span class="side-price">75</span></div>
+    <div class="side-row"><span class="side-name">Kiwi Mojito</span><span class="side-price">75</span></div>
+    <div class="side-row"><span class="side-name">Watermelon Mojito</span><span class="side-price">75</span></div>
+    <div class="side-row"><span class="side-name">Blueberry Mojito</span><span class="side-price">75</span></div>
+    <div class="side-row"><span class="side-name">Mixberry Mojito</span><span class="side-price">75</span></div>
+    <div class="side-row"><span class="side-name">JellyCola Mojito</span><span class="side-price">75</span></div>
+    <div class="side-row"><span class="side-name">Melon &amp; Strawberry Mojito</span><span class="side-price">95</span></div>
+    <div class="side-row"><span class="side-name">Melon &amp; Peach Mojito</span><span class="side-price">95</span></div>
+    <div class="side-row"><span class="side-name">Mango &amp; Kiwi Mojito</span><span class="side-price">95</span></div>
+    <div class="side-row"><span class="side-name">Peach &amp; Mango Mojito</span><span class="side-price">95</span></div>
+    <div class="side-row"><span class="side-name">Kiwi &amp; Mint Mojito</span><span class="side-price">95</span></div>
+    <div class="side-row"><span class="side-name">Kiwi &amp; Strawberry Mojito</span><span class="side-price">95</span></div>
   </div>
 
   <div class="cat-badge green">Smoothie</div>
@@ -661,15 +702,15 @@ body{font-family:'Nunito',sans-serif;background:#e8e8e8;min-height:100vh;display
     <div class="side-row"><span class="side-name">Melon</span><span class="side-price">60</span></div>
     <div class="side-row"><span class="side-name">Mango</span><span class="side-price">60</span></div>
     <div class="side-row"><span class="side-name">Kiwi</span><span class="side-price">60</span></div>
-    <div class="side-row"><span class="side-name">Strawberry</span><span class="side-price">60</span></div>
-    <div class="side-row"><span class="side-name">Mint Lemon</span><span class="side-price">60</span></div>
+    <div class="side-row"><span class="side-name">Strawberrie</span><span class="side-price">60</span></div>
+    <div class="side-row"><span class="side-name">Minte Lemon</span><span class="side-price">60</span></div>
     <div class="side-row"><span class="side-name">MixBerry</span><span class="side-price">60</span></div>
     <div class="side-row"><span class="side-name">Blueberry</span><span class="side-price">70</span></div>
     <div class="side-row"><span class="side-name">Berry &amp; Strawberry</span><span class="side-price">70</span></div>
     <div class="side-row"><span class="side-name">Melon &amp; Strawberry</span><span class="side-price">70</span></div>
     <div class="side-row"><span class="side-name">Melon &amp; Peach</span><span class="side-price">70</span></div>
     <div class="side-row"><span class="side-name">Mango &amp; Kiwi</span><span class="side-price">70</span></div>
-    <div class="side-row"><span class="side-name">Peach &amp; Mango</span><span class="side-price">70</span></div>
+    <div class="side-row"><span class="side-name">Peach &amp; Mago</span><span class="side-price">70</span></div>
     <div class="side-row"><span class="side-name">Kiwi &amp; Strawberry</span><span class="side-price">70</span></div>
   </div>
 
@@ -690,7 +731,7 @@ body{font-family:'Nunito',sans-serif;background:#e8e8e8;min-height:100vh;display
   <div class="side-table">
     <div class="side-row"><span class="side-name">Hot Chocolate</span><span class="side-price">80</span></div>
     <div class="side-row"><span class="side-name">Hot Chocolate Brownie</span><span class="side-price">85</span></div>
-    <div class="side-row"><span class="side-name">Hot Chocolate Strawberry</span><span class="side-price">85</span></div>
+    <div class="side-row"><span class="side-name">Hot Chocolate Strawb</span><span class="side-price">85</span></div>
     <div class="side-row"><span class="side-name">Hot Chocolate Flex</span><span class="side-price">85</span></div>
     <div class="side-row"><span class="side-name">Hot Chocolate Espresso</span><span class="side-price">90</span></div>
     <div class="side-row"><span class="side-name">Hot Chocolate Nutella</span><span class="side-price">90</span></div>
@@ -786,7 +827,7 @@ function showCat(cat){
   if(tabRow) tabRow.style.display='flex';
   document.querySelectorAll('.menu-section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.tab-btn,.tpill').forEach(b=>b.classList.remove('active'));
-  var firstTabs = {'healthy':'breakfast','special':'special-meals','tatbela':'tatbela-section'};
+  var firstTabs = {'healthy':'breakfast','special':'special-meals','tatbela':'tatbela-section','plans':'plans-section'};
   var firstId = firstTabs[cat];
   var sec = document.getElementById(firstId);
   if(sec) sec.classList.add('active');
@@ -984,6 +1025,35 @@ function showCopied(){
       }
     });
 
+    /* ── Drinks side-table rows (Mojito, Smoothie, Iced Coffee, Winter Drinks, Soft Drinks) ── */
+    document.querySelectorAll('.side-row').forEach(function(el) {
+      var nameEl = el.querySelector('.side-name');
+      if (!nameEl) return;
+
+      var key    = el.dataset.origKey || getItemKey(nameEl);
+      var fbItem = mapEn[key] || mapAr[key];
+      if (!fbItem) return;
+
+      if (!el.dataset.origKey) el.dataset.origKey = key;
+
+      var newName = fbItem.name || fbItem.nameAr;
+      if (newName) {
+        var badges = getBadgesHtml(nameEl);
+        nameEl.innerHTML = newName + (badges ? ' ' + badges : '');
+      }
+
+      var priceEl = el.querySelector('.side-price');
+      if (priceEl && fbItem.singlePrice != null) {
+        priceEl.textContent = fbItem.singlePrice;
+      }
+
+      if (fbItem.active === false) {
+        el.classList.add('item-unavail');
+      } else {
+        el.classList.remove('item-unavail');
+      }
+    });
+
     document.getElementById('liveBadge').style.opacity = '1';
   }
 
@@ -992,6 +1062,48 @@ function showCopied(){
     applyMenu(snap.val() || {});
   }, function(err) {
     console.warn('[TuComida] Sync error:', err.message);
+  });
+
+  /* ── Monthly Plans — static metadata mirrors owner's PLAN_DEFS (names/periods aren't stored in DB) ── */
+  var PLAN_META = {
+    'weekly':         { name:'Weekly Plan',          period:'/ week' },
+    'monthly':        { name:'Half Monthly Plan',    period:'/ 15 days' },
+    'fitness':        { name:'Monthly Plan',         period:'/ month' },
+    'tatbela-week':   { name:'Weekly Marinade',      period:'/ week' },
+    'tatbela-2weeks': { name:'Half Monthly Marinade',period:'/ 2 weeks' },
+    'tatbela-month':  { name:'Monthly Marinade',     period:'/ month' },
+  };
+
+  function renderPlans(plansObj) {
+    var cont = document.getElementById('plansContainer');
+    if (!cont) return;
+    cont.innerHTML = '';
+    if (!plansObj) return;
+    Object.entries(plansObj).forEach(function(entry) {
+      var pid = entry[0], plan = entry[1];
+      if (plan.active === false) return;
+      var meta  = PLAN_META[pid] || {};
+      var name  = plan.nameEn || meta.name || plan.nameAr || plan.name || 'Plan';
+      var period = meta.period || plan.period || '';
+      var desc  = (plan.components || plan.itemsEn || plan.itemsAr || []);
+      desc = Array.isArray(desc) ? desc.join(' • ') : desc;
+      var el = document.createElement('div');
+      el.className = 'item';
+      el.innerHTML =
+        '<div class="item-top"><span class="item-name">' + name + '</span>' +
+        '<span class="item-price">' + (plan.price || 0) + ' <small style="font-weight:400">' + period + '</small></span></div>' +
+        (desc ? '<div class="item-desc">' + desc + '</div>' : '');
+      cont.appendChild(el);
+    });
+    if (!cont.children.length) {
+      cont.innerHTML = '<div class="item-desc" style="padding:12px 0">لا توجد باقات متاحة حالياً</div>';
+    }
+  }
+
+  fdb.ref('settings/plans').on('value', function(snap) {
+    renderPlans(snap.val());
+  }, function(err) {
+    console.warn('[TuComida] Plans sync error:', err.message);
   });
 
 })();
