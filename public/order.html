@@ -430,9 +430,9 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
 <!-- ── SUCCESS ── -->
 <div class="success-screen" id="successScreen">
   <div class="success-icon">✅</div>
-  <div class="success-title">تم الطلب بنجاح!</div>
+  <div class="success-title">طلبك جاهز للإرسال!</div>
   <div class="success-num" id="successNum">#5001</div>
-  <div class="success-msg">شكراً لطلبك من TuComida!<br>هيوصلك قريباً أو تعالى تستلم.</div>
+  <div class="success-msg">فتحنالك واتساب برسالة فيها كل تفاصيل طلبك جاهزة.<br>دوس إرسال في واتساب لتأكيد الطلب فعليًا 📲</div>
   <div class="success-actions">
     <a href="/" style="display:inline-block;background:var(--g1);color:#fff;padding:14px 36px;border-radius:28px;font-size:15px;font-weight:700;text-decoration:none;box-shadow:var(--e1)">← الرئيسية</a>
     <a href="https://wa.me/201102708550" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;padding:13px 28px;border-radius:28px;font-size:14px;font-weight:700;text-decoration:none">
@@ -613,33 +613,36 @@ async function submitOnlineOrder() {
   if (!ok) { showToast('يرجى إكمال البيانات المطلوبة'); return; }
   const btn = document.getElementById('checkoutSubmitBtn');
   btn.disabled = true;
-  btn.textContent = '⏳ جاري الإرسال...';
+  btn.textContent = '⏳ جاري التحويل لواتساب...';
   try {
     const orderNumber = await getNextOnlineOrderNumber();
     const total = cart.reduce((s,i)=>s+i.price*i.qty, 0);
-    const items = cart.map(i=>({name:i.name,quantity:i.qty,price:i.price,size:i.size||null,cal:i.cal||null}));
-    await db.ref('online_orders').push({
-      orderNumber,
-      type: orderType,
-      customerName: sanitizeText(name, 200),
-      customerPhone: ph,
-      customerAddress: orderType==='delivery' ? sanitizeText(address,500) : '',
-      notes: sanitizeText(notes, 300),
-      items,
-      total,
-      status: 'pending',
-      createdAt: Date.now(),
-      dayId: getDayId()
-    });
+    const typeLabel = orderType==='delivery' ? 'توصيل' : 'استلام من الفرع';
+    const lines = [
+      `*طلب جديد من الموقع #${orderNumber}*`,
+      `النوع: ${typeLabel}`,
+      '',
+      ...cart.map(i=>`• ${i.qty}× ${i.name}${i.size?' ('+i.size+')':''} — ${i.price*i.qty} ج`),
+      '',
+      `*الإجمالي: ${total} ج*`,
+      '',
+      `الاسم: ${sanitizeText(name,200)}`,
+      `التليفون: ${ph}`,
+    ];
+    if (orderType==='delivery') lines.push(`العنوان: ${sanitizeText(address,500)}`);
+    if (notes) lines.push(`ملاحظات: ${sanitizeText(notes,300)}`);
+    const waMsg = encodeURIComponent(lines.join('\n'));
     closeCheckout();
     cart = [];
     updateUI();
     document.getElementById('successNum').textContent = '#' + orderNumber;
     document.getElementById('successScreen').classList.add('show');
     window.scrollTo(0,0);
+    window.open('https://wa.me/201102708550?text=' + waMsg, '_blank');
   } catch(e) {
     console.error(e);
     showToast('حدث خطأ — حاول مرة ثانية');
+  } finally {
     btn.disabled = false;
     btn.textContent = 'تأكيد وإرسال الطلب 🚀';
   }
