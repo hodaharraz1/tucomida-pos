@@ -1473,6 +1473,14 @@
       <select id="odAddSelect" class="form-input-o"></select>
       <button class="btn-ms-save" onclick="odAddItem()">+ إضافة</button>
     </div>
+    <div style="text-align:center;margin:-4px 0 12px">
+      <button type="button" onclick="odToggleCustom()" style="background:none;border:none;color:var(--accent);font-size:13px;font-weight:700;cursor:pointer;padding:6px;font-family:var(--font-ar)">➕ إضافة صنف بالوزن (بروتين/أرز زيادة..)</button>
+    </div>
+    <div id="odCustomRow" style="display:none;flex-direction:column;gap:8px;margin-bottom:14px">
+      <input type="text" id="odCustomName" class="form-input-o" placeholder="مثال: بروتين 100g">
+      <input type="number" id="odCustomPrice" class="form-input-o" placeholder="السعر (ج)" min="0" inputmode="decimal">
+      <button class="btn-ms-save" style="min-height:46px" onclick="odAddCustomItem()">إضافة الصنف ✓</button>
+    </div>
     <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:17px;font-weight:900;">
       <span>الإجمالي</span><span id="odModalTotal" style="color:var(--gold)">0 ج</span>
     </div>
@@ -1918,8 +1926,31 @@ function openOrderDetail(orderId, isOnline) {
     callBtn.style.display = 'none';
   }
 
+  document.getElementById('odCustomRow').style.display = 'none';
+  document.getElementById('odCustomName').value = '';
+  document.getElementById('odCustomPrice').value = '';
+
   renderOdItems();
   document.getElementById('orderDetailModal').classList.add('open');
+}
+
+function odToggleCustom() {
+  const row = document.getElementById('odCustomRow');
+  const show = row.style.display === 'none';
+  row.style.display = show ? 'flex' : 'none';
+  if (show) document.getElementById('odCustomName').focus();
+}
+function odAddCustomItem() {
+  const nameEl = document.getElementById('odCustomName');
+  const priceEl = document.getElementById('odCustomPrice');
+  const name = nameEl.value.trim();
+  const price = parseFloat(priceEl.value);
+  if (!name) { showToastO('اكتب اسم الصنف'); return; }
+  if (!price || price <= 0) { showToastO('اكتب سعر صحيح'); return; }
+  _odItems.push({ itemId: null, name, size: null, price, quantity: 1, notes: '' });
+  nameEl.value = ''; priceEl.value = '';
+  document.getElementById('odCustomRow').style.display = 'none';
+  renderOdItems();
 }
 
 function renderOdItems() {
