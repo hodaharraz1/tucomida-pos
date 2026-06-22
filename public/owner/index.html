@@ -1109,6 +1109,7 @@
           <div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">ابدأ بإضافة أيتمز من القائمة</div>
         </div>
         <div class="o-cart-ftr">
+          <textarea id="oOrderNotes" class="form-input-o" rows="2" style="resize:vertical;font-family:var(--font-ar);margin-bottom:10px" placeholder="📝 ملاحظات على الطلب (اختياري)..."></textarea>
           <div class="o-cart-total">
             <span>الإجمالي</span>
             <span class="o-cart-total-val" id="oCartTotal">0 ج</span>
@@ -4224,6 +4225,7 @@ async function oSubmitOrder() {
     const orderNumber = await getNextOrderNumber();
     const subtotal    = oCart.reduce((s,i) => s + i.price * i.quantity, 0);
     const orderId     = generateId();
+    const notes       = document.getElementById('oOrderNotes').value.trim();
 
     await db.ref(`orders/${orderId}`).set({
       orderNumber,
@@ -4235,7 +4237,7 @@ async function oSubmitOrder() {
         itemId: i.itemId, name: i.name, size: i.size||null,
         price: i.price, quantity: i.quantity, notes: ''
       })),
-      subtotal, discount: 0, total: subtotal, paymentMethod: null,
+      subtotal, discount: 0, total: subtotal, paymentMethod: null, notes,
       createdAt: Date.now(), createdBy: currentUser.uid, createdByRole: 'owner',
       updatedAt: Date.now(), cancelRequested: false, cancelRequestedBy: null,
       cancelRequestedAt: null, cancelApproved: false, cancelApprovedBy: null,
@@ -4251,6 +4253,7 @@ async function oSubmitOrder() {
     deductInventoryForOrder(oCart.map(i => ({ itemId:i.itemId, quantity:i.quantity })));
     showToastO(`✅ تم إرسال الأوردر #${orderNumber} للمطبخ`);
     oCart = [];
+    document.getElementById('oOrderNotes').value = '';
     oRenderCart();
     switchOwnerScreen('live');
   } catch(e) {
