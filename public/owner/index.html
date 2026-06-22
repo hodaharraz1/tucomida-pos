@@ -679,7 +679,7 @@
     .o-size-confirm{flex:2;padding:13px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-ar)}
 
     @media(max-width:767px){
-      .main-content{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
+      .main-content{padding-bottom:calc(var(--o-ftr-pad,160px) + env(safe-area-inset-bottom,0px))}
       .owner-order-layout{display:flex;flex-direction:column;height:auto}
       .owner-cart-col{order:-1;overflow:visible;max-height:none}
       .o-cart-body{max-height:30vh;overflow-y:auto}
@@ -1113,7 +1113,10 @@
           <div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">ابدأ بإضافة أيتمز من القائمة</div>
         </div>
         <div class="o-cart-ftr">
-          <textarea id="oOrderNotes" class="form-input-o" rows="2" style="resize:vertical;font-family:var(--font-ar);margin-bottom:10px" placeholder="📝 ملاحظات على الطلب (اختياري)..."></textarea>
+          <div style="text-align:center;margin-bottom:6px" id="oNotesToggleWrap">
+            <button type="button" onclick="oToggleNotes()" style="background:none;border:none;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;padding:6px;font-family:var(--font-ar)">📝 إضافة ملاحظة على الطلب</button>
+          </div>
+          <textarea id="oOrderNotes" class="form-input-o" rows="2" style="display:none;resize:vertical;font-family:var(--font-ar);margin-bottom:10px" placeholder="📝 ملاحظات على الطلب (اختياري)..."></textarea>
           <div class="o-cart-total">
             <span>الإجمالي</span>
             <span class="o-cart-total-val" id="oCartTotal">0 ج</span>
@@ -4177,6 +4180,27 @@ function oAddToCart(itemId, item, size, price) {
   oRenderCart();
 }
 
+function oToggleNotes() {
+  const ta = document.getElementById('oOrderNotes');
+  const wrap = document.getElementById('oNotesToggleWrap');
+  ta.style.display = 'block';
+  wrap.style.display = 'none';
+  ta.focus();
+  oSyncFooterPadding();
+}
+
+// Keeps .main-content's bottom padding in sync with the real height of the
+// fixed order-cart footer on mobile, so it never overlaps page content
+// above it (footer height changes when the notes field is toggled open).
+function oSyncFooterPadding() {
+  if (window.innerWidth > 767) return;
+  const ftr = document.querySelector('#screen-neworder .o-cart-ftr');
+  if (!ftr) return;
+  requestAnimationFrame(() => {
+    document.querySelector('.main-content').style.setProperty('--o-ftr-pad', (ftr.offsetHeight + 24) + 'px');
+  });
+}
+
 function oRenderCart() {
   const body = document.getElementById('oCartBody');
   const totalEl = document.getElementById('oCartTotal');
@@ -4271,7 +4295,10 @@ async function oSubmitOrder() {
     showToastO(`✅ تم إرسال الأوردر #${orderNumber} للمطبخ`);
     oCart = [];
     document.getElementById('oOrderNotes').value = '';
+    document.getElementById('oOrderNotes').style.display = 'none';
+    document.getElementById('oNotesToggleWrap').style.display = 'block';
     oRenderCart();
+    oSyncFooterPadding();
     switchOwnerScreen('live');
   } catch(e) {
     console.error(e);
@@ -4293,8 +4320,13 @@ function switchOwnerScreen(name) {
     activeBtn.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
   }
   if (name === 'reports')  setTimeout(() => setReportMode(rMode), 100);
-  if (name === 'neworder') oInitOrderScreen();
+  if (name === 'neworder') { oInitOrderScreen(); oSyncFooterPadding(); }
+  else document.querySelector('.main-content').style.removeProperty('--o-ftr-pad');
 }
+
+window.addEventListener('resize', () => {
+  if (document.getElementById('screen-neworder')?.classList.contains('active')) oSyncFooterPadding();
+});
 
 /* ═══════════════════════════════════════════════
    HELPERS
