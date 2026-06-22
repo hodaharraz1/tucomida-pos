@@ -224,6 +224,24 @@
     .pay-row:last-child { border-bottom:none; }
     .pay-label { font-size:13px; font-weight:600; color:var(--text2); }
 
+    /* ── ORDER DETAIL/EDIT MODAL — touch-friendly controls ── */
+    .od-item-row { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); }
+    .od-item-info { flex:1; min-width:0; }
+    .od-item-name { font-weight:700; font-size:14px; color:var(--text); word-break:break-word; }
+    .od-item-sub { font-size:12px; color:var(--muted); margin-top:2px; font-family:var(--font-en); }
+    .od-item-ctrls { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+    .od-qty-btn { width:38px; height:38px; min-width:38px; border-radius:10px; border:1px solid var(--border2); background:var(--card2); color:var(--text); font-size:18px; font-weight:800; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; display:flex; align-items:center; justify-content:center; }
+    .od-qty-val { min-width:26px; text-align:center; font-weight:800; font-size:15px; font-family:var(--font-en); }
+    .od-remove-btn { width:38px; height:38px; min-width:38px; border-radius:10px; border:1px solid rgba(239,83,80,.3); background:rgba(239,83,80,.1); color:#EF5350; font-size:15px; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; display:flex; align-items:center; justify-content:center; }
+    .od-add-row { display:flex; flex-direction:column; gap:8px; margin:14px 0; }
+    .od-add-row select { font-size:16px; min-height:46px; }
+    .od-add-row button { min-height:46px; }
+    @media(min-width:480px){
+      .od-add-row { flex-direction:row; }
+      .od-add-row select { flex:1; }
+      .od-add-row button { flex:0 0 auto; padding:0 18px; white-space:nowrap; }
+    }
+
     /* ── OWNER MOBILE RESPONSIVE ─────────────── */
     @media(max-width:480px){
       .stats-grid { grid-template-columns:1fr 1fr; gap:8px; }
@@ -1451,9 +1469,9 @@
     <div id="odCustomerInfo"></div>
     <div style="margin-bottom:8px;font-weight:700;font-size:14px;color:var(--muted);">الطلب:</div>
     <div id="odItemsList"></div>
-    <div style="display:flex;gap:8px;margin:12px 0;">
-      <select id="odAddSelect" class="form-input-o" style="flex:1"></select>
-      <button class="btn-ms-save" style="padding:0 16px;white-space:nowrap" onclick="odAddItem()">+ إضافة</button>
+    <div class="od-add-row">
+      <select id="odAddSelect" class="form-input-o"></select>
+      <button class="btn-ms-save" onclick="odAddItem()">+ إضافة</button>
     </div>
     <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:17px;font-weight:900;">
       <span>الإجمالي</span><span id="odModalTotal" style="color:var(--gold)">0 ج</span>
@@ -1462,7 +1480,7 @@
       <button class="btn-ms-cancel" onclick="closeOrderDetailModal()">إغلاق</button>
       <button class="btn-ms-save" id="odCallBtn" style="display:none">📞 اتصال</button>
     </div>
-    <button class="btn-ms-save" style="width:100%;margin-top:8px" onclick="saveOrderEdits()">حفظ التعديلات ✓</button>
+    <button class="btn-ms-save" style="width:100%;margin-top:8px;min-height:46px" onclick="saveOrderEdits()">حفظ التعديلات ✓</button>
   </div>
 </div>
 
@@ -1907,16 +1925,16 @@ function openOrderDetail(orderId, isOnline) {
 function renderOdItems() {
   const list = document.getElementById('odItemsList');
   list.innerHTML = _odItems.map((i,idx) => `
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
-      <div style="flex:1;min-width:0">
-        <div style="font-weight:700;font-size:14px">${escapeHtml(i.name||'')}${i.size?` <span style="color:var(--muted);font-size:12px">(${escapeHtml(i.size)})</span>`:''}</div>
-        <div style="font-size:12px;color:var(--muted)">${i.price} ج × ${i.quantity} = ${i.price*i.quantity} ج</div>
+    <div class="od-item-row">
+      <div class="od-item-info">
+        <div class="od-item-name">${escapeHtml(i.name||'')}${i.size?` <span style="color:var(--muted);font-size:12px">(${escapeHtml(i.size)})</span>`:''}</div>
+        <div class="od-item-sub">${i.price} ج × ${i.quantity} = ${i.price*i.quantity} ج</div>
       </div>
-      <div style="display:flex;align-items:center;gap:6px">
-        <button class="loc-act-btn" style="padding:4px 10px" onclick="odChangeQty(${idx},-1)">−</button>
-        <span style="min-width:20px;text-align:center;font-weight:800">${i.quantity}</span>
-        <button class="loc-act-btn" style="padding:4px 10px" onclick="odChangeQty(${idx},1)">+</button>
-        <button class="loc-act-btn loc-act-cancel" style="padding:4px 10px" onclick="odRemoveItem(${idx})">🗑</button>
+      <div class="od-item-ctrls">
+        <button class="od-qty-btn" onclick="odChangeQty(${idx},-1)" aria-label="تقليل">−</button>
+        <span class="od-qty-val">${i.quantity}</span>
+        <button class="od-qty-btn" onclick="odChangeQty(${idx},1)" aria-label="زيادة">+</button>
+        <button class="od-remove-btn" onclick="odRemoveItem(${idx})" aria-label="حذف">🗑</button>
       </div>
     </div>`).join('') || '<div style="text-align:center;color:var(--muted);padding:14px 0;font-size:13px">لا توجد أصناف</div>';
   const total = _odItems.reduce((s,i) => s + i.price*i.quantity, 0);
