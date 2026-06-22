@@ -1165,10 +1165,17 @@ async function listenOrders() {
     const o = snap.val();
     if (['pending','preparing'].includes(o.status)) {
       if (dineOrders[snap.key]) {
+        const prev = dineOrders[snap.key];
         // Status changed from pending to preparing — remove from alarm
-        if (o.status === 'preparing' && dineOrders[snap.key].status === 'pending') {
+        if (o.status === 'preparing' && prev.status === 'pending') {
           pendingAlarmIds.delete(snap.key);
           updateAlarmBanner();
+        }
+        // Order edited (items/notes added) while still active — re-alert kitchen
+        if (o.updatedAt && prev.updatedAt && o.updatedAt > prev.updatedAt) {
+          pendingAlarmIds.add(snap.key);
+          updateAlarmBanner();
+          flashTicket(snap.key);
         }
       }
       dineOrders[snap.key] = {...o, _src:'dine'}; renderAll();
@@ -1207,9 +1214,16 @@ async function listenOrders() {
   _onlineRef.on('child_changed', snap => {
     const o = snap.val();
     if (['pending','preparing'].includes(o.status)) {
-      if (onlineOrdersMap[snap.key]?.status === 'pending' && o.status === 'preparing') {
+      const prevOnl = onlineOrdersMap[snap.key];
+      if (prevOnl?.status === 'pending' && o.status === 'preparing') {
         pendingAlarmIds.delete(snap.key);
         updateAlarmBanner();
+      }
+      // Order edited (items/notes added) while still active — re-alert kitchen
+      if (prevOnl && o.updatedAt && prevOnl.updatedAt && o.updatedAt > prevOnl.updatedAt) {
+        pendingAlarmIds.add(snap.key);
+        updateAlarmBanner();
+        flashTicket(snap.key);
       }
       onlineOrdersMap[snap.key] = {...o, _src:'online'}; renderAll();
     } else if (onlineOrdersMap[snap.key]) {

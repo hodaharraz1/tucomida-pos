@@ -937,6 +937,10 @@ async function listenDineOrders() {
       if (o.status === 'ready' && prevStatus !== 'ready') {
         playReadyChime();
         flashCard(snap.key);
+      } else if (prev && o.updatedAt && prev.updatedAt && o.updatedAt > prev.updatedAt) {
+        // Order edited (items/notes added) while still active — alert the cashier
+        playNewOrderBeep();
+        flashCard(snap.key);
       }
       renderOrders(); updateReadyBadge();
     } else {
@@ -991,7 +995,12 @@ async function listenOnlineOrders() {
       const prev = onlineOrders[snap.key];
       const prevStatus = prev ? prev.status : null;
       onlineOrders[snap.key] = o;
-      if (o.status === 'ready' && prevStatus !== 'ready') playReadyChime();
+      if (o.status === 'ready' && prevStatus !== 'ready') {
+        playReadyChime();
+      } else if (prev && o.updatedAt && prev.updatedAt && o.updatedAt > prev.updatedAt) {
+        // Order edited while still active — alert the cashier
+        playNewOrderBeep();
+      }
       renderOnlineOrders(); updateOnlineBadge();
     } else {
       if (onlineOrders[snap.key]) {
