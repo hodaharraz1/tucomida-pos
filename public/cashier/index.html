@@ -1566,8 +1566,9 @@ async function submitCashierOrder() {
     }
 
     logActivity(currentUser.uid, currentRole||'cashier', 'new_order', {
-      orderId, orderNumber, total: subtotal, email: currentUser.email,
-      items: cashierCart.map(i=>`${i.quantity}× ${i.name}${i.size?` (${i.size})`:''}`).join(', ')
+      orderId, orderNumber, total: subtotal, email: currentUser.email, type: cashierOrderType,
+      items: cashierCart.map(i=>`${i.quantity}× ${i.name}${i.size?` (${i.size})`:''}`).join(', '),
+      itemsDetail: cashierCart.map(i=>({ name:i.name, size:i.size||null, price:i.price, quantity:i.quantity, notes:i.notes||'' }))
     });
     showToast(`✅ تم إرسال الأوردر #${orderNumber} للمطبخ`);
     // Deduct from inventory (silent, non-blocking)

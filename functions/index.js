@@ -141,7 +141,10 @@ exports.onNewOnlineOrder = functions
         orderNumber:  order.orderNumber,
         total:        order.total,
         type:         order.type,
-        customerName: order.customerName || ''
+        customerName: order.customerName || '',
+        notes:        order.notes || '',
+        items: (order.items||[]).map(i=>`${i.quantity}× ${i.name}${i.size?` (${i.size})`:''}`).join(', '),
+        itemsDetail: (order.items||[]).map(i=>({ name:i.name, size:i.size||null, price:i.price, quantity:i.quantity, notes:i.notes||'' }))
       }
     });
 

@@ -2961,11 +2961,19 @@ function renderActivityLog() {
       </div>`;
     }
     if ((l.action === 'new_order' || l.action === 'online_order_received') && d.orderNumber) {
+      const typeLabels = { 'dine-in':'صالة', 'takeaway':'تيك أواي', 'delivery':'دليفري' };
+      const itemsRows = (d.itemsDetail||[]).map(i => `
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text);padding:2px 0">
+          <span>${escapeHtml(i.quantity)}× ${escapeHtml(i.name)}${i.size?` <span style="color:var(--muted)">(${escapeHtml(i.size)})</span>`:''}${i.notes?` <span style="color:var(--accent)">- ${escapeHtml(i.notes)}</span>`:''}</span>
+          <span style="color:var(--muted)">${Number(i.price)*Number(i.quantity)} ج</span>
+        </div>`).join('');
       extraHtml = `<div class="log-pay-detail">
         <span>#${d.orderNumber}</span>
+        ${d.type?`<span>${typeLabels[d.type]||escapeHtml(d.type)}</span>`:''}
         ${d.total!==undefined?`<span style="font-weight:800;color:var(--green)">${Number(d.total).toLocaleString()} ج</span>`:''}
       </div>
-      ${d.items ? `<div style="font-size:11px;color:var(--muted);margin-top:3px">${escapeHtml(d.items)}</div>` : ''}`;
+      ${itemsRows ? `<div style="margin-top:4px;border-top:1px dashed var(--border);padding-top:4px">${itemsRows}</div>` : (d.items ? `<div style="font-size:11px;color:var(--muted);margin-top:3px">${escapeHtml(d.items)}</div>` : '')}
+      ${d.notes ? `<div style="font-size:11px;color:var(--accent);margin-top:3px">📝 ${escapeHtml(d.notes)}</div>` : ''}`;
     }
     if (l.action === 'login' && d.email) {
       extraHtml = `<div class="log-pay-detail"><span style="color:var(--muted)">${escapeHtml(d.email)}</span></div>`;
@@ -4250,8 +4258,9 @@ async function oSubmitOrder() {
     }
 
     logActivity(currentUser.uid, 'owner', 'new_order', {
-      orderId, orderNumber, total: subtotal, email: currentUser.email,
-      items: oCart.map(i=>`${i.quantity}× ${i.name}${i.size?` (${i.size})`:''}`).join(', ')
+      orderId, orderNumber, total: subtotal, email: currentUser.email, type: oOrderType, notes,
+      items: oCart.map(i=>`${i.quantity}× ${i.name}${i.size?` (${i.size})`:''}`).join(', '),
+      itemsDetail: oCart.map(i=>({ name:i.name, size:i.size||null, price:i.price, quantity:i.quantity }))
     });
     // Deduct inventory (silent)
     deductInventoryForOrder(oCart.map(i => ({ itemId:i.itemId, quantity:i.quantity })));
