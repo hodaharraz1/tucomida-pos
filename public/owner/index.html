@@ -2960,11 +2960,12 @@ function renderActivityLog() {
         ${d.orderId ? `<button class="log-print-btn" onclick="printLogReceipt('${escapeHtml(d.orderId)}',false)">🖨 وصل</button>` : ''}
       </div>`;
     }
-    if (l.action === 'new_order' && d.orderNumber) {
-      extraHtml = `<div class="log-pay-detail"><span>#${d.orderNumber}</span>${d.total?`<span>${Number(d.total).toLocaleString()} ج</span>`:''}</div>`;
-    }
-    if (l.action === 'online_order_received' && d.orderNumber) {
-      extraHtml = `<div class="log-pay-detail"><span>#${d.orderNumber}</span>${d.total?`<span>${Number(d.total).toLocaleString()} ج</span>`:''}</div>`;
+    if ((l.action === 'new_order' || l.action === 'online_order_received') && d.orderNumber) {
+      extraHtml = `<div class="log-pay-detail">
+        <span>#${d.orderNumber}</span>
+        ${d.total!==undefined?`<span style="font-weight:800;color:var(--green)">${Number(d.total).toLocaleString()} ج</span>`:''}
+      </div>
+      ${d.items ? `<div style="font-size:11px;color:var(--muted);margin-top:3px">${escapeHtml(d.items)}</div>` : ''}`;
     }
     if (l.action === 'login' && d.email) {
       extraHtml = `<div class="log-pay-detail"><span style="color:var(--muted)">${escapeHtml(d.email)}</span></div>`;
@@ -4248,7 +4249,10 @@ async function oSubmitOrder() {
       await db.ref(`tables/${sel.value}/status`).set('occupied');
     }
 
-    logActivity(currentUser.uid, 'owner', 'new_order', { orderId, orderNumber, total: subtotal });
+    logActivity(currentUser.uid, 'owner', 'new_order', {
+      orderId, orderNumber, total: subtotal,
+      items: oCart.map(i=>`${i.quantity}× ${i.name}${i.size?` (${i.size})`:''}`).join(', ')
+    });
     // Deduct inventory (silent)
     deductInventoryForOrder(oCart.map(i => ({ itemId:i.itemId, quantity:i.quantity })));
     showToastO(`✅ تم إرسال الأوردر #${orderNumber} للمطبخ`);

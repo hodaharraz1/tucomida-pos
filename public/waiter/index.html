@@ -1016,7 +1016,7 @@ async function submitOrder() {
       dayId:getDayId(), sessionId
     });
     if (currentOrder.tableId) await db.ref(`tables/${currentOrder.tableId}/status`).set('occupied');
-    await logActivity(currentUser.uid, currentRole, 'new_order', {orderId, orderNumber, type:currentOrder.type});
+    await logActivity(currentUser.uid, currentRole, 'new_order', {orderId, orderNumber, type:currentOrder.type, total, items:cart.map(i=>`${i.quantity}× ${i.name}${i.size?` (${i.size})`:''}`).join(', ')});
     showToast(`تم إرسال الأوردر #${orderNumber} للمطبخ ✓`);
     cart = []; _wDiscOpen=false; document.getElementById('cartDiscountSection').style.display='none'; document.getElementById('wDiscToggle').textContent='🏷 إضافة خصم'; renderCart(); setTimeout(() => goToTables(), 1500);
   } catch(e) {

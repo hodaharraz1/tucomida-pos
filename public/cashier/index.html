@@ -1565,6 +1565,10 @@ async function submitCashierOrder() {
       await db.ref(`tables/${tableSelEl.value}/status`).set('occupied');
     }
 
+    logActivity(currentUser.uid, currentRole||'cashier', 'new_order', {
+      orderId, orderNumber, total: subtotal,
+      items: cashierCart.map(i=>`${i.quantity}× ${i.name}${i.size?` (${i.size})`:''}`).join(', ')
+    });
     showToast(`✅ تم إرسال الأوردر #${orderNumber} للمطبخ`);
     // Deduct from inventory (silent, non-blocking)
     _deductInventory(cashierCart.map(i => ({ itemId:i.itemId, quantity:i.quantity })));
