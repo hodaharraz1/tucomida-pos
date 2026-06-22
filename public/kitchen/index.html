@@ -1126,6 +1126,14 @@ async function listenOrders() {
   // Scope all queries to today — prevents loading full order history on startup
   const _today = getDayId();
 
+  // getDayId() rolls over at UTC midnight (2 AM Cairo time), not local midnight.
+  // If this tab stays open past that point, the day-scoped queries below stop
+  // matching new orders. Detect the rollover and reload to re-sync automatically
+  // instead of requiring a manual refresh.
+  setInterval(() => {
+    if (getDayId() !== _today) location.reload();
+  }, 60000);
+
   // Pre-load silently (no alarm for existing orders)
   const [snapDine, snapOnl] = await Promise.all([
     db.ref('orders').orderByChild('dayId').equalTo(_today).once('value'),
