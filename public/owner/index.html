@@ -1481,6 +1481,10 @@
       <input type="number" id="odCustomPrice" class="form-input-o" placeholder="السعر (ج)" min="0" inputmode="decimal">
       <button class="btn-ms-save" style="min-height:46px" onclick="odAddCustomItem()">إضافة الصنف ✓</button>
     </div>
+    <div class="form-group-o">
+      <label for="odNotes">📝 ملاحظات</label>
+      <textarea id="odNotes" class="form-input-o" rows="2" style="resize:vertical;font-family:var(--font-ar)" placeholder="مثال: من غير صوص، الصوص ع جنب..."></textarea>
+    </div>
     <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:17px;font-weight:900;">
       <span>الإجمالي</span><span id="odModalTotal" style="color:var(--gold)">0 ج</span>
     </div>
@@ -1897,7 +1901,6 @@ function openOrderDetail(orderId, isOnline) {
         <div style="font-size:17px;font-weight:800;">${escapeHtml(o.customerName||'—')}</div>
         <div style="font-size:15px;color:var(--gold);margin-top:4px;">📞 ${escapeHtml(o.customerPhone||'—')}</div>
         ${o.type==='delivery'&&o.customerAddress?`<div style="font-size:13px;color:var(--muted);margin-top:6px;">📍 ${escapeHtml(o.customerAddress)}</div>`:''}
-        ${o.notes?`<div style="font-size:13px;color:#FFD54F;margin-top:6px;">📝 ${escapeHtml(o.notes)}</div>`:''}
       </div>`;
   } else {
     custEl.innerHTML = '';
@@ -1929,6 +1932,7 @@ function openOrderDetail(orderId, isOnline) {
   document.getElementById('odCustomRow').style.display = 'none';
   document.getElementById('odCustomName').value = '';
   document.getElementById('odCustomPrice').value = '';
+  document.getElementById('odNotes').value = o.notes || '';
 
   renderOdItems();
   document.getElementById('orderDetailModal').classList.add('open');
@@ -2001,10 +2005,11 @@ async function saveOrderEdits() {
   const o = _odIsOnline ? onlineOrders[_odOrderId] : activeOrders[_odOrderId];
   const discount = Number(o && o.discount) || 0;
   const total = Math.max(0, subtotal - discount);
+  const notes = document.getElementById('odNotes').value.trim();
   try {
     await db.ref(path).update({
       items: _odItems.map(i => ({ itemId:i.itemId, name:i.name, size:i.size||null, price:i.price, quantity:i.quantity, notes:i.notes||'' })),
-      subtotal, total, updatedAt: Date.now()
+      subtotal, total, notes, updatedAt: Date.now()
     });
     logActivity(currentUser.uid, 'owner', 'edit_order_items', { orderId: _odOrderId, total });
     showToastO('تم تحديث الطلب ✓');
