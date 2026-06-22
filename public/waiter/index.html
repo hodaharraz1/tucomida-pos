@@ -313,6 +313,38 @@
     }
     .btn-cancel-req:hover{background:rgba(211,47,47,.1)}
     .cancel-sent{color:#F57C00;font-size:12px;text-align:center;padding:8px;font-weight:600}
+    .btn-details-req{
+      width:100%;padding:12px 10px;min-height:44px;background:var(--bg);
+      color:var(--primary);border:1px solid var(--border);
+      border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;
+      font-family:var(--font-ar);transition:background .15s;margin-bottom:8px;
+    }
+    .btn-details-req:hover{background:rgba(67,160,71,.08)}
+
+    /* ── ORDER DETAIL/EDIT MODAL ──────────────── */
+    .od-item-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+    .od-item-info{flex:1;min-width:0}
+    .od-item-name{font-weight:700;font-size:14px;color:var(--text);word-break:break-word}
+    .od-item-sub{font-size:12px;color:var(--muted);margin-top:2px;font-family:var(--font-en)}
+    .od-item-ctrls{display:flex;align-items:center;gap:6px;flex-shrink:0}
+    .od-qty-btn{width:38px;height:38px;min-width:38px;border-radius:10px;border:1px solid var(--border2);background:var(--bg);color:var(--text);font-size:18px;font-weight:800;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center}
+    .od-qty-val{min-width:26px;text-align:center;font-weight:800;font-size:15px;font-family:var(--font-en)}
+    .od-remove-btn{width:38px;height:38px;min-width:38px;border-radius:10px;border:1px solid rgba(211,47,47,.3);background:rgba(211,47,47,.08);color:var(--red);font-size:15px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center}
+    .od-add-row{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+    .od-add-row select{font-size:16px;min-height:46px;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-family:var(--font-ar);background:var(--surface)}
+    .od-add-row button{min-height:46px}
+    @media(min-width:480px){
+      .od-add-row{flex-direction:row}
+      .od-add-row select{flex:1}
+      .od-add-row button{flex:0 0 auto;padding:0 18px;white-space:nowrap}
+    }
+    .od-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:16px;outline:none;font-family:var(--font-ar);background:var(--surface);box-sizing:border-box;margin-bottom:8px}
+    .btn-ms-save{
+      flex:1;padding:14px;background:var(--primary);color:#fff;
+      border:none;border-radius:12px;font-size:15px;font-weight:700;
+      cursor:pointer;font-family:var(--font-ar);transition:background .15s;
+    }
+    .btn-ms-save:hover{background:var(--primary-mid)}
 
     /* ── BOTTOM NAV ───────────────────────────── */
     .bottom-nav{
@@ -614,6 +646,35 @@
     <div class="modal-btns">
       <button class="btn-ms-cancel" onclick="closeCancelModal()">إلغاء</button>
       <button class="btn-ms-add" style="background:#D32F2F" onclick="confirmCancel()">إرسال طلب الإلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER DETAILS / EDIT MODAL -->
+<div class="modal-bg" id="orderDetailModal" onclick="if(event.target===this)closeOrderDetailModal()">
+  <div class="modal-sheet">
+    <div class="ms-title" id="wodModalNum">#5001</div>
+    <div style="margin-bottom:8px;font-weight:700;font-size:14px;color:var(--muted);">الطلب:</div>
+    <div id="wodItemsList"></div>
+    <div class="od-add-row">
+      <select id="wodAddSelect"></select>
+      <button class="btn-ms-save" onclick="wodAddItem()">+ إضافة</button>
+    </div>
+    <div style="text-align:center;margin:-4px 0 12px">
+      <button type="button" onclick="wodToggleCustom()" style="background:none;border:none;color:var(--accent);font-size:13px;font-weight:700;cursor:pointer;padding:6px;font-family:var(--font-ar)">➕ إضافة صنف بالوزن (بروتين/أرز زيادة..)</button>
+    </div>
+    <div id="wodCustomRow" style="display:none;flex-direction:column;gap:8px;margin-bottom:14px">
+      <input type="text" id="wodCustomName" class="od-input" placeholder="مثال: بروتين 100g">
+      <input type="number" id="wodCustomPrice" class="od-input" placeholder="السعر (ج)" min="0" inputmode="decimal">
+      <button class="btn-ms-save" style="min-height:46px" onclick="wodAddCustomItem()">إضافة الصنف ✓</button>
+    </div>
+    <textarea id="wodNotes" class="od-input" rows="2" style="resize:vertical" placeholder="📝 ملاحظات على الطلب..."></textarea>
+    <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:17px;font-weight:900;">
+      <span>الإجمالي</span><span id="wodModalTotal" style="color:var(--primary)">0 ج</span>
+    </div>
+    <div class="modal-btns" style="margin-top:6px">
+      <button class="btn-ms-cancel" onclick="closeOrderDetailModal()">إغلاق</button>
+      <button class="btn-ms-save" onclick="saveOrderEditsW()">حفظ التعديلات ✓</button>
     </div>
   </div>
 </div>
@@ -1094,6 +1155,7 @@ function renderActiveOrders() {
       </div>
       <div class="oc-items">${items}</div>
       <div class="oc-total"><span>الإجمالي</span><span style="color:var(--glight)">${o.total} ج</span></div>
+      <button class="btn-details-req" onclick="openOrderDetailW('${id}')">تفاصيل / تعديل الطلب</button>
       ${cancelHtml}`;
     grid.appendChild(card);
   });
@@ -1121,6 +1183,120 @@ async function confirmCancel() {
   });
   await logActivity(currentUser.uid, currentRole, 'cancel_request', {orderId:cancelOrderId, reason});
   showToast('تم إرسال طلب الإلغاء للأونر ✓'); closeCancelModal();
+}
+
+// ── ORDER DETAILS / EDIT MODAL ─────────────────────
+let _wodOrderId = null, _wodItems = [], _wodMenuFlat = [];
+
+function openOrderDetailW(orderId) {
+  const o = activeOrdersData[orderId];
+  if (!o) return;
+  _wodOrderId = orderId;
+  _wodItems = (o.items||[]).map(i => ({
+    itemId: i.itemId, name: i.name, size: i.size||null,
+    price: Number(i.price)||0, quantity: Number(i.quantity)||1, notes: i.notes||''
+  }));
+  const tinfo = o.type === 'takeaway' ? 'تيك أواي' : `طاولة ${o.tableNumber}`;
+  document.getElementById('wodModalNum').textContent = `#${o.orderNumber} — ${tinfo}`;
+
+  _wodMenuFlat = [];
+  Object.entries(menuData.items||{}).forEach(([itemId,it]) => {
+    if (it.active === false) return;
+    if (it.sizes) {
+      Object.entries(it.sizes).forEach(([sz,d]) => {
+        _wodMenuFlat.push({ itemId, name: it.name, size: sz, price: Number(d.price)||0 });
+      });
+    } else {
+      _wodMenuFlat.push({ itemId, name: it.name, size: null, price: Number(it.singlePrice)||0 });
+    }
+  });
+  document.getElementById('wodAddSelect').innerHTML = _wodMenuFlat.map((m,i) =>
+    `<option value="${i}">${escapeHtml(m.name)}${m.size?` (${escapeHtml(m.size)})`:''} — ${m.price} ج</option>`
+  ).join('');
+
+  document.getElementById('wodCustomRow').style.display = 'none';
+  document.getElementById('wodCustomName').value = '';
+  document.getElementById('wodCustomPrice').value = '';
+  document.getElementById('wodNotes').value = o.notes || '';
+
+  renderWodItems();
+  document.getElementById('orderDetailModal').classList.add('open');
+}
+
+function renderWodItems() {
+  const list = document.getElementById('wodItemsList');
+  list.innerHTML = _wodItems.map((i,idx) => `
+    <div class="od-item-row">
+      <div class="od-item-info">
+        <div class="od-item-name">${escapeHtml(i.name||'')}${i.size?` <span style="color:var(--muted);font-size:12px">(${escapeHtml(i.size)})</span>`:''}</div>
+        <div class="od-item-sub">${i.price} ج × ${i.quantity} = ${i.price*i.quantity} ج</div>
+      </div>
+      <div class="od-item-ctrls">
+        <button class="od-qty-btn" onclick="wodChangeQty(${idx},-1)" aria-label="تقليل">−</button>
+        <span class="od-qty-val">${i.quantity}</span>
+        <button class="od-qty-btn" onclick="wodChangeQty(${idx},1)" aria-label="زيادة">+</button>
+        <button class="od-remove-btn" onclick="wodRemoveItem(${idx})" aria-label="حذف">🗑</button>
+      </div>
+    </div>`).join('') || '<div style="text-align:center;color:var(--muted);padding:14px 0;font-size:13px">لا توجد أصناف</div>';
+  const total = _wodItems.reduce((s,i) => s + i.price*i.quantity, 0);
+  document.getElementById('wodModalTotal').textContent = `${total} ج`;
+}
+
+function wodChangeQty(idx, delta) {
+  const it = _wodItems[idx];
+  if (!it) return;
+  it.quantity = Math.max(1, (it.quantity||1) + delta);
+  renderWodItems();
+}
+function wodRemoveItem(idx) { _wodItems.splice(idx,1); renderWodItems(); }
+function wodAddItem() {
+  const sel = document.getElementById('wodAddSelect');
+  const m = _wodMenuFlat[Number(sel.value)];
+  if (!m) return;
+  const existing = _wodItems.find(i => i.itemId===m.itemId && i.size===m.size);
+  if (existing) existing.quantity++;
+  else _wodItems.push({ itemId: m.itemId, name: m.name, size: m.size, price: m.price, quantity: 1, notes: '' });
+  renderWodItems();
+}
+function closeOrderDetailModal() { document.getElementById('orderDetailModal').classList.remove('open'); }
+function wodToggleCustom() {
+  const row = document.getElementById('wodCustomRow');
+  const show = row.style.display === 'none';
+  row.style.display = show ? 'flex' : 'none';
+  if (show) document.getElementById('wodCustomName').focus();
+}
+function wodAddCustomItem() {
+  const nameEl = document.getElementById('wodCustomName');
+  const priceEl = document.getElementById('wodCustomPrice');
+  const name = nameEl.value.trim();
+  const price = parseFloat(priceEl.value);
+  if (!name) { showToast('اكتب اسم الصنف'); return; }
+  if (!price || price <= 0) { showToast('اكتب سعر صحيح'); return; }
+  _wodItems.push({ itemId: null, name, size: null, price, quantity: 1, notes: '' });
+  nameEl.value = ''; priceEl.value = '';
+  document.getElementById('wodCustomRow').style.display = 'none';
+  renderWodItems();
+}
+async function saveOrderEditsW() {
+  if (!_wodOrderId) return;
+  if (!_wodItems.length) { showToast('لازم يكون فيه صنف واحد على الأقل'); return; }
+  const subtotal = _wodItems.reduce((s,i) => s + i.price*i.quantity, 0);
+  const o = activeOrdersData[_wodOrderId];
+  const discount = Number(o && o.discount) || 0;
+  const total = Math.max(0, subtotal - discount);
+  const notes = document.getElementById('wodNotes').value.trim();
+  try {
+    await db.ref(`orders/${_wodOrderId}`).update({
+      items: _wodItems.map(i => ({ itemId:i.itemId, name:i.name, size:i.size||null, price:i.price, quantity:i.quantity, notes:i.notes||'' })),
+      subtotal, total, notes, updatedAt: Date.now()
+    });
+    logActivity(currentUser.uid, currentRole, 'edit_order_items', { orderId: _wodOrderId, total });
+    showToast('تم تحديث الطلب ✓');
+    closeOrderDetailModal();
+  } catch (e) {
+    console.error(e);
+    showToast('حصل خطأ، حاول تاني');
+  }
 }
 
 // ── NAVIGATION ─────────────────────────────────────

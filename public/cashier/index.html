@@ -189,6 +189,27 @@
     .size-opt-c:hover { border-color:var(--primary-light); background:rgba(67,160,71,.04); transform:translateY(-1px); }
     .size-opt-c.sel { border-color:var(--primary-light); background:rgba(67,160,71,.08); }
 
+    /* ── ORDER DETAILS / EDIT MODAL ── */
+    .od-item-row { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); }
+    .od-item-info { flex:1; min-width:0; }
+    .od-item-name { font-weight:700; font-size:14px; color:var(--text); word-break:break-word; }
+    .od-item-sub { font-size:12px; color:var(--muted); margin-top:2px; font-family:var(--font-en); }
+    .od-item-ctrls { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+    .od-qty-btn { width:38px; height:38px; min-width:38px; border-radius:10px; border:1px solid var(--border); background:var(--surface2); color:var(--text); font-size:18px; font-weight:800; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; display:flex; align-items:center; justify-content:center; }
+    .od-remove-btn { width:38px; height:38px; min-width:38px; border-radius:10px; border:1px solid rgba(211,47,47,.3); background:rgba(211,47,47,.08); color:var(--red); font-size:15px; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; display:flex; align-items:center; justify-content:center; }
+    .od-qty-val { min-width:26px; text-align:center; font-weight:800; font-size:15px; font-family:var(--font-en); }
+    .od-add-row { display:flex; flex-direction:column; gap:8px; margin:14px 0; }
+    .od-add-row select { font-size:16px; min-height:46px; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-family:var(--font-ar); background:var(--surface); }
+    .od-add-row button { min-height:46px; }
+    @media(min-width:480px){
+      .od-add-row { flex-direction:row; }
+      .od-add-row select { flex:1; }
+      .od-add-row button { flex:0 0 auto; padding:0 18px; white-space:nowrap; }
+    }
+    .od-input { width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:16px; outline:none; font-family:var(--font-ar); background:var(--surface2); box-sizing:border-box; margin-bottom:8px; }
+    .btn-details-c { padding:13px; min-height:44px; background:var(--surface2); color:var(--muted); border:1px solid var(--border); border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; font-family:var(--font-ar); transition:background .15s; margin-top:8px; width:100%; }
+    .btn-details-c:hover { background:var(--border); }
+
     /* cashier menu search */
     .cashier-search-wrap {
       display:flex; align-items:center; gap:8px;
@@ -651,6 +672,34 @@
 </div>
 
 <!-- CUSTOM ITEM MODAL -->
+<div class="modal-bg" id="orderDetailModal" onclick="if(event.target===this)closeOrderDetailModal()">
+  <div class="modal-box">
+    <div class="modal-title" id="codModalNum">#5001</div>
+    <div class="modal-sub" style="margin-bottom:8px">الطلب:</div>
+    <div id="codItemsList"></div>
+    <div class="od-add-row">
+      <select id="codAddSelect"></select>
+      <button class="btn-modal-confirm" style="flex:0 0 auto;padding:0 18px" onclick="codAddItem()">+ إضافة</button>
+    </div>
+    <div style="text-align:center;margin:-4px 0 12px">
+      <button type="button" onclick="codToggleCustom()" style="background:none;border:none;color:var(--accent);font-size:13px;font-weight:700;cursor:pointer;padding:6px;font-family:var(--font-ar)">➕ إضافة صنف بالوزن (بروتين/أرز زيادة..)</button>
+    </div>
+    <div id="codCustomRow" style="display:none;flex-direction:column;gap:8px;margin-bottom:14px">
+      <input type="text" id="codCustomName" class="od-input" placeholder="مثال: بروتين 100g">
+      <input type="number" id="codCustomPrice" class="od-input" placeholder="السعر (ج)" min="0" inputmode="decimal">
+      <button class="btn-modal-confirm" style="width:100%;min-height:46px" onclick="codAddCustomItem()">إضافة الصنف ✓</button>
+    </div>
+    <textarea id="codNotes" class="od-input" rows="2" style="resize:vertical" placeholder="📝 ملاحظات على الطلب..."></textarea>
+    <div class="modal-total-row">
+      <span>الإجمالي</span><span id="codModalTotal">0 ج</span>
+    </div>
+    <div class="modal-btn-row">
+      <button class="btn-modal-cancel" onclick="closeOrderDetailModal()">إغلاق</button>
+      <button class="btn-modal-confirm" onclick="saveOrderEditsC()">حفظ التعديلات ✓</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-bg" id="customItemModal" onclick="if(event.target===this)closeCustomItemModal()" style="display:none;align-items:center;justify-content:center;">
   <div class="modal-box" style="max-width:340px;width:90%">
     <div class="modal-title">➕ إضافة صنف مخصص</div>
@@ -1021,6 +1070,7 @@ function renderOrders() {
         <div class="ocard-meta">${tableInfo} — ${formatTime(o.createdAt)}</div>
         <div class="ocard-items">${itemsHtml}</div>
         <div class="ocard-total"><span>الإجمالي</span><span style="color:var(--green-mid)">${o.total} ج</span></div>
+        <button class="btn-details-c" onclick="openOrderDetailC('${id}')">تفاصيل / تعديل الطلب</button>
         ${payBtn}
       `;
       grid.appendChild(card);
@@ -1671,6 +1721,120 @@ async function confirmEndDay() {
   await logActivity(currentUser.uid, currentRole||'cashier', 'end_day', { dayId, totalSales, totalOrders, dineOrders:dineOrders.length, onlineOrders:onlineOrders.length });
   showToast(`✅ تم إنهاء اليوم — ${totalOrders} أوردر / ${totalSales.toLocaleString()} ج`);
   loadReports();
+}
+
+// ── ORDER DETAILS / EDIT MODAL ─────────────────────
+let _codOrderId = null, _codItems = [], _codMenuFlat = [];
+
+function openOrderDetailC(orderId) {
+  const o = allOrders[orderId];
+  if (!o) return;
+  _codOrderId = orderId;
+  _codItems = (o.items||[]).map(i => ({
+    itemId: i.itemId, name: i.name, size: i.size||null,
+    price: Number(i.price)||0, quantity: Number(i.quantity)||1, notes: i.notes||''
+  }));
+  const tinfo = o.type === 'takeaway' ? 'تيك أواي' : `طاولة ${o.tableNumber}`;
+  document.getElementById('codModalNum').textContent = `#${o.orderNumber} — ${tinfo}`;
+
+  _codMenuFlat = [];
+  Object.entries(menuData.items||{}).forEach(([itemId,it]) => {
+    if (it.active === false) return;
+    if (it.sizes) {
+      Object.entries(it.sizes).forEach(([sz,d]) => {
+        _codMenuFlat.push({ itemId, name: it.name, size: sz, price: Number(d.price)||0 });
+      });
+    } else {
+      _codMenuFlat.push({ itemId, name: it.name, size: null, price: Number(it.singlePrice)||0 });
+    }
+  });
+  document.getElementById('codAddSelect').innerHTML = _codMenuFlat.map((m,i) =>
+    `<option value="${i}">${escapeHtml(m.name)}${m.size?` (${escapeHtml(m.size)})`:''} — ${m.price} ج</option>`
+  ).join('');
+
+  document.getElementById('codCustomRow').style.display = 'none';
+  document.getElementById('codCustomName').value = '';
+  document.getElementById('codCustomPrice').value = '';
+  document.getElementById('codNotes').value = o.notes || '';
+
+  renderCodItems();
+  document.getElementById('orderDetailModal').classList.add('open');
+}
+
+function renderCodItems() {
+  const list = document.getElementById('codItemsList');
+  list.innerHTML = _codItems.map((i,idx) => `
+    <div class="od-item-row">
+      <div class="od-item-info">
+        <div class="od-item-name">${escapeHtml(i.name||'')}${i.size?` <span style="color:var(--muted);font-size:12px">(${escapeHtml(i.size)})</span>`:''}</div>
+        <div class="od-item-sub">${i.price} ج × ${i.quantity} = ${i.price*i.quantity} ج</div>
+      </div>
+      <div class="od-item-ctrls">
+        <button class="od-qty-btn" onclick="codChangeQty(${idx},-1)" aria-label="تقليل">−</button>
+        <span class="od-qty-val">${i.quantity}</span>
+        <button class="od-qty-btn" onclick="codChangeQty(${idx},1)" aria-label="زيادة">+</button>
+        <button class="od-remove-btn" onclick="codRemoveItem(${idx})" aria-label="حذف">🗑</button>
+      </div>
+    </div>`).join('') || '<div style="text-align:center;color:var(--muted);padding:14px 0;font-size:13px">لا توجد أصناف</div>';
+  const total = _codItems.reduce((s,i) => s + i.price*i.quantity, 0);
+  document.getElementById('codModalTotal').textContent = `${total} ج`;
+}
+
+function codChangeQty(idx, delta) {
+  const it = _codItems[idx];
+  if (!it) return;
+  it.quantity = Math.max(1, (it.quantity||1) + delta);
+  renderCodItems();
+}
+function codRemoveItem(idx) { _codItems.splice(idx,1); renderCodItems(); }
+function codAddItem() {
+  const sel = document.getElementById('codAddSelect');
+  const m = _codMenuFlat[Number(sel.value)];
+  if (!m) return;
+  const existing = _codItems.find(i => i.itemId===m.itemId && i.size===m.size);
+  if (existing) existing.quantity++;
+  else _codItems.push({ itemId: m.itemId, name: m.name, size: m.size, price: m.price, quantity: 1, notes: '' });
+  renderCodItems();
+}
+function closeOrderDetailModal() { document.getElementById('orderDetailModal').classList.remove('open'); }
+function codToggleCustom() {
+  const row = document.getElementById('codCustomRow');
+  const show = row.style.display === 'none';
+  row.style.display = show ? 'flex' : 'none';
+  if (show) document.getElementById('codCustomName').focus();
+}
+function codAddCustomItem() {
+  const nameEl = document.getElementById('codCustomName');
+  const priceEl = document.getElementById('codCustomPrice');
+  const name = nameEl.value.trim();
+  const price = parseFloat(priceEl.value);
+  if (!name) { showToast('اكتب اسم الصنف'); return; }
+  if (!price || price <= 0) { showToast('اكتب سعر صحيح'); return; }
+  _codItems.push({ itemId: null, name, size: null, price, quantity: 1, notes: '' });
+  nameEl.value = ''; priceEl.value = '';
+  document.getElementById('codCustomRow').style.display = 'none';
+  renderCodItems();
+}
+async function saveOrderEditsC() {
+  if (!_codOrderId) return;
+  if (!_codItems.length) { showToast('لازم يكون فيه صنف واحد على الأقل'); return; }
+  const subtotal = _codItems.reduce((s,i) => s + i.price*i.quantity, 0);
+  const o = allOrders[_codOrderId];
+  const discount = Number(o && o.discount) || 0;
+  const total = Math.max(0, subtotal - discount);
+  const notes = document.getElementById('codNotes').value.trim();
+  try {
+    await db.ref(`orders/${_codOrderId}`).update({
+      items: _codItems.map(i => ({ itemId:i.itemId, name:i.name, size:i.size||null, price:i.price, quantity:i.quantity, notes:i.notes||'' })),
+      subtotal, total, notes, updatedAt: Date.now()
+    });
+    logActivity(currentUser.uid, currentRole||'cashier', 'edit_order_items', { orderId: _codOrderId, total });
+    showToast('تم تحديث الطلب ✓');
+    closeOrderDetailModal();
+  } catch (e) {
+    console.error(e);
+    showToast('حصل خطأ، حاول تاني');
+  }
 }
 
 /* ═══════════════════════════════════════════════
