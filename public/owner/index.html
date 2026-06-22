@@ -2975,7 +2975,7 @@ function renderActivityLog() {
       <div class="log-icon">${actionIcons[l.action]||'📌'}</div>
       <div class="log-info">
         <div class="log-action">${actionLabels[l.action]||escapeHtml(l.action||'')}</div>
-        <div class="log-meta">${roleLabels[l.role]||escapeHtml(l.role||'')}</div>
+        <div class="log-meta">${roleLabels[l.role]||escapeHtml(l.role||'')}${d.email?` • ${escapeHtml(d.email)}`:''}</div>
         ${extraHtml}
       </div>
       <div class="log-time">
@@ -4250,7 +4250,7 @@ async function oSubmitOrder() {
     }
 
     logActivity(currentUser.uid, 'owner', 'new_order', {
-      orderId, orderNumber, total: subtotal,
+      orderId, orderNumber, total: subtotal, email: currentUser.email,
       items: oCart.map(i=>`${i.quantity}× ${i.name}${i.size?` (${i.size})`:''}`).join(', ')
     });
     // Deduct inventory (silent)

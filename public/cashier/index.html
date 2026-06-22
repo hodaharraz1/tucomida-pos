@@ -1566,7 +1566,7 @@ async function submitCashierOrder() {
     }
 
     logActivity(currentUser.uid, currentRole||'cashier', 'new_order', {
-      orderId, orderNumber, total: subtotal,
+      orderId, orderNumber, total: subtotal, email: currentUser.email,
       items: cashierCart.map(i=>`${i.quantity}× ${i.name}${i.size?` (${i.size})`:''}`).join(', ')
     });
     showToast(`✅ تم إرسال الأوردر #${orderNumber} للمطبخ`);
