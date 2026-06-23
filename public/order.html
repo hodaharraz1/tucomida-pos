@@ -125,7 +125,7 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
 
 .food-card-body{padding:10px 11px 12px;flex:1;display:flex;flex-direction:column}
 .food-card-name{font-size:13px;font-weight:800;color:var(--ink);line-height:1.25;margin-bottom:2px}
-.food-card-desc{font-size:10px;color:var(--mute);line-height:1.4;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.food-card-desc{font-size:10px;color:var(--mute);line-height:1.4;margin-bottom:8px}
 .food-card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;gap:6px}
 .food-card-price{font-size:14px;font-weight:900;color:var(--g1);font-family:var(--fe);line-height:1}
 .food-card-cal{font-size:9px;color:var(--o);background:rgba(230,123,32,.09);padding:2px 6px;border-radius:8px;font-weight:700;font-family:var(--fe)}
@@ -207,8 +207,32 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
 .sheet-section-title{font-size:12px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
 /* Order summary in checkout */
 .checkout-items{background:var(--s1);border-radius:12px;padding:12px;margin-bottom:4px}
-.checkout-item-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--s2)}
+.checkout-item-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--s2)}
 .checkout-item-row:last-child{border-bottom:none}
+.checkout-item-info{flex:1;min-width:0}
+.checkout-item-name{font-size:13px;font-weight:700;color:var(--ink);line-height:1.3}
+.checkout-item-price{font-size:12px;font-weight:700;color:var(--g1);font-family:var(--fe);margin-top:2px}
+.cqty-ctrl{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.cqty-btn{
+  width:34px;height:34px;min-width:34px;border-radius:50%;font-size:16px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;transition:all .15s;
+}
+.cqty-btn.minus{background:rgba(198,40,40,.1);color:#C62828}
+.cqty-btn.plus{background:rgba(46,125,50,.1);color:var(--g2)}
+.cqty-btn:hover{opacity:.8}
+.cqty-n{font-size:13px;font-weight:800;min-width:18px;text-align:center;color:var(--ink);font-family:var(--fe)}
+.checkout-remove-btn{
+  width:34px;height:34px;min-width:34px;border-radius:50%;background:rgba(198,40,40,.08);
+  color:#C62828;font-size:14px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;cursor:pointer;border:none;transition:all .15s;
+}
+.checkout-remove-btn:hover{background:rgba(198,40,40,.16)}
+.checkout-cancel-order-btn{
+  width:100%;padding:13px;margin-top:10px;background:rgba(198,40,40,.07);
+  border:1.5px solid rgba(198,40,40,.25);color:#C62828;border-radius:12px;
+  font-size:14px;font-weight:700;font-family:var(--f);cursor:pointer;transition:background .18s;
+}
+.checkout-cancel-order-btn:hover{background:rgba(198,40,40,.13)}
 .checkout-total{display:flex;justify-content:space-between;font-size:17px;font-weight:900;padding-top:14px;border-top:1px solid var(--s2)}
 /* Form fields */
 .field{margin-bottom:14px}
@@ -388,6 +412,7 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
       <div class="sheet-section">
         <div class="sheet-section-title">ملخص الطلب</div>
         <div class="checkout-items" id="checkoutItems"></div>
+        <button type="button" class="checkout-cancel-order-btn" onclick="cancelOnlineOrder()">🗑 إلغاء الطلب كله</button>
         <div class="field" style="margin-top:12px">
           <label>ملاحظات (اختياري)</label>
           <textarea id="orderNotes" rows="2" placeholder="أي تفاصيل إضافية..."></textarea>
@@ -578,19 +603,48 @@ function confirmSizePick() {
 /* ── CHECKOUT MODAL ── */
 function openCheckout() {
   if (!cart.length) { showToast('أضف أيتمز للسلة أولاً'); return; }
-  // Build summary
+  renderCheckoutItems();
+  document.getElementById('checkoutOverlay').classList.add('open');
+  document.getElementById('addressField').style.display = orderType==='delivery' ? '' : 'none';
+}
+function renderCheckoutItems() {
   const cont = document.getElementById('checkoutItems');
   const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
   cont.innerHTML = cart.map(ci=>`
     <div class="checkout-item-row">
-      <span style="font-size:14px;font-weight:700">${ci.qty}× ${ci.name}${ci.size?` (${ci.size})`:''}</span>
-      <span style="font-size:14px;font-weight:700;color:var(--g1);font-family:var(--fe)">${(ci.price*ci.qty).toLocaleString()} EGP</span>
+      <div class="checkout-item-info">
+        <div class="checkout-item-name">${ci.name}${ci.size?` (${ci.size})`:''}</div>
+        <div class="checkout-item-price">${(ci.price*ci.qty).toLocaleString()} EGP</div>
+      </div>
+      <div class="cqty-ctrl">
+        <button class="cqty-btn minus" onclick="checkoutChangeQty('${ci.iid}','${ci.size||''}',-1)">−</button>
+        <span class="cqty-n">${ci.qty}</span>
+        <button class="cqty-btn plus" onclick="checkoutChangeQty('${ci.iid}','${ci.size||''}',1)">+</button>
+      </div>
+      <button class="checkout-remove-btn" onclick="removeCheckoutItem('${ci.iid}','${ci.size||''}')" aria-label="حذف الصنف">🗑</button>
     </div>`).join('');
   document.getElementById('checkoutTotal').innerHTML = `
     <span style="font-size:17px;font-weight:900">الإجمالي</span>
     <span style="font-size:20px;font-weight:900;color:var(--g1);font-family:var(--fe)">${total.toLocaleString()} EGP</span>`;
-  document.getElementById('checkoutOverlay').classList.add('open');
-  document.getElementById('addressField').style.display = orderType==='delivery' ? '' : 'none';
+}
+function checkoutChangeQty(iid, size, delta) {
+  changeQty(iid, size||null, delta);
+  if (!cart.length) { closeCheckout(); showToast('السلة فاضية دلوقتي'); return; }
+  renderCheckoutItems();
+}
+function removeCheckoutItem(iid, size) {
+  const idx = cart.findIndex(x=>x.iid===iid && x.size===(size||null));
+  if (idx>=0) cart.splice(idx,1);
+  updateUI();
+  if (!cart.length) { closeCheckout(); showToast('السلة فاضية دلوقتي'); return; }
+  renderCheckoutItems();
+}
+function cancelOnlineOrder() {
+  if (!confirm('متأكد عايز تلغي الطلب كله؟')) return;
+  cart = [];
+  updateUI();
+  closeCheckout();
+  showToast('تم إلغاء الطلب');
 }
 function closeCheckout() { document.getElementById('checkoutOverlay').classList.remove('open'); }
 function overlayClose(e) { if (e.target===document.getElementById('checkoutOverlay')) closeCheckout(); }
@@ -805,7 +859,7 @@ function buildPlanCard(iid, item) {
   return `<div class="food-card${qty>0?' in-cart':''}" data-iid="${iid}" data-size="" onclick="showPlanModal('${iid}')">
     <div class="food-card-body">
       <div class="food-card-name">${item.name}</div>
-      <div class="food-card-desc" style="-webkit-line-clamp:3">${item.description||''}</div>
+      <div class="food-card-desc">${item.description||''}</div>
       <div class="food-card-foot" style="margin-top:8px">
         <div class="food-card-price">${priceLabel}</div>
         <button class="add-btn" onclick="event.stopPropagation();addItem('${iid}','${item.name}',${item.singlePrice||0},null,0)" style="${qty>0?'display:none':''}">+</button>
