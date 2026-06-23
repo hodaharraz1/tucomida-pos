@@ -715,6 +715,23 @@ let _activeCat = '__best__';
 let _allItems = [];
 let _itemSalesData = {};
 
+const BEST_SELLER_NAMES = ['Tokyo','Toxic','Casdia','Barry','Crunchy wrap','Delight','Brownie','Pesto'];
+function pickBestSellers(itemsObj) {
+  const entries = Object.entries(itemsObj || {});
+  const result = [];
+  BEST_SELLER_NAMES.forEach(name => {
+    const nameLower = name.toLowerCase();
+    entries.forEach(([id, item]) => {
+      if (item && item.active !== false &&
+          (item.name || '').toLowerCase().includes(nameLower) &&
+          !result.some(([rid]) => rid === id)) {
+        result.push([id, item]);
+      }
+    });
+  });
+  return result;
+}
+
 let _menuRaw = null, _plansRaw = null, _menuReady = false;
 
 function _rebuildMenu() {
@@ -827,15 +844,7 @@ function renderMenu(catId, search) {
   cont.innerHTML = '';
 
   if (catId === '__best__' && !search) {
-    let entries = Object.entries(_itemSalesData||{})
-      .sort((a,b)=>(b[1]||0)-(a[1]||0))
-      .map(([id])=>[id,(menuData.items||{})[id]])
-      .filter(([,i])=>i && i.active!==false)
-      .slice(0,16);
-    if (!entries.length) {
-      // لا توجد مبيعات مسجلة بعد — اعرض عناصر المنيو الحالية كبداية
-      entries = Object.entries(menuData.items||{}).filter(([,i])=>i.active!==false).slice(0,16);
-    }
+    const entries = pickBestSellers(menuData.items);
     if (!entries.length) {
       cont.innerHTML = '<div class="empty-menu"><p style="font-size:14px;color:var(--mute)">لا توجد عناصر في المنيو</p></div>';
       return;

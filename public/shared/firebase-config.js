@@ -128,6 +128,27 @@ function recordItemSales(items) {
 }
 
 /**
+ * Curated "Best Sellers" tab — fixed list of item names, in display order.
+ */
+const BEST_SELLER_NAMES = ['Tokyo','Toxic','Casdia','Barry','Crunchy wrap','Delight','Brownie','Pesto'];
+
+function pickBestSellers(itemsObj) {
+  const entries = Object.entries(itemsObj || {});
+  const result = [];
+  BEST_SELLER_NAMES.forEach(name => {
+    const nameLower = name.toLowerCase();
+    entries.forEach(([id, item]) => {
+      if (item && item.active !== false &&
+          (item.name || '').toLowerCase().includes(nameLower) &&
+          !result.some(([rid]) => rid === id)) {
+        result.push([id, item]);
+      }
+    });
+  });
+  return result;
+}
+
+/**
  * Log menu changes (items/categories created/updated/deleted)
  * Only callable by owner — server-side rules enforce this.
  */

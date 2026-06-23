@@ -945,15 +945,7 @@ function renderMenuItems(filterCat) {
   }
 
   if (filterCat === '__best__') {
-    let items = Object.entries(itemSalesData||{})
-      .sort((a,b) => (b[1]||0) - (a[1]||0))
-      .map(([id]) => [id, (menuData.items||{})[id]])
-      .filter(([,i]) => i && i.active !== false)
-      .slice(0,16);
-    if (!items.length) {
-      // لا توجد مبيعات مسجلة بعد — اعرض عناصر المنيو الحالية كبداية
-      items = Object.entries(menuData.items||{}).filter(([,i]) => i.active !== false).slice(0,16);
-    }
+    const items = pickBestSellers(menuData.items);
     if (!items.length) {
       container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:13px;">لا توجد عناصر في المنيو</div>';
       return;
