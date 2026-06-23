@@ -184,6 +184,12 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
   box-shadow:0 4px 16px rgba(27,94,32,.3);
 }
 .float-cart-btn:hover{background:var(--g2);transform:translateY(-1px)}
+.float-cart-cancel-btn{
+  width:44px;height:44px;min-width:44px;border-radius:50%;background:rgba(198,40,40,.08);
+  color:#C62828;font-size:17px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;cursor:pointer;border:none;transition:background .15s;
+}
+.float-cart-cancel-btn:hover{background:rgba(198,40,40,.16)}
 
 /* ── CHECKOUT MODAL ── */
 .modal-overlay{
@@ -363,6 +369,7 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
       <div class="float-cart-count" id="floatCount">0 أيتم</div>
       <div class="float-cart-total" id="floatTotal">0 EGP</div>
     </div>
+    <button class="float-cart-cancel-btn" onclick="cancelOnlineOrder()" aria-label="إلغاء الطلب">🗑</button>
     <button class="float-cart-btn" onclick="openCheckout()">
       تأكيد الطلب ←
     </button>
@@ -910,7 +917,7 @@ function buildFoodCard(iid, item) {
   return `<div class="food-card${qty>0?' in-cart':''}" data-iid="${iid}" data-size="">
     <div class="food-card-body">
       <div class="food-card-name">${item.isNew?'<span class="new-tag">جديد</span>':''}${item.name||item.nameAr}</div>
-      ${item.nameAr&&item.name!==item.nameAr&&item.nameAr!==item.description?`<div style="font-size:10px;color:var(--mute);margin-bottom:3px">${item.nameAr}</div>`:''}
+      ${item.nameAr&&item.name!==item.nameAr&&!item.description?`<div style="font-size:10px;color:var(--mute);margin-bottom:3px">${item.nameAr}</div>`:''}
       ${item.description?`<div class="food-card-desc">${item.description}</div>`:''}
       ${hasSizes ? `<div class="size-row">${Object.entries(item.sizes).map(([s,d])=>`<button class="size-pill" onclick="event.stopPropagation();addItem('${iid}','${name} ${s}',${d.price},'${s}',${d.calories||0})">${s}: ${d.price} EGP</button>`).join('')}</div>` : ''}
       <div class="food-card-foot" style="margin-top:8px">
