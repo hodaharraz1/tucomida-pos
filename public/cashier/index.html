@@ -594,6 +594,10 @@
           <div id="topItems"></div>
         </div>
       </div>
+      <div class="report-card" style="margin-bottom:16px">
+        <div class="report-card-title">🧾 أوردرات اليوم المكتملة</div>
+        <div id="reportOrdersList"></div>
+      </div>
       <div class="reports-actions">
         <button class="btn-reload-report" onclick="loadReports()">🔄 تحديث التقرير</button>
         <button class="btn-endday" onclick="confirmEndDay()">🌙 إنهاء اليوم</button>
@@ -696,6 +700,24 @@
     <div class="modal-btn-row">
       <button class="btn-modal-cancel" onclick="closeOrderDetailModal()">إغلاق</button>
       <button class="btn-modal-confirm" onclick="saveOrderEditsC()">حفظ التعديلات ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- READ-ONLY HISTORICAL ORDER DETAIL (Reports) -->
+<div class="modal-bg" id="histOrderModal" onclick="if(event.target===this)closeHistOrderModalC()">
+  <div class="modal-box">
+    <div class="modal-title" id="hocModalNum">#5001</div>
+    <div id="hocMeta" style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.7"></div>
+    <div class="modal-sub" style="margin-bottom:8px">الطلب:</div>
+    <div id="hocItemsList"></div>
+    <div id="hocNotesWrap" style="display:none;margin-top:10px;font-size:13px;color:var(--accent)"></div>
+    <div class="modal-total-row">
+      <span>الإجمالي</span><span id="hocModalTotal">0 ج</span>
+    </div>
+    <div class="modal-btn-row">
+      <button class="btn-modal-cancel" onclick="closeHistOrderModalC()">إغلاق</button>
+      <button class="btn-modal-confirm" onclick="printHistOrderC()">🖨 طباعة الوصل</button>
     </div>
   </div>
 </div>
@@ -1692,6 +1714,65 @@ async function loadReports() {
           `<div class="top-item-row"><div class="top-item-rank">${i+1}</div><div class="top-item-name">${escapeHtml(name)}</div><div class="top-item-count">${escapeHtml(String(cnt))}×</div></div>`
         ).join('')
       : '<div style="text-align:center;padding:20px;color:var(--muted);">لا بيانات اليوم</div>';
+
+  // Today's completed orders — clickable to view full details
+  const completedRows = Object.entries(snap.val() || {})
+    .filter(([,o]) => o.status === 'completed')
+    .map(([id,o]) => ({...o, _id:id}))
+    .sort((a,b) => (b.createdAt||0)-(a.createdAt||0));
+  _reportOrdersCache = {};
+  completedRows.forEach(o => { _reportOrdersCache[o._id] = o; });
+  document.getElementById('reportOrdersList').innerHTML = completedRows.length
+    ? completedRows.map(o => {
+        const typeL = o.type==='takeaway' ? '🥡 تيك أواي'
+          : o.type==='delivery' ? '🛵 توصيل'
+          : o.type==='pickup'   ? '🏪 استلام'
+          : `🍽 طاولة ${o.tableNumber||'—'}`;
+        const items = (o.items||[]).map(i=>`${i.quantity}×${escapeHtml(i.name||'')}`).join('، ');
+        return `<div class="payment-row" style="cursor:pointer;align-items:flex-start" onclick="openHistOrderC('${o._id}')">
+          <div style="min-width:0;flex:1">
+            <div style="font-weight:700;color:var(--text)">#${o.orderNumber} <span style="font-weight:400;font-size:12px;color:var(--muted)">${typeL} — ${formatTime(o.createdAt)}</span></div>
+            <div style="font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px">${items}</div>
+          </div>
+          <span class="payment-amount" style="flex-shrink:0">${o.total} ج ›</span>
+        </div>`;
+      }).join('')
+    : '<div style="text-align:center;padding:20px;color:var(--muted);">لا توجد أوردرات مكتملة اليوم</div>';
+}
+
+let _reportOrdersCache = {};
+let _histOrderC = null;
+function openHistOrderC(orderId) {
+  const o = _reportOrdersCache[orderId];
+  if (!o) { showToast('تعذّر تحميل الأوردر'); return; }
+  _histOrderC = o;
+  const typeL = o.type==='takeaway' ? '🥡 تيك أواي'
+    : o.type==='delivery' ? '🛵 توصيل'
+    : o.type==='pickup'   ? '🏪 استلام'
+    : `🍽 طاولة ${o.tableNumber||'—'}`;
+  const pmL = { cash:'💵 كاش', visa:'💳 فيزا/كارت', instapay:'📱 إنستاباي', fawry:'🏪 فوري' };
+  document.getElementById('hocModalNum').textContent = '#' + (o.orderNumber||'—');
+  document.getElementById('hocMeta').innerHTML =
+    `${typeL} — ${formatTime(o.createdAt)}<br>الدفع: ${pmL[o.paymentMethod]||o.paymentMethod||'—'}`;
+  document.getElementById('hocItemsList').innerHTML = (o.items||[]).map(i => `
+    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+      <span>${Number(i.quantity||0)}× ${escapeHtml(i.name||'')}${i.size?` <span style="color:var(--muted)">(${escapeHtml(i.size)})</span>`:''}${i.notes?` <span style="color:var(--accent)">- ${escapeHtml(i.notes)}</span>`:''}</span>
+      <span style="color:var(--muted)">${Number((i.price||0)*(i.quantity||0))} ج</span>
+    </div>`).join('') || '<div style="text-align:center;padding:14px;color:var(--muted)">لا توجد تفاصيل أصناف</div>';
+  const notesWrap = document.getElementById('hocNotesWrap');
+  if (o.notes) { notesWrap.style.display = 'block'; notesWrap.textContent = '📝 ' + o.notes; }
+  else notesWrap.style.display = 'none';
+  const discount = o.discount || 0;
+  document.getElementById('hocModalTotal').innerHTML = discount > 0
+    ? `<span style="font-size:12px;color:var(--muted);text-decoration:line-through;margin-left:6px">${o.subtotal||0} ج</span>${o.total||0} ج`
+    : `${o.total||0} ج`;
+  document.getElementById('histOrderModal').classList.add('open');
+}
+function closeHistOrderModalC() { document.getElementById('histOrderModal').classList.remove('open'); }
+function printHistOrderC() {
+  if (!_histOrderC) return;
+  const o = _histOrderC;
+  printReceipt(o, o.total||0, o.discount||0, o.paymentMethod||'cash', 0);
 }
 
 async function confirmEndDay() {
