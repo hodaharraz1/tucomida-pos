@@ -348,7 +348,7 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
 <!-- ── CAT TABS ── -->
 <div class="cat-bar">
   <div class="cat-bar-inner" id="catTabs">
-    <button class="cat-tab active" data-cat="all" onclick="filterCat(null,this)">🍴 All</button>
+    <button class="cat-tab active" data-cat="__best__" onclick="filterCat('__best__',this)">⭐ الأكثر مبيعاً</button>
   </div>
 </div>
 
@@ -693,6 +693,7 @@ async function submitOnlineOrder() {
     if (orderType==='delivery') lines.push(`العنوان: ${sanitizeText(address,500)}`);
     if (notes) lines.push(`ملاحظات: ${sanitizeText(notes,300)}`);
     const waMsg = encodeURIComponent(lines.join('\n'));
+    cart.forEach(i => { if (i.iid) db.ref('itemSales/' + i.iid).transaction(c => (c||0) + (i.qty||1)); });
     closeCheckout();
     cart = [];
     updateUI();
@@ -710,8 +711,9 @@ async function submitOnlineOrder() {
 }
 
 /* ── MENU LOADING ── */
-let _activeCat = null;
+let _activeCat = '__best__';
 let _allItems = [];
+let _itemSalesData = {};
 
 let _menuRaw = null, _plansRaw = null, _menuReady = false;
 
@@ -781,13 +783,17 @@ function loadMenu() {
     _plansRaw = snap.val();
     if (_menuReady) _rebuildMenu();
   }, () => {});
+  db.ref('itemSales').on('value', snap => {
+    _itemSalesData = snap.val() || {};
+    if (_activeCat === '__best__') renderMenu('__best__', '');
+  });
 }
 
 function buildCatTabs() {
   const cats = Object.entries(menuData.categories||{})
     .filter(([,c])=>c.active!==false).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
   const row = document.getElementById('catTabs');
-  row.innerHTML = '<button class="cat-tab'+(_activeCat?'':' active')+'" data-cat="all" onclick="filterCat(null,this)">🍴 All</button>';
+  row.innerHTML = '<button class="cat-tab'+(_activeCat==='__best__'?' active':'')+'" data-cat="__best__" onclick="filterCat(\'__best__\',this)">⭐ الأكثر مبيعاً</button>';
   cats.forEach(([id,c])=>{
     const b = document.createElement('button');
     b.className = 'cat-tab' + (_activeCat===id?' active':'');
@@ -812,7 +818,6 @@ function handleSearch(q) {
   _searchTimer = setTimeout(() => {
     _activeCat = null;
     document.querySelectorAll('.cat-tab').forEach(b=>b.classList.remove('active'));
-    document.querySelector('.cat-tab[data-cat="all"]').classList.add('active');
     renderMenu(null, q.trim().toLowerCase());
   }, 200);
 }
@@ -820,6 +825,21 @@ function handleSearch(q) {
 function renderMenu(catId, search) {
   const cont = document.getElementById('menuContainer');
   cont.innerHTML = '';
+
+  if (catId === '__best__' && !search) {
+    const entries = Object.entries(_itemSalesData||{})
+      .sort((a,b)=>(b[1]||0)-(a[1]||0))
+      .map(([id])=>[id,(menuData.items||{})[id]])
+      .filter(([,i])=>i && i.active!==false)
+      .slice(0,16);
+    if (!entries.length) {
+      cont.innerHTML = '<div class="empty-menu"><p style="font-size:14px;color:var(--mute)">لا توجد بيانات مبيعات كافية بعد</p></div>';
+      return;
+    }
+    cont.innerHTML = `<div class="cat-section-title">⭐ الأكثر مبيعاً</div><div class="items-grid">${entries.map(([iid,item])=>item.isPlan?buildPlanCard(iid,item):buildFoodCard(iid,item)).join('')}</div>`;
+    updateUI();
+    return;
+  }
 
   const cats = Object.entries(menuData.categories||{})
     .filter(([,c])=>c.active!==false)

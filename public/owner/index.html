@@ -4058,7 +4058,8 @@ async function deleteInvItem(id) {
    OWNER NEW ORDER — Full Cashier Equivalent
 ═══════════════════════════════════════════════ */
 let oCart = [], oOrderType = 'dine-in', oMenuLoaded = false, oTablesLoaded = false;
-let oSizeItem = null, oSizePick = null, oSearchTimer = null, oCatFilter = null;
+let oSizeItem = null, oSizePick = null, oSearchTimer = null, oCatFilter = '__best__';
+let oItemSalesData = {}, oSalesLoaded = false;
 
 /* ── Init ── */
 function oInitOrderScreen() {
@@ -4071,6 +4072,13 @@ function oInitOrderScreen() {
       menuData = data;
       oRenderCats();
       oRenderMenu();
+    });
+  }
+  if (!oSalesLoaded) {
+    oSalesLoaded = true;
+    db.ref('itemSales').on('value', snap => {
+      oItemSalesData = snap.val() || {};
+      if (oCatFilter === '__best__') oRenderMenu();
     });
   }
   if (!oTablesLoaded) {
@@ -4106,7 +4114,7 @@ function oSearch(q) {
   oSearchTimer = setTimeout(() => {
     oCatFilter = null;
     document.querySelectorAll('.o-cat-tab').forEach(b => b.classList.remove('active'));
-    const all = document.querySelector('.o-cat-tab[data-cat="all"]');
+    const all = document.querySelector('.o-cat-tab[data-cat="__best__"]');
     if (all) all.classList.add('active');
     oRenderMenu(q.trim().toLowerCase());
   }, 200);
@@ -4118,7 +4126,7 @@ function oRenderCats() {
     .filter(([,c]) => c.active !== false)
     .sort((a,b) => (a[1].order||0) - (b[1].order||0));
   const row = document.getElementById('oCatTabs');
-  row.innerHTML = '<button class="o-cat-tab active" data-cat="all" onclick="oSelectCat(null,this)">الكل</button>';
+  row.innerHTML = '<button class="o-cat-tab active" data-cat="__best__" onclick="oSelectCat(\'__best__\',this)">⭐ الأكثر مبيعاً</button>';
   cats.forEach(([id,c]) => {
     const b = document.createElement('button');
     b.className = 'o-cat-tab';
@@ -4168,6 +4176,28 @@ function oRenderMenu(q) {
       div.innerHTML = `<div class="o-mi-name">${escapeHtml(p.nameAr)}</div>
                        <div class="o-mi-price" style="color:${p.color}">${hasPrice ? Number(price).toLocaleString()+' ج' : '— (بدون سعر)'}</div>`;
       if (hasPrice) div.onclick = () => oAddToCart('__plan__'+p.id, {name: p.nameAr+' '+p.period, singlePrice: price}, null, price);
+      grid.appendChild(div);
+    });
+    return;
+  }
+
+  if (oCatFilter === '__best__') {
+    const items = Object.entries(oItemSalesData||{})
+      .sort((a,b) => (b[1]||0) - (a[1]||0))
+      .map(([id]) => [id, (menuData.items||{})[id]])
+      .filter(([,i]) => i && i.active !== false)
+      .slice(0,16);
+    if (!items.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted)">لا توجد بيانات مبيعات كافية بعد</div>';
+      return;
+    }
+    items.forEach(([id,item]) => {
+      const hasSizes = item.sizes && Object.keys(item.sizes).length > 0;
+      const div = document.createElement('div');
+      div.className = 'o-menu-item';
+      div.innerHTML = `<div class="o-mi-name">${escapeHtml(item.name||item.nameAr||'')}</div>
+                       <div class="o-mi-price">${hasSizes ? 'M / L' : (item.singlePrice||0)+' ج'}</div>`;
+      div.onclick = () => hasSizes ? oOpenSize(id, item) : oAddToCart(id, item, null, item.singlePrice||0);
       grid.appendChild(div);
     });
     return;
@@ -4337,6 +4367,8 @@ async function oSubmitOrder() {
     if (oOrderType === 'dine-in' && sel.value) {
       await db.ref(`tables/${sel.value}/status`).set('occupied');
     }
+
+    recordItemSales(oCart);
 
     logActivity(currentUser.uid, 'owner', 'new_order', {
       orderId, orderNumber, total: subtotal, email: currentUser.email, type: oOrderType, notes,

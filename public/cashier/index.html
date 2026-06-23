@@ -88,7 +88,7 @@
     .btn-pay:hover { background:var(--primary-mid); }
     .btn-pay.disabled-btn { background:var(--border); color:var(--muted2); cursor:default; }
     .btn-pay.disabled-btn:hover { background:var(--border); }
-    .new-order-layout { display:grid; grid-template-columns:1fr 350px; gap:14px; height:calc(100vh - 160px); }
+    .new-order-layout { display:grid; grid-template-columns:1fr 290px; gap:14px; height:calc(100vh - 160px); }
     .menu-section { overflow-y:auto; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
     .cart-section { background:var(--surface); border-radius:14px; display:flex; flex-direction:column; overflow:hidden; border:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,.04); }
     .cat-tabs { display:flex; gap:6px; overflow-x:auto; padding-bottom:10px; margin-bottom:12px; scrollbar-width:none; }
@@ -273,8 +273,8 @@
       .sidebar-logo-text { font-size:16px; }
       .nav-item { padding:9px 10px; font-size:11px; gap:7px; }
       .sidebar-role { display:none; }
-      .new-order-layout { grid-template-columns:1fr 255px; gap:10px; height:calc(100vh - 155px); }
-      .menu-grid-cashier { grid-template-columns:repeat(auto-fill,minmax(115px,1fr)); gap:6px; }
+      .new-order-layout { grid-template-columns:1fr 215px; gap:10px; height:calc(100vh - 155px); }
+      .menu-grid-cashier { grid-template-columns:repeat(auto-fill,minmax(105px,1fr)); gap:6px; }
       .menu-item-c { padding:9px 8px; }
       .mic-name { font-size:12px; }
       .mic-price { font-size:12px; }
@@ -286,8 +286,8 @@
       .sidebar { width:160px; }
       .sidebar-logo-text { font-size:17px; }
       .nav-item { padding:10px 12px; font-size:12px; }
-      .new-order-layout { grid-template-columns:1fr 295px; gap:12px; height:calc(100vh - 158px); }
-      .menu-grid-cashier { grid-template-columns:repeat(auto-fill,minmax(122px,1fr)); gap:7px; }
+      .new-order-layout { grid-template-columns:1fr 250px; gap:12px; height:calc(100vh - 158px); }
+      .menu-grid-cashier { grid-template-columns:repeat(auto-fill,minmax(115px,1fr)); gap:7px; }
       .menu-item-c { padding:10px 9px; }
       .mic-name { font-size:12px; }
       .mic-price { font-size:12px; }
@@ -341,7 +341,7 @@
 
       /* New order layout */
       .new-order-layout { grid-template-columns:1fr; height:auto; gap:10px; }
-      .cart-section { max-height:55vh; min-height:200px; }
+      .cart-section { max-height:40vh; min-height:160px; }
       .cart-footer-c { position:sticky; bottom:0; background:var(--surface); z-index:1; padding-bottom:calc(14px + env(safe-area-inset-bottom,0px)); }
 
       /* Orders grid */
@@ -1355,13 +1355,23 @@ function printReceipt(order, total, discount, payMethod, paid) {
 /* ═══════════════════════════════════════════════
    CASHIER NEW ORDER
 ═══════════════════════════════════════════════ */
+let itemSalesData = {};
+
 function loadMenu() {
   const _menuRef = db.ref('menu');
   registerCleanup(() => _menuRef.off());
   _menuRef.on('value', snap => {
     menuData = snap.val() || { categories:{}, items:{} };
     renderCashierCats();
-    renderCashierMenu(null);
+    renderCashierMenu('__best__');
+  });
+  const _salesRef = db.ref('itemSales');
+  registerCleanup(() => _salesRef.off());
+  _salesRef.on('value', snap => {
+    itemSalesData = snap.val() || {};
+    if (document.querySelector('#cashierCatTabs .cat-tab.active')?.textContent.includes('الأكثر مبيعاً')) {
+      renderCashierMenu('__best__');
+    }
   });
 }
 
@@ -1432,10 +1442,10 @@ function clearCashierSearch() {
   _cashierSearchQ = '';
   const clearBtn = document.getElementById('cashierSearchClear');
   if (clearBtn) clearBtn.classList.remove('show');
-  // أعد تفعيل "الكل"
+  // أعد تفعيل "الأكثر مبيعاً"
   const firstTab = document.querySelector('#cashierCatTabs .cat-tab');
   if (firstTab) firstTab.classList.add('active');
-  renderCashierMenu(null, null, '');
+  renderCashierMenu('__best__', null, '');
 }
 
 function renderCashierCats() {
@@ -1443,7 +1453,7 @@ function renderCashierCats() {
     .filter(([,c]) => c.active !== false)
     .sort((a,b) => (a[1].order||0) - (b[1].order||0));
   const tabs = document.getElementById('cashierCatTabs');
-  tabs.innerHTML = '<button class="cat-tab active" onclick="selectCashierCat(null,this)">الكل</button>';
+  tabs.innerHTML = '<button class="cat-tab active" onclick="selectCashierCat(\'__best__\',this)">⭐ الأكثر مبيعاً</button>';
   cats.forEach(([id,c]) => {
     const btn = document.createElement('button');
     btn.className = 'cat-tab';
@@ -1502,6 +1512,26 @@ function renderCashierMenu(catId, btn, searchQ) {
         div.style.opacity = '0.5';
         div.style.cursor = 'default';
       }
+      grid.appendChild(div);
+    });
+    return;
+  }
+  if (catId === '__best__') {
+    const items = Object.entries(itemSalesData||{})
+      .sort((a,b) => (b[1]||0) - (a[1]||0))
+      .map(([id]) => [id, (menuData.items||{})[id]])
+      .filter(([,i]) => i && i.active !== false)
+      .slice(0,16);
+    if (!items.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);font-size:13px;">لا توجد بيانات مبيعات كافية بعد</div>';
+      return;
+    }
+    items.forEach(([id,item]) => {
+      const hasSizes = item.sizes && Object.keys(item.sizes).length > 0;
+      const div = document.createElement('div');
+      div.className = 'menu-item-c';
+      div.innerHTML = `<div class="mic-name">${escapeHtml(item.name||'')}</div><div class="mic-price">${hasSizes ? 'M / L' : (item.singlePrice||0) + ' ج'}</div>`;
+      div.onclick = () => hasSizes ? openSizeC(id, item) : addToCashierCart(id, item, null, item.singlePrice || 0);
       grid.appendChild(div);
     });
     return;
@@ -1649,6 +1679,8 @@ async function submitCashierOrder() {
     if (cashierOrderType === 'dine-in' && tableSelEl.value) {
       await db.ref(`tables/${tableSelEl.value}/status`).set('occupied');
     }
+
+    recordItemSales(cashierCart);
 
     logActivity(currentUser.uid, currentRole||'cashier', 'new_order', {
       orderId, orderNumber, total: subtotal, email: currentUser.email, type: cashierOrderType,

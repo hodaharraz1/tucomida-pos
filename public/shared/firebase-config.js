@@ -118,6 +118,16 @@ function generateId() {
 }
 
 /**
+ * Increment per-item sales counters, used to compute the "Best Sellers" tab.
+ */
+function recordItemSales(items) {
+  (items || []).forEach(i => {
+    if (!i || !i.itemId || String(i.itemId).startsWith('__')) return;
+    db.ref('itemSales/' + i.itemId).transaction(c => (c || 0) + (i.quantity || 1));
+  });
+}
+
+/**
  * Log menu changes (items/categories created/updated/deleted)
  * Only callable by owner — server-side rules enforce this.
  */

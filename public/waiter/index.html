@@ -870,13 +870,20 @@ function startTakeaway() {
 }
 
 // ── MENU ───────────────────────────────────────────
+let itemSalesData = {};
 function loadMenu() {
   const _menuRef = db.ref('menu');
   _menuRef.on('value', snap => {
     menuData = snap.val() || {categories:{}, items:{}};
-    renderCatFilter(); renderMenuItems(null);
+    renderCatFilter(); renderMenuItems('__best__');
   });
   registerCleanup(() => _menuRef.off());
+  const _salesRef = db.ref('itemSales');
+  _salesRef.on('value', snap => {
+    itemSalesData = snap.val() || {};
+    if ((document.querySelector('#catFilter .cat-btn.active')||{}).dataset?.catId === '__best__') renderMenuItems('__best__');
+  });
+  registerCleanup(() => _salesRef.off());
 }
 function renderCatFilter() {
   const cats = Object.entries(menuData.categories||{})
@@ -884,7 +891,7 @@ function renderCatFilter() {
   const f = document.getElementById('catFilter');
   // preserve currently active cat
   const activeCatId = (document.querySelector('#catFilter .cat-btn.active') || {}).dataset?.catId || null;
-  f.innerHTML = '<button class="cat-btn active" onclick="filterCat(null,this)">الكل</button>';
+  f.innerHTML = '<button class="cat-btn active" data-cat-id="__best__" onclick="filterCat(\'__best__\',this)">⭐ الأكثر مبيعاً</button>';
   cats.forEach(([id,c]) => {
     const b = document.createElement('button');
     b.className = 'cat-btn'; b.dataset.catId = id; b.textContent = c.name||c.nameAr;
@@ -931,6 +938,31 @@ function renderMenuItems(filterCat) {
         card.style.opacity = '0.5';
         card.style.cursor = 'default';
       }
+      grid.appendChild(card);
+    });
+    container.appendChild(grid);
+    return;
+  }
+
+  if (filterCat === '__best__') {
+    const items = Object.entries(itemSalesData||{})
+      .sort((a,b) => (b[1]||0) - (a[1]||0))
+      .map(([id]) => [id, (menuData.items||{})[id]])
+      .filter(([,i]) => i && i.active !== false)
+      .slice(0,16);
+    if (!items.length) {
+      container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:13px;">لا توجد بيانات مبيعات كافية بعد</div>';
+      return;
+    }
+    const grid = document.createElement('div'); grid.className = 'items-grid';
+    items.forEach(([iid,item]) => {
+      const hasSizes = item.sizes && Object.keys(item.sizes).length > 0;
+      const card = document.createElement('div'); card.className = 'item-card';
+      let priceHtml = hasSizes
+        ? `<div class="ic-sizes">${Object.entries(item.sizes).map(([s,d]) => `<span class="size-chip">${s}: ${d.price}ج</span>`).join('')}</div>`
+        : `<div class="ic-price">${item.singlePrice||0} ج</div>`;
+      card.innerHTML = `<div class="ic-name">${escapeHtml(item.name||item.nameAr||'')}</div>${priceHtml}`;
+      card.onclick = () => addToCart(iid, item);
       grid.appendChild(card);
     });
     container.appendChild(grid);
@@ -1077,6 +1109,7 @@ async function submitOrder() {
       dayId:getDayId(), sessionId
     });
     if (currentOrder.tableId) await db.ref(`tables/${currentOrder.tableId}/status`).set('occupied');
+    recordItemSales(cart);
     await logActivity(currentUser.uid, currentRole, 'new_order', {orderId, orderNumber, type:currentOrder.type, total, email: currentUser.email, items:cart.map(i=>`${i.quantity}× ${i.name}${i.size?` (${i.size})`:''}`).join(', '), itemsDetail:cart.map(i=>({name:i.name,size:i.size||null,price:i.price,quantity:i.quantity,notes:i.notes||''}))});
     showToast(`تم إرسال الأوردر #${orderNumber} للمطبخ ✓`);
     cart = []; _wDiscOpen=false; document.getElementById('cartDiscountSection').style.display='none'; document.getElementById('wDiscToggle').textContent='🏷 إضافة خصم'; renderCart(); setTimeout(() => goToTables(), 1500);

@@ -145,6 +145,19 @@
     },
 
     /* ═══════════════════════════════════════════════════════════
+       ITEM SALES — per-item sale counters, drives the "Best Sellers" tab
+       Public write allowed since unauthenticated customers (order.html)
+       also place orders; counters only, low risk if abused.
+    ═══════════════════════════════════════════════════════════ */
+    "itemSales": {
+      ".read": true,
+      "$itemId": {
+        ".write": "auth == null || root.child('users').child(auth.uid).child('role').val().matches(/^(waiter|cashier|owner)$/)",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000000"
+      }
+    },
+
+    /* ═══════════════════════════════════════════════════════════
        SETTINGS
     ═══════════════════════════════════════════════════════════ */
     "settings": {
