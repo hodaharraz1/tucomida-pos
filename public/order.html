@@ -348,7 +348,7 @@ button{cursor:pointer;font-family:var(--f);border:none;background:none}
 <!-- ── CAT TABS ── -->
 <div class="cat-bar">
   <div class="cat-bar-inner" id="catTabs">
-    <button class="cat-tab active" data-cat="__best__" onclick="filterCat('__best__',this)">⭐ الأكثر مبيعاً</button>
+    <button class="cat-tab active" data-cat="__best__" onclick="filterCat('__best__',this)">⭐ Best Sellers</button>
   </div>
 </div>
 
@@ -793,7 +793,7 @@ function buildCatTabs() {
   const cats = Object.entries(menuData.categories||{})
     .filter(([,c])=>c.active!==false).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
   const row = document.getElementById('catTabs');
-  row.innerHTML = '<button class="cat-tab'+(_activeCat==='__best__'?' active':'')+'" data-cat="__best__" onclick="filterCat(\'__best__\',this)">⭐ الأكثر مبيعاً</button>';
+  row.innerHTML = '<button class="cat-tab'+(_activeCat==='__best__'?' active':'')+'" data-cat="__best__" onclick="filterCat(\'__best__\',this)">⭐ Best Sellers</button>';
   cats.forEach(([id,c])=>{
     const b = document.createElement('button');
     b.className = 'cat-tab' + (_activeCat===id?' active':'');
@@ -840,7 +840,7 @@ function renderMenu(catId, search) {
       cont.innerHTML = '<div class="empty-menu"><p style="font-size:14px;color:var(--mute)">لا توجد عناصر في المنيو</p></div>';
       return;
     }
-    cont.innerHTML = `<div class="cat-section-title">⭐ الأكثر مبيعاً</div><div class="items-grid">${entries.map(([iid,item])=>item.isPlan?buildPlanCard(iid,item):buildFoodCard(iid,item)).join('')}</div>`;
+    cont.innerHTML = `<div class="cat-section-title">⭐ Best Sellers</div><div class="items-grid">${entries.map(([iid,item])=>item.isPlan?buildPlanCard(iid,item):buildFoodCard(iid,item)).join('')}</div>`;
     updateUI();
     return;
   }
