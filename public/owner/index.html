@@ -1504,6 +1504,25 @@
   </div>
 </div>
 
+<!-- READ-ONLY HISTORICAL ORDER DETAIL (Reports → day click) -->
+<div class="modal-bg" id="histOrderModal" onclick="if(event.target===this)closeHistOrderModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title-s" id="hoModalNum">#5001</div>
+    <div id="hoMeta" style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.7"></div>
+    <div style="margin-bottom:8px;font-weight:700;font-size:14px;color:var(--muted);">الطلب:</div>
+    <div id="hoItemsList"></div>
+    <div id="hoNotesWrap" style="display:none;margin-top:10px;font-size:13px;color:var(--accent)"></div>
+    <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:17px;font-weight:900;">
+      <span>الإجمالي</span><span id="hoModalTotal" style="color:var(--gold)">0 ج</span>
+    </div>
+    <div class="modal-btns-s" style="margin-top:6px">
+      <button class="btn-ms-cancel" onclick="closeHistOrderModal()">إغلاق</button>
+      <button class="btn-ms-save" onclick="printLogReceiptFromHist()">🖨 طباعة الوصل</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast-o" id="toastO"></div>
 
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -3072,8 +3091,8 @@ async function _calDayClick(dayId, year, month) {
     db.ref('orders').orderByChild('dayId').equalTo(dayId).once('value'),
     db.ref('online_orders').orderByChild('dayId').equalTo(dayId).once('value')
   ]);
-  const dine   = Object.values(sd.val()||{}).filter(o=>o.status==='completed');
-  const online = Object.values(so.val()||{}).filter(o=>o.status==='completed');
+  const dine   = Object.entries(sd.val()||{}).filter(([,o])=>o.status==='completed').map(([id,o])=>({...o,_id:id,_isOnline:false}));
+  const online = Object.entries(so.val()||{}).filter(([,o])=>o.status==='completed').map(([id,o])=>({...o,_id:id,_isOnline:true}));
   const all    = [...dine,...online].sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));
   const total  = all.reduce((s,o)=>s+(o.total||0), 0);
   const avg    = all.length ? Math.round(total/all.length) : 0;
@@ -3091,13 +3110,12 @@ async function _calDayClick(dayId, year, month) {
       : `🍽 طاولة ${o.tableNumber||'—'}`;
     const items = (o.items||[]).map(i=>`${i.quantity}×${escapeHtml(i.name||'')}${i.size?` ${escapeHtml(i.size)}`:''}`)
       .join(', ');
-    const isOnline = o.type==='delivery'||o.type==='pickup';
-    return `<div class="ddp-order-row">
+    return `<div class="ddp-order-row" onclick="openHistOrder('${o._id}',${o._isOnline})" style="cursor:pointer">
       <div>
         <div class="ddp-order-num">#${o.orderNumber}</div>
         <div class="ddp-order-meta">${typeL} — ${formatTime(o.createdAt)}</div>
         <div class="ddp-order-meta" style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${items}</div>
-        <button class="ddp-print-btn" onclick="printLogReceipt('${escapeHtml(Object.keys(sd.val()||{}).find(k=>sd.val()[k]===o)||Object.keys(so.val()||{}).find(k=>so.val()[k]===o)||'')}',${isOnline})">🖨 وصل</button>
+        <button class="ddp-print-btn" onclick="event.stopPropagation();printLogReceipt('${o._id}',${o._isOnline})">🖨 وصل</button>
       </div>
       <div style="text-align:left">
         <div class="ddp-order-total">${o.total} ج</div>
@@ -3257,6 +3275,41 @@ function printLastPaidOrder() {
 }
 
 /* ── Print receipt from activity log ── */
+let _histOrderId = null, _histIsOnline = false;
+async function openHistOrder(orderId, isOnline) {
+  const path = isOnline ? `online_orders/${orderId}` : `orders/${orderId}`;
+  try {
+    const snap = await db.ref(path).once('value');
+    const o = snap.val();
+    if (!o) { showToastO('تعذّر تحميل الأوردر'); return; }
+    _histOrderId = orderId; _histIsOnline = isOnline;
+    const typeL = o.type==='takeaway' ? '🥡 تيك أواي'
+      : o.type==='delivery' ? '🛵 توصيل'
+      : o.type==='pickup'   ? '🏪 استلام'
+      : `🍽 طاولة ${o.tableNumber||'—'}`;
+    const pmL = {cash:'💵 كاش',visa:'💳 فيزا',instapay:'📱 إنستاباي',fawry:'🏪 فوري'};
+    document.getElementById('hoModalNum').textContent = '#' + (o.orderNumber||'—');
+    document.getElementById('hoMeta').innerHTML =
+      `${typeL} — ${formatTime(o.createdAt)}${o.customerName?` — ${escapeHtml(o.customerName)}`:''}${o.customerPhone?` — ${escapeHtml(o.customerPhone)}`:''}<br>` +
+      `الدفع: ${pmL[o.paymentMethod]||o.paymentMethod||'—'}${o.email?` — بواسطة: ${escapeHtml(o.email)}`:''}`;
+    document.getElementById('hoItemsList').innerHTML = (o.items||[]).map(i => `
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+        <span>${Number(i.quantity||0)}× ${escapeHtml(i.name||'')}${i.size?` <span style="color:var(--muted)">(${escapeHtml(i.size)})</span>`:''}${i.notes?` <span style="color:var(--accent)">- ${escapeHtml(i.notes)}</span>`:''}</span>
+        <span style="color:var(--muted)">${Number((i.price||0)*(i.quantity||0))} ج</span>
+      </div>`).join('') || '<div style="text-align:center;padding:14px;color:var(--muted)">لا توجد تفاصيل أصناف</div>';
+    const notesWrap = document.getElementById('hoNotesWrap');
+    if (o.notes) { notesWrap.style.display = 'block'; notesWrap.textContent = '📝 ' + o.notes; }
+    else notesWrap.style.display = 'none';
+    const discount = o.discount || 0;
+    document.getElementById('hoModalTotal').innerHTML = discount > 0
+      ? `<span style="font-size:12px;color:var(--muted);text-decoration:line-through;margin-left:6px">${o.subtotal||0} ج</span>${o.total||0} ج`
+      : `${o.total||0} ج`;
+    document.getElementById('histOrderModal').classList.add('open');
+  } catch(e) { console.error(e); showToastO('خطأ في تحميل الأوردر'); }
+}
+function closeHistOrderModal() { document.getElementById('histOrderModal').classList.remove('open'); }
+function printLogReceiptFromHist() { if (_histOrderId) printLogReceipt(_histOrderId, _histIsOnline); }
+
 async function printLogReceipt(orderId, isOnline) {
   const path = isOnline ? `online_orders/${orderId}` : `orders/${orderId}`;
   try {
