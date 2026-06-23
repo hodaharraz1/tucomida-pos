@@ -4182,13 +4182,17 @@ function oRenderMenu(q) {
   }
 
   if (oCatFilter === '__best__') {
-    const items = Object.entries(oItemSalesData||{})
+    let items = Object.entries(oItemSalesData||{})
       .sort((a,b) => (b[1]||0) - (a[1]||0))
       .map(([id]) => [id, (menuData.items||{})[id]])
       .filter(([,i]) => i && i.active !== false)
       .slice(0,16);
     if (!items.length) {
-      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted)">لا توجد بيانات مبيعات كافية بعد</div>';
+      // لا توجد مبيعات مسجلة بعد — اعرض عناصر المنيو الحالية كبداية
+      items = Object.entries(menuData.items||{}).filter(([,i]) => i.active !== false).slice(0,16);
+    }
+    if (!items.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted)">لا توجد عناصر في المنيو</div>';
       return;
     }
     items.forEach(([id,item]) => {

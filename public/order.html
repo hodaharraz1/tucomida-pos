@@ -827,13 +827,17 @@ function renderMenu(catId, search) {
   cont.innerHTML = '';
 
   if (catId === '__best__' && !search) {
-    const entries = Object.entries(_itemSalesData||{})
+    let entries = Object.entries(_itemSalesData||{})
       .sort((a,b)=>(b[1]||0)-(a[1]||0))
       .map(([id])=>[id,(menuData.items||{})[id]])
       .filter(([,i])=>i && i.active!==false)
       .slice(0,16);
     if (!entries.length) {
-      cont.innerHTML = '<div class="empty-menu"><p style="font-size:14px;color:var(--mute)">لا توجد بيانات مبيعات كافية بعد</p></div>';
+      // لا توجد مبيعات مسجلة بعد — اعرض عناصر المنيو الحالية كبداية
+      entries = Object.entries(menuData.items||{}).filter(([,i])=>i.active!==false).slice(0,16);
+    }
+    if (!entries.length) {
+      cont.innerHTML = '<div class="empty-menu"><p style="font-size:14px;color:var(--mute)">لا توجد عناصر في المنيو</p></div>';
       return;
     }
     cont.innerHTML = `<div class="cat-section-title">⭐ الأكثر مبيعاً</div><div class="items-grid">${entries.map(([iid,item])=>item.isPlan?buildPlanCard(iid,item):buildFoodCard(iid,item)).join('')}</div>`;

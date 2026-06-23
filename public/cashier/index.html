@@ -1517,13 +1517,17 @@ function renderCashierMenu(catId, btn, searchQ) {
     return;
   }
   if (catId === '__best__') {
-    const items = Object.entries(itemSalesData||{})
+    let items = Object.entries(itemSalesData||{})
       .sort((a,b) => (b[1]||0) - (a[1]||0))
       .map(([id]) => [id, (menuData.items||{})[id]])
       .filter(([,i]) => i && i.active !== false)
       .slice(0,16);
     if (!items.length) {
-      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);font-size:13px;">لا توجد بيانات مبيعات كافية بعد</div>';
+      // لا توجد مبيعات مسجلة بعد — اعرض عناصر المنيو الحالية كبداية
+      items = Object.entries(menuData.items||{}).filter(([,i]) => i.active !== false).slice(0,16);
+    }
+    if (!items.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);font-size:13px;">لا توجد عناصر في المنيو</div>';
       return;
     }
     items.forEach(([id,item]) => {
